@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Document - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 1000px; margin: 0 auto; }
+        .form-header { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #ecf0f1; }
+        .form-header h2 { color: #2c3e50; font-size: 24px; margin-bottom: 8px; }
+        .form-header p { color: #7f8c8d; font-size: 14px; }
+        .form-section { margin-bottom: 35px; }
+        .section-title { font-size: 18px; color: #2c3e50; font-weight: 600; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1; display: flex; align-items: center; gap: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; color: #2c3e50; font-weight: 500; margin-bottom: 8px; }
+        .form-label.required::after { content: " *"; color: #e74c3c; }
+        .form-input, .form-select, .form-textarea { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        .form-textarea { resize: vertical; min-height: 100px; font-family: inherit; }
+        .file-upload-area { border: 2px dashed #dfe6e9; border-radius: 8px; padding: 40px; text-align: center; background: #f8f9fa; cursor: pointer; transition: all 0.3s ease; }
+        .file-upload-area:hover { border-color: #3498db; background: #e3f2fd; }
+        .file-upload-area input[type="file"] { display: none; }
+        .upload-icon { font-size: 48px; margin-bottom: 15px; }
+        .upload-text { color: #7f8c8d; font-size: 14px; }
+        .form-actions { display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 2px solid #ecf0f1; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(48, 207, 208, 0.4); }
+        .btn-secondary { background: #ecf0f1; color: #2c3e50; }
+        .btn-secondary:hover { background: #dfe6e9; }
+        .help-text { font-size: 12px; color: #95a5a6; margin-top: 5px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title"><h1>Legal CRM Portal</h1><p>SNG & Partners - Business Development Platform</p></div>
+        </div>
+        <div class="user-section">
+            <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..."></div>
+            <div class="notification-icon"><span style="font-size: 24px;">🔔</span><div class="badge" id="notificationCount">0</div></div>
+            <div class="user-profile"><div class="user-avatar">PM</div><div><div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div><div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div></div></div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Dashboard</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="lead-management.html" class="nav-item"><div class="nav-icon">🎯</div><div class="nav-label">Lead Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="client-management.html" class="nav-item"><div class="nav-icon">👥</div><div class="nav-label">Client Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="project-management.html" class="nav-item"><div class="nav-icon">📁</div><div class="nav-label">Matter/Project Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="task-management.html" class="nav-item"><div class="nav-icon">✅</div><div class="nav-label">Task Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="document-management.html" class="nav-item active"><div class="nav-icon">📄</div><div class="nav-label">Document Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="user-management.html" class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">User & Role Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="reporting.html" class="nav-item"><div class="nav-icon">📈</div><div class="nav-label">Basic Reporting</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="billing.html" class="nav-item"><div class="nav-icon">💰</div><div class="nav-label">Billing & Revenue</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="calendar.html" class="nav-item"><div class="nav-icon">📆</div><div class="nav-label">Calendar Integration</div><div class="phase-badge mvp">MVP</div></a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-header"><h2>📄 Upload Document</h2><p>Upload and manage documents for matters and clients</p></div>
+            <form id="documentForm">
+                <div class="form-section">
+                    <div class="section-title"><span>📎</span> File Upload</div>
+                    <div class="file-upload-area" onclick="document.getElementById('fileInput').click()">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">
+                            <strong>Click to browse</strong> or drag and drop files here<br>
+                            <small>Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (Max 50MB)</small>
+                        </div>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png">
+                    </div>
+                    <div id="fileList" style="margin-top: 15px;"></div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span>📋</span> Document Details</div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label required">Document Title</label>
+                            <input type="text" class="form-input" id="title" placeholder="e.g., Service Agreement - Tech Corp" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Document Type</label>
+                            <select class="form-select" id="docType" required>
+                                <option value="">Select Type</option>
+                                <option value="Contract">Contract</option>
+                                <option value="Agreement">Agreement</option>
+                                <option value="Court Filing">Court Filing</option>
+                                <option value="Legal Opinion">Legal Opinion</option>
+                                <option value="Correspondence">Correspondence</option>
+                                <option value="Evidence">Evidence</option>
+                                <option value="Notice">Notice</option>
+                                <option value="Invoice">Invoice</option>
+                                <option value="Receipt">Receipt</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="category">
+                                <option value="Legal">Legal</option>
+                                <option value="Financial">Financial</option>
+                                <option value="Administrative">Administrative</option>
+                                <option value="Compliance">Compliance</option>
+                                <option value="Communication">Communication</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Client</label>
+                            <select class="form-select" id="clientId"><option value="">Select Client</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Matter/Project</label>
+                            <select class="form-select" id="projectId"><option value="">Select Matter</option></select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Document Date</label>
+                            <input type="date" class="form-input" id="docDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Version</label>
+                            <input type="text" class="form-input" id="version" placeholder="e.g., v1.0, Draft, Final">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="status">
+                                <option value="Draft">Draft</option>
+                                <option value="Under Review">Under Review</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Final">Final</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confidentiality</label>
+                            <select class="form-select" id="confidentiality">
+                                <option value="Public">Public</option>
+                                <option value="Internal">Internal</option>
+                                <option value="Confidential">Confidential</option>
+                                <option value="Highly Confidential">Highly Confidential</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" id="description" placeholder="Brief description of the document..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Tags</label>
+                            <input type="text" class="form-input" id="tags" placeholder="e.g., contract, confidential, signed (comma separated)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Uploaded By</label>
+                            <select class="form-select" id="uploadedBy">
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Anita Sharma">Anita Sharma</option>
+                                <option value="Vikram Singh">Vikram Singh</option>
+                                <option value="Neha Gupta">Neha Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expiry Date</label>
+                            <input type="date" class="form-input" id="expiryDate">
+                            <span class="help-text">Optional: For documents with expiration</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Upload Document</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClients();
+            loadProjects();
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+        });
+
+        function loadClients() {
+            const clients = legalCRM.get('clients');
+            const select = document.getElementById('clientId');
+            clients.forEach(c => {
+                const option = document.createElement('option');
+                option.value = c.id;
+                option.textContent = c.companyName;
+                select.appendChild(option);
+            });
+        }
+
+        function loadProjects() {
+            const projects = legalCRM.get('projects');
+            const select = document.getElementById('projectId');
+            projects.forEach(p => {
+                const option = document.createElement('option');
+                option.value = p.id;
+                option.textContent = p.matterName || p.name;
+                select.appendChild(option);
+            });
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+
+            for (let file of files) {
+                const fileItem = document.createElement('div');
+                fileItem.style.padding = '10px';
+                fileItem.style.background = '#f8f9fa';
+                fileItem.style.borderRadius = '6px';
+                fileItem.style.marginBottom = '8px';
+                fileItem.innerHTML = `
+                    <strong>${file.name}</strong><br>
+                    <small>Size: ${(file.size / 1024).toFixed(2)} KB | Type: ${file.type || 'Unknown'}</small>
+                `;
+                fileList.appendChild(fileItem);
+            }
+        }
+
+        document.getElementById('documentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const files = document.getElementById('fileInput').files;
+            if (files.length === 0) {
+                alert('Please select at least one file to upload');
+                return;
+            }
+
+            const docData = {
+                id: 'DOC-' + Date.now(),
+                title: document.getElementById('title').value,
+                docType: document.getElementById('docType').value,
+                category: document.getElementById('category').value,
+                clientId: document.getElementById('clientId').value,
+                projectId: document.getElementById('projectId').value,
+                docDate: document.getElementById('docDate').value,
+                version: document.getElementById('version').value,
+                status: document.getElementById('status').value,
+                confidentiality: document.getElementById('confidentiality').value,
+                description: document.getElementById('description').value,
+                tags: document.getElementById('tags').value,
+                uploadedBy: document.getElementById('uploadedBy').value,
+                expiryDate: document.getElementById('expiryDate').value,
+                uploadDate: new Date().toISOString().split('T')[0],
+                fileName: files[0].name,
+                fileSize: files[0].size,
+                fileType: files[0].type
+            };
+
+            if (!docData.title || !docData.docType) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            legalCRM.add('documents', docData);
+            legalCRM.add('activities', {
+                id: 'ACT-' + Date.now(),
+                type: 'document_uploaded',
+                title: 'Document Uploaded',
+                description: `${docData.title} uploaded by ${docData.uploadedBy}`,
+                timestamp: new Date().toISOString()
+            });
+
+            alert('Document uploaded successfully!');
+            window.location.href = 'document-management.html';
+        });
+
+        function cancelForm() {
+            if (confirm('Cancel document upload?')) window.location.href = 'document-management.html';
+        }
+    </script>
+</body>
+</html>

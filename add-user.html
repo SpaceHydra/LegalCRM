@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New User - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 1000px; margin: 0 auto; }
+        .form-header { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #ecf0f1; }
+        .form-header h2 { color: #2c3e50; font-size: 24px; margin-bottom: 8px; }
+        .form-header p { color: #7f8c8d; font-size: 14px; }
+        .form-section { margin-bottom: 35px; }
+        .section-title { font-size: 18px; color: #2c3e50; font-weight: 600; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #ecf0f1; display: flex; align-items: center; gap: 10px; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-label { font-size: 14px; color: #2c3e50; font-weight: 500; margin-bottom: 8px; }
+        .form-label.required::after { content: " *"; color: #e74c3c; }
+        .form-input, .form-select, .form-textarea { padding: 12px; border: 1px solid #dfe6e9; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: #3498db; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1); }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+        .form-actions { display: flex; gap: 15px; justify-content: flex-end; padding-top: 20px; border-top: 2px solid #ecf0f1; }
+        .btn { padding: 12px 30px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+        .btn-secondary { background: #ecf0f1; color: #2c3e50; }
+        .btn-secondary:hover { background: #dfe6e9; }
+        .help-text { font-size: 12px; color: #95a5a6; margin-top: 5px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title"><h1>Legal CRM Portal</h1><p>SNG & Partners - Business Development Platform</p></div>
+        </div>
+        <div class="user-section">
+            <div class="search-box"><span>🔍</span><input type="text" placeholder="Search..."></div>
+            <div class="notification-icon"><span style="font-size: 24px;">🔔</span><div class="badge" id="notificationCount">0</div></div>
+            <div class="user-profile"><div class="user-avatar">PM</div><div><div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div><div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div></div></div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item"><div class="nav-icon">📊</div><div class="nav-label">Dashboard</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="lead-management.html" class="nav-item"><div class="nav-icon">🎯</div><div class="nav-label">Lead Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="client-management.html" class="nav-item"><div class="nav-icon">👥</div><div class="nav-label">Client Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="project-management.html" class="nav-item"><div class="nav-icon">📁</div><div class="nav-label">Matter/Project Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="task-management.html" class="nav-item"><div class="nav-icon">✅</div><div class="nav-label">Task Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="document-management.html" class="nav-item"><div class="nav-icon">📄</div><div class="nav-label">Document Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="user-management.html" class="nav-item active"><div class="nav-icon">👤</div><div class="nav-label">User & Role Management</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="reporting.html" class="nav-item"><div class="nav-icon">📈</div><div class="nav-label">Basic Reporting</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="billing.html" class="nav-item"><div class="nav-icon">💰</div><div class="nav-label">Billing & Revenue</div><div class="phase-badge mvp">MVP</div></a>
+            <a href="calendar.html" class="nav-item"><div class="nav-icon">📆</div><div class="nav-label">Calendar Integration</div><div class="phase-badge mvp">MVP</div></a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-header"><h2>👤 Add New User</h2><p>Create a new user account with role and permissions</p></div>
+            <form id="userForm">
+                <div class="form-section">
+                    <div class="section-title"><span>👤</span> Personal Information</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Full Name</label>
+                            <input type="text" class="form-input" id="fullName" placeholder="e.g., John Doe" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" id="email" placeholder="email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Phone</label>
+                            <input type="tel" class="form-input" id="phone" placeholder="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Designation</label>
+                            <input type="text" class="form-input" id="designation" placeholder="e.g., Senior Associate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Employee ID</label>
+                            <input type="text" class="form-input" id="employeeId" placeholder="Auto-generated or custom">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date of Joining</label>
+                            <input type="date" class="form-input" id="dateOfJoining">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span>🔐</span> Account & Access</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Username</label>
+                            <input type="text" class="form-input" id="username" placeholder="Username for login" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Role</label>
+                            <select class="form-select" id="role" required>
+                                <option value="">Select Role</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Senior Partner">Senior Partner</option>
+                                <option value="Partner">Partner</option>
+                                <option value="Senior Associate">Senior Associate</option>
+                                <option value="Associate">Associate</option>
+                                <option value="Paralegal">Paralegal</option>
+                                <option value="Secretary">Secretary</option>
+                                <option value="Accountant">Accountant</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Department</label>
+                            <select class="form-select" id="department" required>
+                                <option value="">Select Department</option>
+                                <option value="Corporate Law">Corporate Law</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="IP & Technology">IP & Technology</option>
+                                <option value="Tax">Tax</option>
+                                <option value="Administration">Administration</option>
+                                <option value="Finance">Finance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="On Leave">On Leave</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Reports To</label>
+                            <select class="form-select" id="reportsTo">
+                                <option value="">Select Manager</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Anita Sharma">Anita Sharma</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Bar Council Number</label>
+                            <input type="text" class="form-input" id="barCouncilNumber" placeholder="For lawyers only">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span>⚙️</span> Permissions</div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Access Permissions</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permLeads" checked>
+                                    <label for="permLeads">Manage Leads</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permClients" checked>
+                                    <label for="permClients">Manage Clients</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permProjects" checked>
+                                    <label for="permProjects">Manage Matters</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permTasks" checked>
+                                    <label for="permTasks">Manage Tasks</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permDocuments" checked>
+                                    <label for="permDocuments">Manage Documents</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permBilling">
+                                    <label for="permBilling">Manage Billing</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permReports">
+                                    <label for="permReports">View Reports</label>
+                                </div>
+                                <div class="checkbox-item">
+                                    <input type="checkbox" id="permUsers">
+                                    <label for="permUsers">Manage Users</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <div class="section-title"><span>📝</span> Additional Information</div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Hourly Rate</label>
+                            <input type="number" class="form-input" id="hourlyRate" placeholder="Rate per hour in ₹">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Specialization</label>
+                            <input type="text" class="form-input" id="specialization" placeholder="e.g., Corporate Law, Litigation">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Bio/Notes</label>
+                            <textarea class="form-input" id="bio" placeholder="Additional notes about the user..." style="min-height: 80px;"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const userData = {
+                id: 'USER-' + Date.now(),
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                designation: document.getElementById('designation').value,
+                employeeId: document.getElementById('employeeId').value || 'EMP-' + Date.now(),
+                dateOfJoining: document.getElementById('dateOfJoining').value,
+                username: document.getElementById('username').value,
+                role: document.getElementById('role').value,
+                department: document.getElementById('department').value,
+                status: document.getElementById('status').value,
+                reportsTo: document.getElementById('reportsTo').value,
+                barCouncilNumber: document.getElementById('barCouncilNumber').value,
+                permissions: {
+                    leads: document.getElementById('permLeads').checked,
+                    clients: document.getElementById('permClients').checked,
+                    projects: document.getElementById('permProjects').checked,
+                    tasks: document.getElementById('permTasks').checked,
+                    documents: document.getElementById('permDocuments').checked,
+                    billing: document.getElementById('permBilling').checked,
+                    reports: document.getElementById('permReports').checked,
+                    users: document.getElementById('permUsers').checked
+                },
+                hourlyRate: parseFloat(document.getElementById('hourlyRate').value) || 0,
+                specialization: document.getElementById('specialization').value,
+                bio: document.getElementById('bio').value,
+                createdDate: new Date().toISOString().split('T')[0]
+            };
+
+            if (!userData.fullName || !userData.email || !userData.phone || !userData.username || !userData.role || !userData.department) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            legalCRM.add('users', userData);
+            legalCRM.add('activities', {
+                id: 'ACT-' + Date.now(),
+                type: 'user_created',
+                title: 'New User Created',
+                description: `${userData.fullName} added as ${userData.role}`,
+                timestamp: new Date().toISOString()
+            });
+
+            alert('User created successfully!');
+            window.location.href = 'user-management.html';
+        });
+
+        function cancelForm() {
+            if (confirm('Cancel user creation?')) window.location.href = 'user-management.html';
+        }
+    </script>
+</body>
+</html>
