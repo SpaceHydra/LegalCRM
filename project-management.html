@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matter/Project Management - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-new { background: #e3f2fd; color: #2196f3; }
+        .status-in-progress { background: #fff8e1; color: #f39c12; }
+        .status-review { background: #f3e5f5; color: #9c27b0; }
+        .status-completed { background: #e8f5e9; color: #27ae60; }
+        .status-hold { background: #ffebee; color: #e74c3c; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .milestone-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ecf0f1;
+        }
+
+        .milestone-info {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-actions {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item active">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>📁 Matter/Project Management</h2>
+            <p>Track all your legal matters and projects</p>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-value" id="totalProjects">0</div>
+                <div class="summary-label">Total Projects</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="inProgressProjects">0</div>
+                <div class="summary-label">In Progress</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="completedProjects">0</div>
+                <div class="summary-label">Completed</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="reviewProjects">0</div>
+                <div class="summary-label">Under Review</div>
+            </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="table-title">All Projects</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search projects...">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="New">New</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Review">Review</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Hold">Hold</option>
+                    </select>
+                    <select class="filter-select" id="practiceFilter">
+                        <option value="">All Practice Areas</option>
+                        <option value="Corporate Law">Corporate Law</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="Litigation">Litigation</option>
+                        <option value="Contract Law">Contract Law</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddProjectModal()">
+                        ➕ Add New Project
+                    </button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="projectsTable">
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Project Name</th>
+                            <th>Client</th>
+                            <th>Practice Area</th>
+                            <th>Lead Advocate</th>
+                            <th>Status</th>
+                            <th>Timeline</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectsTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Project Modal -->
+    <div class="modal" id="projectModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Project</h3>
+                <button class="close-btn" onclick="closeProjectModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <input type="hidden" id="projectId">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label required">Project Name</label>
+                            <input type="text" class="form-input" id="projectName" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" id="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Client</label>
+                            <select class="form-select" id="clientId" required>
+                                <option value="">Select Client</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Practice Area</label>
+                            <select class="form-select" id="practiceArea" required>
+                                <option value="">Select Practice Area</option>
+                                <option value="Corporate Law">Corporate Law</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Contract Law">Contract Law</option>
+                                <option value="Intellectual Property">Intellectual Property</option>
+                                <option value="Tax Law">Tax Law</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Project Type</label>
+                            <select class="form-select" id="projectType" required>
+                                <option value="">Select Type</option>
+                                <option value="Advisory">Advisory</option>
+                                <option value="Transaction">Transaction</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Compliance">Compliance</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Lead Advocate</label>
+                            <select class="form-select" id="leadAdvocate" required>
+                                <option value="">Select Advocate</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Harish Kumar">Harish Kumar</option>
+                                <option value="Meera Patel">Meera Patel</option>
+                                <option value="Anjali Singh">Anjali Singh</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" class="form-input" id="startDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expected End Date</label>
+                            <input type="date" class="form-input" id="expectedEndDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="New">New</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Review">Review</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Hold">Hold</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width" style="margin-top: 20px;">
+                        <label class="form-label">Milestones</label>
+                        <div id="milestoneContainer"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addMilestone()" style="margin-top: 10px;">
+                            ➕ Add Milestone
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeProjectModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let milestoneCounter = 0;
+
+        // Load projects on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClients();
+            loadProjects();
+            updateStats();
+            setupFilters();
+        });
+
+        function loadClients() {
+            const clients = legalCRM.get('clients');
+            const clientSelect = document.getElementById('clientId');
+            clientSelect.innerHTML = '<option value="">Select Client</option>';
+            clients.forEach(client => {
+                clientSelect.innerHTML += `<option value="${client.id}">${client.companyName}</option>`;
+            });
+        }
+
+        function loadProjects(filterStatus = '', filterPractice = '', searchTerm = '') {
+            let projects = legalCRM.get('projects');
+
+            // Apply filters
+            if (filterStatus) {
+                projects = projects.filter(p => p.status === filterStatus);
+            }
+            if (filterPractice) {
+                projects = projects.filter(p => p.practiceArea === filterPractice);
+            }
+            if (searchTerm) {
+                searchTerm = searchTerm.toLowerCase();
+                projects = projects.filter(p =>
+                    p.name.toLowerCase().includes(searchTerm) ||
+                    p.clientName.toLowerCase().includes(searchTerm) ||
+                    p.id.toLowerCase().includes(searchTerm) ||
+                    p.leadAdvocate.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const tbody = document.getElementById('projectsTableBody');
+
+            if (projects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📁</div>
+                                <h3>No projects found</h3>
+                                <p>Start by adding your first project</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = projects.map(project => `
+                <tr>
+                    <td><strong>${project.id}</strong></td>
+                    <td>
+                        <strong>${project.name}</strong><br>
+                        <small style="color: #7f8c8d;">${project.projectType}</small>
+                    </td>
+                    <td>${project.clientName}</td>
+                    <td>${project.practiceArea}</td>
+                    <td>${project.leadAdvocate}</td>
+                    <td>
+                        <span class="status-badge status-${project.status.toLowerCase().replace(' ', '-')}">
+                            ${project.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${formatDate(project.startDate)}<br>
+                        <small style="color: #7f8c8d;">to ${formatDate(project.expectedEndDate)}</small>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="editProject('${project.id}')" title="Edit">
+                                ✏️
+                            </button>
+                            <button class="icon-btn btn-success" onclick="viewProject('${project.id}')" title="View Details">
+                                👁️
+                            </button>
+                            <button class="icon-btn btn-danger" onclick="deleteProject('${project.id}')" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            const projects = legalCRM.get('projects');
+            const totalProjects = projects.length;
+            const inProgressProjects = projects.filter(p => p.status === 'In Progress').length;
+            const completedProjects = projects.filter(p => p.status === 'Completed').length;
+            const reviewProjects = projects.filter(p => p.status === 'Review').length;
+
+            document.getElementById('totalProjects').textContent = totalProjects;
+            document.getElementById('inProgressProjects').textContent = inProgressProjects;
+            document.getElementById('completedProjects').textContent = completedProjects;
+            document.getElementById('reviewProjects').textContent = reviewProjects;
+        }
+
+        function setupFilters() {
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const practiceFilter = document.getElementById('practiceFilter').value;
+                loadProjects(statusFilter, practiceFilter, searchTerm);
+            });
+
+            document.getElementById('statusFilter').addEventListener('change', function(e) {
+                const statusFilter = e.target.value;
+                const practiceFilter = document.getElementById('practiceFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadProjects(statusFilter, practiceFilter, searchTerm);
+            });
+
+            document.getElementById('practiceFilter').addEventListener('change', function(e) {
+                const practiceFilter = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadProjects(statusFilter, practiceFilter, searchTerm);
+            });
+        }
+
+        function openAddProjectModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Project';
+            document.getElementById('projectForm').reset();
+            document.getElementById('projectId').value = '';
+            document.getElementById('milestoneContainer').innerHTML = '';
+            milestoneCounter = 0;
+            document.getElementById('projectModal').classList.add('active');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').classList.remove('active');
+        }
+
+        function addMilestone() {
+            const container = document.getElementById('milestoneContainer');
+            const milestoneId = `milestone_${milestoneCounter++}`;
+
+            const milestoneHTML = `
+                <div class="milestone-item" id="${milestoneId}">
+                    <div class="milestone-info">
+                        <div class="form-grid" style="gap: 10px;">
+                            <div class="form-group">
+                                <label class="form-label">Milestone Name</label>
+                                <input type="text" class="form-input milestone-name-input" data-milestone="${milestoneId}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Status</label>
+                                <select class="form-select milestone-status-input" data-milestone="${milestoneId}">
+                                    <option value="Pending">Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Target Date</label>
+                                <input type="date" class="form-input milestone-date-input" data-milestone="${milestoneId}">
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeMilestone('${milestoneId}')">Remove</button>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', milestoneHTML);
+        }
+
+        function removeMilestone(milestoneId) {
+            document.getElementById(milestoneId).remove();
+        }
+
+        function saveProject() {
+            const id = document.getElementById('projectId').value;
+            const clientId = document.getElementById('clientId').value;
+            const client = legalCRM.getById('clients', clientId);
+
+            // Collect milestone data
+            const milestones = [];
+            document.querySelectorAll('.milestone-item').forEach(item => {
+                const name = item.querySelector('.milestone-name-input').value;
+                if (name) {
+                    milestones.push({
+                        name: name,
+                        status: item.querySelector('.milestone-status-input').value,
+                        date: item.querySelector('.milestone-date-input').value
+                    });
+                }
+            });
+
+            const projectData = {
+                name: document.getElementById('projectName').value,
+                description: document.getElementById('description').value,
+                clientId: clientId,
+                clientName: client ? client.companyName : '',
+                practiceArea: document.getElementById('practiceArea').value,
+                projectType: document.getElementById('projectType').value,
+                leadAdvocate: document.getElementById('leadAdvocate').value,
+                startDate: document.getElementById('startDate').value,
+                expectedEndDate: document.getElementById('expectedEndDate').value,
+                status: document.getElementById('status').value,
+                milestones: milestones,
+                collaborators: []
+            };
+
+            // Validate required fields
+            if (!projectData.name || !projectData.clientId || !projectData.practiceArea || !projectData.leadAdvocate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (id) {
+                // Update existing project
+                legalCRM.update('projects', id, projectData);
+                showNotification('Project updated successfully!');
+            } else {
+                // Create new project
+                const projects = legalCRM.get('projects');
+                const maxSerial = projects.reduce((max, p) => Math.max(max, p.serialNo || 0), 0);
+
+                const newProject = {
+                    id: legalCRM.generateId('projects', 'PROJ'),
+                    serialNo: maxSerial + 1,
+                    ...projectData,
+                    actualEndDate: '',
+                    createdBy: 'Prateek Mehta',
+                    createdDate: new Date().toISOString().split('T')[0]
+                };
+                legalCRM.create('projects', newProject);
+                showNotification('Project created successfully!');
+            }
+
+            closeProjectModal();
+            loadProjects();
+            updateStats();
+        }
+
+        function editProject(id) {
+            const project = legalCRM.getById('projects', id);
+            if (!project) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Project';
+            document.getElementById('projectId').value = project.id;
+            document.getElementById('projectName').value = project.name;
+            document.getElementById('description').value = project.description || '';
+            document.getElementById('clientId').value = project.clientId;
+            document.getElementById('practiceArea').value = project.practiceArea;
+            document.getElementById('projectType').value = project.projectType;
+            document.getElementById('leadAdvocate').value = project.leadAdvocate;
+            document.getElementById('startDate').value = project.startDate;
+            document.getElementById('expectedEndDate').value = project.expectedEndDate;
+            document.getElementById('status').value = project.status;
+
+            // Load milestones
+            document.getElementById('milestoneContainer').innerHTML = '';
+            milestoneCounter = 0;
+            if (project.milestones && project.milestones.length > 0) {
+                project.milestones.forEach(milestone => {
+                    addMilestone();
+                    const lastMilestone = document.querySelectorAll('.milestone-item')[document.querySelectorAll('.milestone-item').length - 1];
+                    lastMilestone.querySelector('.milestone-name-input').value = milestone.name;
+                    lastMilestone.querySelector('.milestone-status-input').value = milestone.status;
+                    lastMilestone.querySelector('.milestone-date-input').value = milestone.date;
+                });
+            }
+
+            document.getElementById('projectModal').classList.add('active');
+        }
+
+        function deleteProject(id) {
+            if (confirm('Are you sure you want to delete this project?')) {
+                legalCRM.delete('projects', id);
+                showNotification('Project deleted successfully!');
+                loadProjects();
+                updateStats();
+            }
+        }
+
+        function viewProject(id) {
+            const project = legalCRM.getById('projects', id);
+            if (!project) return;
+
+            let milestoneList = '';
+            if (project.milestones && project.milestones.length > 0) {
+                milestoneList = project.milestones.map(m => `
+                    <div style="background: white; padding: 8px; margin: 5px 0; border-radius: 4px;">
+                        <strong>${m.name}</strong> - ${m.status} (${formatDate(m.date)})
+                    </div>
+                `).join('');
+            }
+
+            alert(`
+Project Details:
+================
+ID: ${project.id}
+Name: ${project.name}
+Client: ${project.clientName}
+Practice Area: ${project.practiceArea}
+Type: ${project.projectType}
+Lead: ${project.leadAdvocate}
+Status: ${project.status}
+Timeline: ${formatDate(project.startDate)} to ${formatDate(project.expectedEndDate)}
+Description: ${project.description || 'N/A'}
+
+Milestones: ${project.milestones ? project.milestones.length : 0}
+            `);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('projectModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeProjectModal();
+            }
+        });
+    </script>
+</body>
+</html>

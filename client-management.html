@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Management - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-vip { background: #fff3e0; color: #f57c00; }
+        .status-active { background: #e8f5e9; color: #27ae60; }
+        .status-inactive { background: #ffebee; color: #e74c3c; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .spoc-list {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .spoc-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .spoc-info {
+            flex: 1;
+        }
+
+        .spoc-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 4px;
+        }
+
+        .spoc-details {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-actions {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item active">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>👥 Client Management</h2>
+            <p>Manage your client portfolio and contacts</p>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-value" id="totalClients">0</div>
+                <div class="summary-label">Total Clients</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="vipClients">0</div>
+                <div class="summary-label">VIP Clients</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="activeClients">0</div>
+                <div class="summary-label">Active Clients</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="totalRevenue">₹0</div>
+                <div class="summary-label">Total Revenue</div>
+            </div>
+        </div>
+
+        <!-- Clients Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="table-title">All Clients</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search clients...">
+                    <select class="filter-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="VIP">VIP</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                    <select class="filter-select" id="industryFilter">
+                        <option value="">All Industries</option>
+                        <option value="Real Estate">Real Estate</option>
+                        <option value="IT Services">IT Services</option>
+                        <option value="Construction">Construction</option>
+                        <option value="Manufacturing">Manufacturing</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddClientModal()">
+                        ➕ Add New Client
+                    </button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="clientsTable">
+                    <thead>
+                        <tr>
+                            <th>Client ID</th>
+                            <th>Company Name</th>
+                            <th>Industry</th>
+                            <th>Category</th>
+                            <th>Total Revenue</th>
+                            <th>SPOCs</th>
+                            <th>Last Interaction</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Client Modal -->
+    <div class="modal" id="clientModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Client</h3>
+                <button class="close-btn" onclick="closeClientModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="clientForm">
+                    <input type="hidden" id="clientId">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label required">Company Name</label>
+                            <input type="text" class="form-input" id="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Website</label>
+                            <input type="url" class="form-input" id="website">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PAN</label>
+                            <input type="text" class="form-input" id="pan" maxlength="10">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">GSTIN</label>
+                            <input type="text" class="form-input" id="gstin" maxlength="15">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Industry</label>
+                            <select class="form-select" id="industry" required>
+                                <option value="">Select Industry</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="IT Services">IT Services</option>
+                                <option value="Construction">Construction</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label required">Registered Address</label>
+                            <textarea class="form-textarea" id="registeredAddress" required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Communication Address</label>
+                            <textarea class="form-textarea" id="communicationAddress"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Category</label>
+                            <select class="form-select" id="category" required>
+                                <option value="Active">Active</option>
+                                <option value="VIP">VIP</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width" style="margin-top: 20px;">
+                        <label class="form-label">Single Point of Contact (SPOC)</label>
+                        <div id="spocContainer"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addSPOC()" style="margin-top: 10px;">
+                            ➕ Add SPOC
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeClientModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveClient()">Save Client</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let spocCounter = 0;
+
+        // Load clients on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClients();
+            updateStats();
+            setupFilters();
+        });
+
+        function loadClients(filterCategory = '', filterIndustry = '', searchTerm = '') {
+            let clients = legalCRM.get('clients');
+
+            // Apply filters
+            if (filterCategory) {
+                clients = clients.filter(c => c.category === filterCategory);
+            }
+            if (filterIndustry) {
+                clients = clients.filter(c => c.industry === filterIndustry);
+            }
+            if (searchTerm) {
+                searchTerm = searchTerm.toLowerCase();
+                clients = clients.filter(c =>
+                    c.companyName.toLowerCase().includes(searchTerm) ||
+                    c.id.toLowerCase().includes(searchTerm) ||
+                    c.gstin.toLowerCase().includes(searchTerm) ||
+                    c.pan.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const tbody = document.getElementById('clientsTableBody');
+
+            if (clients.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👥</div>
+                                <h3>No clients found</h3>
+                                <p>Start by adding your first client</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = clients.map(client => `
+                <tr>
+                    <td><strong>${client.id}</strong></td>
+                    <td>
+                        <strong>${client.companyName}</strong><br>
+                        <small style="color: #7f8c8d;">${client.website || 'No website'}</small>
+                    </td>
+                    <td>${client.industry}</td>
+                    <td>
+                        <span class="status-badge status-${client.category.toLowerCase()}">
+                            ${client.category}
+                        </span>
+                    </td>
+                    <td><strong>${formatCurrency(client.totalRevenue)}</strong></td>
+                    <td>${client.spocs ? client.spocs.length : 0} contacts</td>
+                    <td>${formatDate(client.lastInteraction)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="editClient('${client.id}')" title="Edit">
+                                ✏️
+                            </button>
+                            <button class="icon-btn btn-success" onclick="viewClient('${client.id}')" title="View Details">
+                                👁️
+                            </button>
+                            <button class="icon-btn btn-danger" onclick="deleteClient('${client.id}')" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            const clients = legalCRM.get('clients');
+            const totalClients = clients.length;
+            const vipClients = clients.filter(c => c.category === 'VIP').length;
+            const activeClients = clients.filter(c => c.category === 'Active').length;
+            const totalRevenue = clients.reduce((sum, c) => sum + c.totalRevenue, 0);
+
+            document.getElementById('totalClients').textContent = totalClients;
+            document.getElementById('vipClients').textContent = vipClients;
+            document.getElementById('activeClients').textContent = activeClients;
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+        }
+
+        function setupFilters() {
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                const categoryFilter = document.getElementById('categoryFilter').value;
+                const industryFilter = document.getElementById('industryFilter').value;
+                loadClients(categoryFilter, industryFilter, searchTerm);
+            });
+
+            document.getElementById('categoryFilter').addEventListener('change', function(e) {
+                const categoryFilter = e.target.value;
+                const industryFilter = document.getElementById('industryFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadClients(categoryFilter, industryFilter, searchTerm);
+            });
+
+            document.getElementById('industryFilter').addEventListener('change', function(e) {
+                const industryFilter = e.target.value;
+                const categoryFilter = document.getElementById('categoryFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadClients(categoryFilter, industryFilter, searchTerm);
+            });
+        }
+
+        function openAddClientModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Client';
+            document.getElementById('clientForm').reset();
+            document.getElementById('clientId').value = '';
+            document.getElementById('spocContainer').innerHTML = '';
+            spocCounter = 0;
+            addSPOC(); // Add one SPOC by default
+            document.getElementById('clientModal').classList.add('active');
+        }
+
+        function closeClientModal() {
+            document.getElementById('clientModal').classList.remove('active');
+        }
+
+        function addSPOC() {
+            const container = document.getElementById('spocContainer');
+            const spocId = `spoc_${spocCounter++}`;
+
+            const spocHTML = `
+                <div class="spoc-item" id="${spocId}">
+                    <div class="spoc-info">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Name</label>
+                                <input type="text" class="form-input spoc-name-input" data-spoc="${spocId}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input spoc-email-input" data-spoc="${spocId}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-input spoc-phone-input" data-spoc="${spocId}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Department</label>
+                                <input type="text" class="form-input spoc-department-input" data-spoc="${spocId}">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Preference</label>
+                                <select class="form-select spoc-preference-input" data-spoc="${spocId}">
+                                    <option value="Email">Email</option>
+                                    <option value="Phone">Phone</option>
+                                    <option value="WhatsApp">WhatsApp</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeSPOC('${spocId}')">Remove</button>
+                </div>
+            `;
+
+            container.insertAdjacentHTML('beforeend', spocHTML);
+        }
+
+        function removeSPOC(spocId) {
+            document.getElementById(spocId).remove();
+        }
+
+        function saveClient() {
+            const id = document.getElementById('clientId').value;
+
+            // Collect SPOC data
+            const spocs = [];
+            document.querySelectorAll('.spoc-item').forEach((item, index) => {
+                const spocId = item.id;
+                const name = item.querySelector('.spoc-name-input').value;
+                if (name) {
+                    spocs.push({
+                        id: `SPOC-${Date.now()}-${index}`,
+                        name: name,
+                        email: item.querySelector('.spoc-email-input').value,
+                        phone: item.querySelector('.spoc-phone-input').value,
+                        department: item.querySelector('.spoc-department-input').value,
+                        communicationPreference: item.querySelector('.spoc-preference-input').value
+                    });
+                }
+            });
+
+            const clientData = {
+                companyName: document.getElementById('companyName').value,
+                website: document.getElementById('website').value,
+                pan: document.getElementById('pan').value.toUpperCase(),
+                gstin: document.getElementById('gstin').value.toUpperCase(),
+                industry: document.getElementById('industry').value,
+                registeredAddress: document.getElementById('registeredAddress').value,
+                communicationAddress: document.getElementById('communicationAddress').value || document.getElementById('registeredAddress').value,
+                category: document.getElementById('category').value,
+                spocs: spocs,
+                lastInteraction: new Date().toISOString().split('T')[0]
+            };
+
+            // Validate required fields
+            if (!clientData.companyName || !clientData.industry || !clientData.registeredAddress) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (id) {
+                // Update existing client
+                legalCRM.update('clients', id, clientData);
+                showNotification('Client updated successfully!');
+            } else {
+                // Create new client
+                const newClient = {
+                    id: legalCRM.generateId('clients', 'CLT'),
+                    ...clientData,
+                    totalRevenue: 0,
+                    createdDate: new Date().toISOString().split('T')[0]
+                };
+                legalCRM.create('clients', newClient);
+                showNotification('Client created successfully!');
+            }
+
+            closeClientModal();
+            loadClients();
+            updateStats();
+        }
+
+        function editClient(id) {
+            const client = legalCRM.getById('clients', id);
+            if (!client) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Client';
+            document.getElementById('clientId').value = client.id;
+            document.getElementById('companyName').value = client.companyName;
+            document.getElementById('website').value = client.website || '';
+            document.getElementById('pan').value = client.pan || '';
+            document.getElementById('gstin').value = client.gstin || '';
+            document.getElementById('industry').value = client.industry;
+            document.getElementById('registeredAddress').value = client.registeredAddress;
+            document.getElementById('communicationAddress').value = client.communicationAddress;
+            document.getElementById('category').value = client.category;
+
+            // Load SPOCs
+            document.getElementById('spocContainer').innerHTML = '';
+            spocCounter = 0;
+            if (client.spocs && client.spocs.length > 0) {
+                client.spocs.forEach(spoc => {
+                    addSPOC();
+                    const lastSpoc = document.querySelectorAll('.spoc-item')[document.querySelectorAll('.spoc-item').length - 1];
+                    lastSpoc.querySelector('.spoc-name-input').value = spoc.name;
+                    lastSpoc.querySelector('.spoc-email-input').value = spoc.email;
+                    lastSpoc.querySelector('.spoc-phone-input').value = spoc.phone;
+                    lastSpoc.querySelector('.spoc-department-input').value = spoc.department;
+                    lastSpoc.querySelector('.spoc-preference-input').value = spoc.communicationPreference;
+                });
+            } else {
+                addSPOC();
+            }
+
+            document.getElementById('clientModal').classList.add('active');
+        }
+
+        function deleteClient(id) {
+            if (confirm('Are you sure you want to delete this client?')) {
+                legalCRM.delete('clients', id);
+                showNotification('Client deleted successfully!');
+                loadClients();
+                updateStats();
+            }
+        }
+
+        function viewClient(id) {
+            const client = legalCRM.getById('clients', id);
+            if (!client) return;
+
+            let spocList = '';
+            if (client.spocs && client.spocs.length > 0) {
+                spocList = client.spocs.map(spoc => `
+                    <div style="background: white; padding: 10px; margin: 5px 0; border-radius: 6px;">
+                        <strong>${spoc.name}</strong> - ${spoc.department}<br>
+                        📧 ${spoc.email} | 📱 ${spoc.phone}<br>
+                        <small>Preferred: ${spoc.communicationPreference}</small>
+                    </div>
+                `).join('');
+            } else {
+                spocList = '<p>No SPOCs defined</p>';
+            }
+
+            const details = `
+                <h3>${client.companyName}</h3>
+                <p><strong>ID:</strong> ${client.id}</p>
+                <p><strong>Industry:</strong> ${client.industry}</p>
+                <p><strong>Category:</strong> ${client.category}</p>
+                <p><strong>PAN:</strong> ${client.pan || 'N/A'}</p>
+                <p><strong>GSTIN:</strong> ${client.gstin || 'N/A'}</p>
+                <p><strong>Website:</strong> ${client.website || 'N/A'}</p>
+                <p><strong>Address:</strong> ${client.registeredAddress}</p>
+                <p><strong>Total Revenue:</strong> ${formatCurrency(client.totalRevenue)}</p>
+                <p><strong>Last Interaction:</strong> ${formatDate(client.lastInteraction)}</p>
+                <hr>
+                <h4>Single Points of Contact:</h4>
+                ${spocList}
+            `;
+
+            alert(details); // In production, this would be a better modal
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('clientModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeClientModal();
+            }
+        });
+    </script>
+</body>
+</html>
