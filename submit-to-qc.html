@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal CRM Portal - Submit to Quality Check</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Matter Management</div>
+            <a href="matter-list.html" class="nav-item">
+                <div class="nav-icon">⚖️</div>
+                <div class="nav-label">Matters</div>
+            </a>
+            <a href="qc-review.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">QC Review</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div style="margin-bottom: 16px;">
+            <a href="#" onclick="goBack()" style="color: #64748b; text-decoration: none;">← Back to Matter Details</a>
+        </div>
+
+        <div class="page-header">
+            <div>
+                <h2 id="pageTitle">Submit to Quality Check</h2>
+                <p id="matterInfo">Submit deliverables for quality review and approval</p>
+            </div>
+        </div>
+
+        <!-- Pre-submission Checklist -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Pre-Submission Checklist</h3>
+            </div>
+            <div class="card-body">
+                <div id="preCheckList">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+        </div>
+
+        <!-- QC Submission Form -->
+        <form id="qcForm" onsubmit="submitToQC(event)">
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Deliverable Information</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Deliverable Title *</label>
+                            <input type="text" id="deliverableTitle" class="form-control" required placeholder="e.g., BPR Report - HDFC Portfolio Zone 1">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Deliverable Type *</label>
+                            <select id="deliverableType" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="BPR Report">BPR Report</option>
+                                <option value="Title Search Report">Title Search Report</option>
+                                <option value="Legal Opinion">Legal Opinion</option>
+                                <option value="Due Diligence Report">Due Diligence Report</option>
+                                <option value="Verification Report">Verification Report</option>
+                                <option value="Analysis Document">Analysis Document</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Priority *</label>
+                            <select id="priority" class="form-control" required>
+                                <option value="Normal">Normal</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Expected TAT (Days) *</label>
+                            <input type="number" id="expectedTAT" class="form-control" min="1" max="30" value="3" required>
+                            <small>Standard QC turnaround time</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Select Documents for QC</h3>
+                </div>
+                <div class="card-body">
+                    <div id="documentsList" style="max-height: 300px; overflow-y: auto;">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>QC Reviewer Assignment</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Assign to QC Reviewer *</label>
+                            <select id="qcReviewer" class="form-control" required>
+                                <option value="">Select Reviewer</option>
+                                <option value="Senior Advocate - Prateek Mehta">Senior Advocate - Prateek Mehta</option>
+                                <option value="QC Manager - Anjali Sharma">QC Manager - Anjali Sharma</option>
+                                <option value="Lead Advocate - Vikram Singh">Lead Advocate - Vikram Singh</option>
+                                <option value="Quality Head - Meera Patel">Quality Head - Meera Patel</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Review Due Date *</label>
+                            <input type="date" id="reviewDueDate" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Additional Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Specific Review Instructions</label>
+                        <textarea id="reviewInstructions" class="form-control" rows="4" placeholder="Provide specific instructions for the QC reviewer...
+
+Examples:
+- Focus on property description accuracy
+- Verify all encumbrance details
+- Check compliance with bank's reporting format
+- Review calculations and valuation methodology"></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 16px;">
+                        <label>Known Issues / Areas of Concern</label>
+                        <textarea id="knownIssues" class="form-control" rows="3" placeholder="Mention any known issues or areas that need special attention..."></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 16px;">
+                        <label>
+                            <input type="checkbox" id="urgentReview">
+                            Mark as Urgent Review (requires immediate attention)
+                        </label>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 8px;">
+                        <label>
+                            <input type="checkbox" id="notifyClient">
+                            Notify client upon QC approval (send automatic notification)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn-primary" id="submitBtn">✅ Submit for QC Review</button>
+                <button type="button" onclick="goBack()" class="btn-secondary">Cancel</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let matterId = null;
+        let currentMatter = null;
+        let matterDocuments = [];
+        let matterTasks = [];
+        let selectedDocuments = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get matter ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            matterId = urlParams.get('matterId');
+
+            if (!matterId) {
+                alert('No matter ID provided');
+                window.history.back();
+                return;
+            }
+
+            currentMatter = legalCRM.getById('matters', matterId);
+            if (!currentMatter) {
+                alert('Matter not found');
+                window.history.back();
+                return;
+            }
+
+            // Update page info
+            document.getElementById('matterInfo').textContent = `Submit deliverables for ${currentMatter.matterName}`;
+
+            // Set default review due date based on TAT
+            updateReviewDueDate();
+            document.getElementById('expectedTAT').addEventListener('change', updateReviewDueDate);
+
+            // Load data
+            matterDocuments = legalCRM.getMatterDocuments(matterId);
+            matterTasks = legalCRM.getMatterTasks(matterId);
+
+            // Render components
+            renderPreCheckList();
+            renderDocumentsList();
+        });
+
+        function updateReviewDueDate() {
+            const tat = parseInt(document.getElementById('expectedTAT').value) || 3;
+            const dueDate = new Date();
+            dueDate.setDate(dueDate.getDate() + tat);
+            document.getElementById('reviewDueDate').valueAsDate = dueDate;
+        }
+
+        function renderPreCheckList() {
+            const container = document.getElementById('preCheckList');
+
+            // Check various conditions
+            const checks = [];
+
+            // Check 1: All critical tasks completed
+            const criticalTasks = matterTasks.filter(t => t.isCritical);
+            const criticalComplete = criticalTasks.every(t => t.status === 'Completed');
+            checks.push({
+                label: 'All critical tasks completed',
+                status: criticalComplete,
+                detail: criticalComplete ?
+                    `${criticalTasks.length} critical task(s) completed` :
+                    `${criticalTasks.filter(t => t.status !== 'Completed').length} critical task(s) pending`
+            });
+
+            // Check 2: Interim deliverables available
+            const interimDocs = matterDocuments.filter(d => d.folder === 'Interim Deliverables');
+            const hasInterimDocs = interimDocs.length > 0;
+            checks.push({
+                label: 'Interim deliverables uploaded',
+                status: hasInterimDocs,
+                detail: hasInterimDocs ?
+                    `${interimDocs.length} document(s) found in Interim Deliverables folder` :
+                    'No documents in Interim Deliverables folder'
+            });
+
+            // Check 3: Matter not already at QC
+            const existingQC = legalCRM.get('qcItems').filter(q =>
+                q.matterId === matterId &&
+                q.status === 'Pending Review'
+            );
+            const noExistingQC = existingQC.length === 0;
+            checks.push({
+                label: 'No pending QC reviews',
+                status: noExistingQC,
+                detail: noExistingQC ?
+                    'No pending QC reviews for this matter' :
+                    `${existingQC.length} QC item(s) already pending review`
+            });
+
+            // Check 4: Matter status appropriate
+            const appropriateStatus = ['In Execution', 'At Risk'].includes(currentMatter.status);
+            checks.push({
+                label: 'Matter status is appropriate for QC',
+                status: appropriateStatus,
+                detail: `Current status: ${currentMatter.status}`
+            });
+
+            const allChecksPassed = checks.every(c => c.status);
+
+            container.innerHTML = `
+                <div style="margin-bottom: 16px;">
+                    ${allChecksPassed ?
+                        '<div style="padding: 12px; background: #d1fae5; border: 1px solid #10b981; border-radius: 8px; color: #065f46;"><strong>✓ All pre-checks passed!</strong> You can proceed with QC submission.</div>' :
+                        '<div style="padding: 12px; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 8px; color: #92400e;"><strong>⚠ Warning:</strong> Some pre-checks failed. Review below before submitting.</div>'
+                    }
+                </div>
+                <div style="display: grid; gap: 12px;">
+                    ${checks.map(check => `
+                        <div style="display: flex; align-items: start; gap: 12px; padding: 12px; border: 1px solid ${check.status ? '#d1fae5' : '#fee2e2'}; border-radius: 8px; background: ${check.status ? '#f0fdf4' : '#fef2f2'};">
+                            <div style="font-size: 20px;">${check.status ? '✅' : '❌'}</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #0f172a; margin-bottom: 4px;">${check.label}</div>
+                                <div style="font-size: 13px; color: #64748b;">${check.detail}</div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderDocumentsList() {
+            const container = document.getElementById('documentsList');
+
+            // Filter documents - typically interim deliverables are submitted for QC
+            const submittableDocs = matterDocuments.filter(d =>
+                d.folder === 'Interim Deliverables' || d.folder === 'Input Documents'
+            );
+
+            if (submittableDocs.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #64748b;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">📄</div>
+                        <h3 style="margin-bottom: 8px;">No Documents Available</h3>
+                        <p>Upload documents to Interim Deliverables folder first</p>
+                        <button onclick="uploadDocument()" class="btn-primary" style="margin-top: 16px;">Upload Document</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div style="margin-bottom: 16px; padding: 12px; background: #f8fafc; border-radius: 8px;">
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" id="selectAllDocs" onchange="toggleSelectAll(this)" style="margin-right: 8px;">
+                        <span style="font-weight: 500;">Select All Documents (${submittableDocs.length})</span>
+                    </label>
+                </div>
+                <div style="display: grid; gap: 12px;">
+                    ${submittableDocs.map(doc => `
+                        <label style="display: flex; align-items: start; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #ffffff;">
+                            <input type="checkbox" name="qcDocument" value="${doc.id}" onchange="updateSelectedDocs()" style="margin-right: 12px; margin-top: 4px;">
+                            <div style="flex: 1;">
+                                <div style="font-weight: 500; color: #0f172a; margin-bottom: 4px;">${doc.documentName}</div>
+                                <div style="font-size: 12px; color: #64748b;">
+                                    📁 ${doc.folder} | 📎 ${doc.fileType} | ${doc.fileSize} MB | ${doc.versionNumber}
+                                </div>
+                                <div style="font-size: 12px; color: #64748b; margin-top: 4px;">
+                                    Uploaded: ${formatDate(doc.uploadDate)} by ${doc.uploadedBy}
+                                </div>
+                                ${doc.description ? `<div style="font-size: 12px; color: #475569; margin-top: 6px; padding: 6px; background: #f8fafc; border-radius: 4px;">${doc.description}</div>` : ''}
+                            </div>
+                        </label>
+                    `).join('')}
+                </div>
+                <div id="selectionSummary" style="margin-top: 12px; padding: 10px; background: #f8fafc; border-radius: 8px; font-size: 13px; color: #64748b; text-align: center;">
+                    No documents selected
+                </div>
+            `;
+        }
+
+        function toggleSelectAll(checkbox) {
+            const docCheckboxes = document.querySelectorAll('input[name="qcDocument"]');
+            docCheckboxes.forEach(cb => cb.checked = checkbox.checked);
+            updateSelectedDocs();
+        }
+
+        function updateSelectedDocs() {
+            const selected = document.querySelectorAll('input[name="qcDocument"]:checked');
+            const summary = document.getElementById('selectionSummary');
+
+            if (selected.length === 0) {
+                summary.textContent = 'No documents selected';
+                summary.style.background = '#f8fafc';
+            } else {
+                summary.textContent = `${selected.length} document(s) selected for QC review`;
+                summary.style.background = '#dbeafe';
+            }
+
+            // Update select all checkbox state
+            const selectAll = document.getElementById('selectAllDocs');
+            const allDocs = document.querySelectorAll('input[name="qcDocument"]');
+            if (selectAll) {
+                selectAll.checked = selected.length === allDocs.length && allDocs.length > 0;
+            }
+        }
+
+        function submitToQC(event) {
+            event.preventDefault();
+
+            // Get selected documents
+            const selectedDocCheckboxes = document.querySelectorAll('input[name="qcDocument"]:checked');
+            if (selectedDocCheckboxes.length === 0) {
+                alert('Please select at least one document for QC review');
+                return;
+            }
+
+            const selectedDocIds = Array.from(selectedDocCheckboxes).map(cb => cb.value);
+            const selectedDocNames = selectedDocIds.map(id => {
+                const doc = legalCRM.getById('matterDocuments', id);
+                return doc ? doc.documentName : '';
+            }).filter(name => name);
+
+            // Create QC item
+            const newQCItem = {
+                id: `QC-${Date.now()}`,
+                matterId: matterId,
+                matterName: currentMatter.matterName,
+                deliverableTitle: document.getElementById('deliverableTitle').value,
+                deliverableType: document.getElementById('deliverableType').value,
+                documentIds: selectedDocIds,
+                documentNames: selectedDocNames,
+                submittedBy: 'Current User',
+                submittedDate: new Date().toISOString().split('T')[0],
+                qcReviewer: document.getElementById('qcReviewer').value,
+                reviewDueDate: document.getElementById('reviewDueDate').value,
+                expectedTAT: parseInt(document.getElementById('expectedTAT').value),
+                priority: document.getElementById('priority').value,
+                reviewInstructions: document.getElementById('reviewInstructions').value,
+                knownIssues: document.getElementById('knownIssues').value,
+                isUrgent: document.getElementById('urgentReview').checked,
+                notifyClient: document.getElementById('notifyClient').checked,
+                status: 'Pending Review',
+                qcComments: null,
+                qcStatus: null,
+                reviewCompletedDate: null
+            };
+
+            legalCRM.create('qcItems', newQCItem);
+
+            // Move selected documents to "QC Approved" folder once submitted
+            // (In reality, they would only move after approval, but for demo purposes we'll track them)
+            console.log(`Created QC item ${newQCItem.id} for matter ${currentMatter.matterName}`);
+
+            // Show success and redirect
+            alert(`QC submission successful!\n\nDeliverable: ${newQCItem.deliverableTitle}\nDocuments: ${selectedDocNames.length}\nReviewer: ${newQCItem.qcReviewer}\nDue: ${formatDate(newQCItem.reviewDueDate)}`);
+
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+
+        function uploadDocument() {
+            window.location.href = `upload-matter-document.html?matterId=${matterId}`;
+        }
+
+        function goBack() {
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+    </script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>

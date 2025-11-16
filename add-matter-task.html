@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal CRM Portal - Add Matter Task</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Matter Management</div>
+            <a href="matter-list.html" class="nav-item">
+                <div class="nav-icon">⚖️</div>
+                <div class="nav-label">Matters</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div style="margin-bottom: 16px;">
+            <a href="#" onclick="goBack()" style="color: #64748b; text-decoration: none;">← Back to Matter Details</a>
+        </div>
+
+        <div class="page-header">
+            <div>
+                <h2 id="pageTitle">Add New Task</h2>
+                <p id="matterInfo">Create a new task for this matter</p>
+            </div>
+        </div>
+
+        <form id="taskForm" onsubmit="saveTask(event)">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Task Information</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Task Title *</label>
+                            <input type="text" id="taskTitle" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Task Type *</label>
+                            <select id="taskType" class="form-control" required>
+                                <option value="">Select Type</option>
+                                <option value="Drafting">Drafting</option>
+                                <option value="Review">Review</option>
+                                <option value="Analysis">Analysis</option>
+                                <option value="Data Compilation">Data Compilation</option>
+                                <option value="Follow-up">Follow-up</option>
+                                <option value="Hearing Prep">Hearing Prep</option>
+                                <option value="Research">Research</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Priority *</label>
+                            <select id="priority" class="form-control" required>
+                                <option value="Normal">Normal</option>
+                                <option value="High">High</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Due Date *</label>
+                            <input type="date" id="dueDate" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="isCritical">
+                                Mark as Critical Task (blocks matter completion)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Assignment</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Owner (Task Responsible) *</label>
+                            <input type="text" id="owner" class="form-control" required>
+                            <small>Primary advocate or internal manager responsible</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Assignee (Who will execute) *</label>
+                            <input type="text" id="assignee" class="form-control" required>
+                            <small>Person who will complete the task</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Assignee Role *</label>
+                            <select id="assigneeRole" class="form-control" required>
+                                <option value="Internal">Internal / Operations</option>
+                                <option value="Primary">Primary Advocate</option>
+                                <option value="Junior">Junior Advocate</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Dependencies (Optional)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>This task depends on (select tasks that must complete first):</label>
+                        <div id="dependencyList" style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Instructions</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Detailed Instructions</label>
+                        <textarea id="instructions" class="form-control" rows="5" placeholder="Provide detailed instructions for completing this task..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn-primary">💾 Create Task</button>
+                <button type="button" onclick="goBack()" class="btn-secondary">Cancel</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let matterId = null;
+        let currentMatter = null;
+        let existingTasks = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get matter ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            matterId = urlParams.get('matterId');
+
+            if (!matterId) {
+                alert('No matter ID provided');
+                window.history.back();
+                return;
+            }
+
+            currentMatter = legalCRM.getById('matters', matterId);
+            if (!currentMatter) {
+                alert('Matter not found');
+                window.history.back();
+                return;
+            }
+
+            // Update page info
+            document.getElementById('matterInfo').textContent = `Create a new task for ${currentMatter.matterName}`;
+
+            // Set default due date to 7 days from now
+            const defaultDate = new Date();
+            defaultDate.setDate(defaultDate.getDate() + 7);
+            document.getElementById('dueDate').valueAsDate = defaultDate;
+
+            // Set current user as default owner
+            document.getElementById('owner').value = 'Current User';
+
+            // Load existing tasks for dependencies
+            loadDependencyOptions();
+        });
+
+        function loadDependencyOptions() {
+            existingTasks = legalCRM.getMatterTasks(matterId);
+            const container = document.getElementById('dependencyList');
+
+            if (existingTasks.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; text-align: center;">No existing tasks to depend on</p>';
+                return;
+            }
+
+            // Show only incomplete tasks as potential dependencies
+            const availableTasks = existingTasks.filter(t => t.status !== 'Completed' && t.status !== 'Cancelled');
+
+            if (availableTasks.length === 0) {
+                container.innerHTML = '<p style="color: #64748b; text-align: center;">No incomplete tasks available</p>';
+                return;
+            }
+
+            container.innerHTML = availableTasks.map(task => `
+                <div style="margin-bottom: 8px;">
+                    <label style="display: flex; align-items: start; cursor: pointer;">
+                        <input type="checkbox" name="dependency" value="${task.id}" style="margin-right: 8px; margin-top: 4px;">
+                        <div>
+                            <div style="font-weight: 500; color: #0f172a;">${task.taskTitle}</div>
+                            <div style="font-size: 12px; color: #64748b;">
+                                ${task.taskType} | Assigned to: ${task.assignee} | Due: ${formatDate(task.dueDate)}
+                            </div>
+                        </div>
+                    </label>
+                </div>
+            `).join('');
+        }
+
+        function saveTask(event) {
+            event.preventDefault();
+
+            // Collect dependency IDs
+            const dependencyCheckboxes = document.querySelectorAll('input[name="dependency"]:checked');
+            const dependsOn = Array.from(dependencyCheckboxes).map(cb => cb.value);
+
+            const newTask = {
+                id: `MTASK-${Date.now()}`,
+                matterId: matterId,
+                taskTitle: document.getElementById('taskTitle').value,
+                taskType: document.getElementById('taskType').value,
+                createdBy: 'Current User',
+                owner: document.getElementById('owner').value,
+                assignee: document.getElementById('assignee').value,
+                assigneeRole: document.getElementById('assigneeRole').value,
+                dueDate: document.getElementById('dueDate').value,
+                status: 'Open',
+                percentComplete: 0,
+                priority: document.getElementById('priority').value,
+                instructions: document.getElementById('instructions').value,
+                dependsOn: dependsOn,
+                blockedBy: [],
+                isCritical: document.getElementById('isCritical').checked,
+                createdDate: new Date().toISOString().split('T')[0],
+                lastUpdatedDate: new Date().toISOString().split('T')[0]
+            };
+
+            legalCRM.create('matterTasks', newTask);
+
+            // Auto-update matter risk if needed
+            legalCRM.autoUpdateMatterRisk(matterId);
+
+            alert('Task created successfully!');
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+
+        function goBack() {
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+    </script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>

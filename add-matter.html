@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal CRM Portal - Create/Edit Matter</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search matters...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <!-- Core Modules - MVP Phase -->
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Matter Management (Section B)</div>
+            <a href="matter-list.html" class="nav-item active">
+                <div class="nav-icon">⚖️</div>
+                <div class="nav-label">Matters</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="qc-review.html" class="nav-item">
+                <div class="nav-icon">✓</div>
+                <div class="nav-label">QC Review</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="delivery-dashboard.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Delivery Dashboard</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div style="margin-bottom: 16px;">
+            <a href="matter-list.html" style="color: #64748b; text-decoration: none;">← Back to Matters</a>
+        </div>
+
+        <div class="page-header">
+            <div>
+                <h2 id="pageTitle">Create New Matter</h2>
+                <p>Fill in the details to create a new matter or update an existing one</p>
+            </div>
+        </div>
+
+        <form id="matterForm" onsubmit="saveMatter(event)">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Matter Information</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Matter Name *</label>
+                            <input type="text" id="matterName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Client *</label>
+                            <select id="clientId" class="form-control" required onchange="updateClientName()">
+                                <option value="">Select Client</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Practice Area *</label>
+                            <select id="practiceArea" class="form-control" required>
+                                <option value="">Select Practice Area</option>
+                                <option value="Banking">Banking</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Compliance">Compliance</option>
+                                <option value="POSH">POSH</option>
+                                <option value="Corporate">Corporate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Matter Type *</label>
+                            <select id="matterType" class="form-control" required>
+                                <option value="">Select Matter Type</option>
+                                <option value="Implementation">Implementation</option>
+                                <option value="TSR">TSR (Title Search Report)</option>
+                                <option value="BPR">BPR (Business Process Review)</option>
+                                <option value="EDD">EDD (Enhanced Due Diligence)</option>
+                                <option value="Legal Opinion">Legal Opinion</option>
+                                <option value="POSH Investigation">POSH Investigation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Region</label>
+                            <select id="region" class="form-control">
+                                <option value="">Select Region</option>
+                                <option value="North">North</option>
+                                <option value="South">South</option>
+                                <option value="East">East</option>
+                                <option value="West">West</option>
+                                <option value="Central">Central</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" id="city" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>SLA Start Date *</label>
+                            <input type="date" id="slaStartDate" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Target End Date</label>
+                            <input type="date" id="targetEndDate" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Priority *</label>
+                            <select id="priority" class="form-control" required>
+                                <option value="Normal">Normal</option>
+                                <option value="High">High</option>
+                                <option value="Low">Low</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Internal Matter Owner *</label>
+                            <select id="internalMatterOwner" class="form-control" required>
+                                <option value="">Select Owner</option>
+                                <option value="Vikram Sharma">Vikram Sharma</option>
+                                <option value="Meera Patel">Meera Patel</option>
+                                <option value="Harish Kumar">Harish Kumar</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Stage *</label>
+                            <select id="currentStage" class="form-control" required>
+                                <option value="Drafting">Drafting</option>
+                                <option value="Data Collection">Data Collection</option>
+                                <option value="Review">Review</option>
+                                <option value="Implementation">Implementation</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Status *</label>
+                            <select id="status" class="form-control" required>
+                                <option value="New">New</option>
+                                <option value="In Execution">In Execution</option>
+                                <option value="At Risk">At Risk</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Description</label>
+                            <textarea id="description" class="form-control" rows="3"></textarea>
+                        </div>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Risk Flags (comma separated)</label>
+                            <input type="text" id="riskFlags" class="form-control" placeholder="e.g., Tight deadline, Missing documents">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Options</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="createDefaultFolders" checked>
+                            Auto-create default folder structure (Client Inputs, Drafts, Final Deliverables, Internal Notes)
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="createDefaultTasks">
+                            Auto-generate standard tasks based on Matter Type
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn-primary">💾 Save Matter</button>
+                <button type="button" onclick="window.location.href='matter-list.html'" class="btn-secondary">Cancel</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let isEditMode = false;
+        let currentMatterId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClients();
+
+            // Check if editing existing matter
+            const urlParams = new URLSearchParams(window.location.search);
+            currentMatterId = urlParams.get('id');
+
+            if (currentMatterId) {
+                isEditMode = true;
+                document.getElementById('pageTitle').textContent = 'Edit Matter';
+                loadMatterData();
+            } else {
+                // Set default date to today
+                document.getElementById('slaStartDate').valueAsDate = new Date();
+            }
+        });
+
+        function loadClients() {
+            const clients = legalCRM.get('clients');
+            const clientSelect = document.getElementById('clientId');
+
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = client.companyName;
+                option.dataset.clientName = client.companyName;
+                clientSelect.appendChild(option);
+            });
+        }
+
+        function loadMatterData() {
+            const matter = legalCRM.getById('matters', currentMatterId);
+
+            if (!matter) {
+                alert('Matter not found');
+                window.location.href = 'matter-list.html';
+                return;
+            }
+
+            // Populate form fields
+            document.getElementById('matterName').value = matter.matterName;
+            document.getElementById('clientId').value = matter.clientId;
+            document.getElementById('practiceArea').value = matter.practiceArea;
+            document.getElementById('matterType').value = matter.matterType;
+            document.getElementById('region').value = matter.region || '';
+            document.getElementById('city').value = matter.city || '';
+            document.getElementById('slaStartDate').value = matter.slaStartDate;
+            document.getElementById('targetEndDate').value = matter.targetEndDate || '';
+            document.getElementById('priority').value = matter.priority;
+            document.getElementById('internalMatterOwner').value = matter.internalMatterOwner;
+            document.getElementById('currentStage').value = matter.currentStage;
+            document.getElementById('status').value = matter.status;
+            document.getElementById('description').value = matter.description || '';
+
+            if (matter.riskFlags && matter.riskFlags.length > 0) {
+                document.getElementById('riskFlags').value = matter.riskFlags.join(', ');
+            }
+        }
+
+        function updateClientName() {
+            // This function is called when client selection changes
+            const clientSelect = document.getElementById('clientId');
+            const selectedOption = clientSelect.options[clientSelect.selectedIndex];
+        }
+
+        function saveMatter(event) {
+            event.preventDefault();
+
+            const clientSelect = document.getElementById('clientId');
+            const selectedOption = clientSelect.options[clientSelect.selectedIndex];
+            const clientName = selectedOption.dataset.clientName;
+
+            const riskFlagsInput = document.getElementById('riskFlags').value;
+            const riskFlags = riskFlagsInput ? riskFlagsInput.split(',').map(f => f.trim()) : [];
+
+            const matterData = {
+                matterName: document.getElementById('matterName').value,
+                clientId: document.getElementById('clientId').value,
+                clientName: clientName,
+                practiceArea: document.getElementById('practiceArea').value,
+                matterType: document.getElementById('matterType').value,
+                region: document.getElementById('region').value,
+                city: document.getElementById('city').value,
+                slaStartDate: document.getElementById('slaStartDate').value,
+                targetEndDate: document.getElementById('targetEndDate').value,
+                priority: document.getElementById('priority').value,
+                internalMatterOwner: document.getElementById('internalMatterOwner').value,
+                currentStage: document.getElementById('currentStage').value,
+                status: document.getElementById('status').value,
+                description: document.getElementById('description').value,
+                riskFlags: riskFlags,
+                linkedOpportunityId: '',
+                lastUpdatedBy: 'Current User',
+                lastUpdatedDate: new Date().toISOString().split('T')[0]
+            };
+
+            if (isEditMode) {
+                // Update existing matter
+                legalCRM.update('matters', currentMatterId, matterData);
+                alert('Matter updated successfully!');
+                window.location.href = `matter-details.html?id=${currentMatterId}`;
+            } else {
+                // Create new matter
+                const matterId = legalCRM.generateId('matters', 'MAT');
+                matterData.id = matterId;
+                matterData.createdBy = 'Current User';
+                matterData.createdDate = new Date().toISOString().split('T')[0];
+
+                legalCRM.create('matters', matterData);
+
+                // Create default folders if checked
+                if (document.getElementById('createDefaultFolders').checked) {
+                    legalCRM.createDefaultFolders(matterId);
+                }
+
+                alert('Matter created successfully!');
+                window.location.href = `matter-details.html?id=${matterId}`;
+            }
+        }
+    </script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>
