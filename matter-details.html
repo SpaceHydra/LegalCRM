@@ -457,7 +457,73 @@
                 return;
             }
 
-            document.getElementById('tasksContent').innerHTML = tasks.map(task => {
+            // Calculate task progress metrics
+            const progress = legalCRM.getMatterTaskProgress(matterId);
+            const completedTasks = tasks.filter(t => t.status === 'Completed');
+            const inProgressTasks = tasks.filter(t => t.status === 'In Progress');
+            const delayedTasks = tasks.filter(t => t.status !== 'Completed' && t.status !== 'Cancelled' && t.dueDate < today);
+            const criticalTasks = tasks.filter(t => t.isCritical);
+            const criticalPending = criticalTasks.filter(t => t.status !== 'Completed');
+            const blockedTasks = legalCRM.getBlockedTasks(matterId);
+
+            // Task Progress Dashboard
+            const taskDashboard = `
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; padding: 24px; margin-bottom: 24px; color: white;">
+                    <h3 style="margin: 0 0 20px 0; color: white;">📊 Task Progress Dashboard</h3>
+
+                    <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 600;">Overall Completion</span>
+                            <span style="font-size: 24px; font-weight: bold;">${progress.percentComplete}%</span>
+                        </div>
+                        <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden;">
+                            <div style="width: ${progress.percentComplete}%; height: 100%; background: linear-gradient(90deg, #10b981 0%, #34d399 100%); transition: width 0.3s;"></div>
+                        </div>
+                        <div style="margin-top: 8px; font-size: 13px; opacity: 0.9;">
+                            ${progress.completedTasks} of ${progress.totalTasks} tasks completed
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                        <div style="background: rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold;">${tasks.length}</div>
+                            <div style="font-size: 12px; opacity: 0.9;">Total Tasks</div>
+                        </div>
+                        <div style="background: rgba(16,185,129,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold;">${completedTasks.length}</div>
+                            <div style="font-size: 12px; opacity: 0.9;">Completed</div>
+                        </div>
+                        <div style="background: rgba(59,130,246,0.2); border-radius: 8px; padding: 12px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold;">${inProgressTasks.length}</div>
+                            <div style="font-size: 12px; opacity: 0.9;">In Progress</div>
+                        </div>
+                        <div style="background: ${delayedTasks.length > 0 ? 'rgba(220,38,38,0.3)' : 'rgba(255,255,255,0.15)'}; border-radius: 8px; padding: 12px; text-align: center;">
+                            <div style="font-size: 28px; font-weight: bold;">${delayedTasks.length}</div>
+                            <div style="font-size: 12px; opacity: 0.9;">⚠️ Delayed</div>
+                        </div>
+                    </div>
+
+                    ${criticalPending.length > 0 ? `
+                        <div style="margin-top: 16px; padding: 12px; background: rgba(220,38,38,0.2); border: 1px solid rgba(220,38,38,0.4); border-radius: 8px;">
+                            <strong>⚠️ Critical Alert:</strong> ${criticalPending.length} critical task(s) pending completion
+                        </div>
+                    ` : ''}
+
+                    ${blockedTasks.length > 0 ? `
+                        <div style="margin-top: 12px; padding: 12px; background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4); border-radius: 8px;">
+                            <strong>🔒 Blocked Tasks:</strong> ${blockedTasks.length} task(s) waiting on dependencies
+                        </div>
+                    ` : ''}
+
+                    ${progress.percentComplete === 100 ? `
+                        <div style="margin-top: 12px; padding: 12px; background: rgba(16,185,129,0.3); border: 1px solid rgba(16,185,129,0.5); border-radius: 8px; text-align: center;">
+                            <strong>🎉 All tasks completed!</strong> This matter is ready for final review.
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('tasksContent').innerHTML = taskDashboard + tasks.map(task => {
                 const isOverdue = task.dueDate < today && task.status !== 'Completed';
                 const statusClass = task.status === 'Completed' ? 'status-completed' :
                                    isOverdue ? 'status-at-risk' :
@@ -687,126 +753,19 @@
         }
 
         function addNewTask() {
-            const taskTitle = prompt('Enter task title:');
-            if (!taskTitle) return;
-
-            const taskType = prompt('Enter task type (Drafting/Review/Analysis/Data Compilation/Follow-up):') || 'Drafting';
-            const assignee = prompt('Assign to (enter name):') || 'Current User';
-            const dueDate = prompt('Due date (YYYY-MM-DD):') || new Date(Date.now() + 7*24*60*60*1000).toISOString().split('T')[0];
-
-            const newTask = {
-                id: `MTASK-${Date.now()}`,
-                matterId: matterId,
-                taskTitle: taskTitle,
-                taskType: taskType,
-                createdBy: 'Current User',
-                owner: 'Current User',
-                assignee: assignee,
-                assigneeRole: 'Internal',
-                dueDate: dueDate,
-                status: 'Open',
-                percentComplete: 0,
-                priority: 'Normal',
-                instructions: '',
-                createdDate: new Date().toISOString().split('T')[0],
-                lastUpdatedDate: new Date().toISOString().split('T')[0]
-            };
-
-            legalCRM.create('matterTasks', newTask);
-            alert('Task created successfully!');
-            renderTasksTab();
+            window.location.href = `add-matter-task.html?matterId=${matterId}`;
         }
 
         function uploadDocument() {
-            const fileName = prompt('Enter document file name (e.g., "Property_Deed.pdf"):');
-            if (!fileName) return;
-
-            const folder = prompt('Select folder path:\n1. /01. Client Inputs\n2. /02. Drafts\n3. /03. Final Deliverables\n4. /04. Internal Notes\n\nEnter number (1-4):');
-            const folderMap = {
-                '1': '/01. Client Inputs',
-                '2': '/02. Drafts',
-                '3': '/03. Final Deliverables',
-                '4': '/04. Internal Notes'
-            };
-            const folderPath = folderMap[folder] || '/02. Drafts';
-
-            const fileType = prompt('Enter file type (e.g., "BPR Draft", "Client Input", "TSR Final"):') || 'Document';
-
-            const newDocument = {
-                id: `MDOC-${Date.now()}`,
-                matterId: matterId,
-                folderPath: folderPath,
-                fileName: fileName,
-                fileType: fileType,
-                versionNo: 'v1',
-                uploadedBy: 'Current User',
-                uploadedOn: new Date().toISOString(),
-                notes: '',
-                isFinalDeliverable: false,
-                linkedQCItemId: ''
-            };
-
-            legalCRM.create('matterDocuments', newDocument);
-            alert('Document uploaded successfully!');
-            renderDocumentsTab();
+            window.location.href = `upload-matter-document.html?matterId=${matterId}`;
         }
 
         function manageAdvocates() {
-            const advocates = legalCRM.getMatterAdvocates(matterId);
-            let currentPrimary = advocates ? advocates.primaryAdvocate : 'None';
-
-            const newPrimary = prompt(`Current Primary Advocate: ${currentPrimary}\n\nEnter new Primary Advocate name (or press Cancel to keep current):`);
-            if (!newPrimary) return;
-
-            if (advocates) {
-                legalCRM.update('advocateAssignments', advocates.id, {
-                    primaryAdvocate: newPrimary
-                });
-            } else {
-                const newAssignment = {
-                    id: `ASGN-${Date.now()}`,
-                    matterId: matterId,
-                    primaryAdvocate: newPrimary,
-                    supportingAdvocates: [],
-                    panel: '',
-                    zone: currentMatter.region || '',
-                    branchCluster: '',
-                    assignmentStartDate: new Date().toISOString().split('T')[0],
-                    assignmentEndDate: '',
-                    status: 'Active'
-                };
-                legalCRM.create('advocateAssignments', newAssignment);
-            }
-
-            alert('Advocate assignment updated successfully!');
-            renderAdvocatesTab();
+            window.location.href = `manage-matter-advocates.html?matterId=${matterId}`;
         }
 
         function submitToQC() {
-            const deliverableName = prompt('Enter deliverable file name (e.g., "BPR_Final_v1.pdf"):');
-            if (!deliverableName) return;
-
-            const deliverableType = prompt('Enter deliverable type (e.g., "BPR Report", "TSR Final", "EDD Report"):') || 'Report';
-            const reviewer = prompt('Assign reviewer to:') || 'Vikram Sharma';
-
-            const newQCItem = {
-                id: `QC-${Date.now()}`,
-                matterId: matterId,
-                documentId: '',
-                deliverableName: deliverableName,
-                deliverableType: deliverableType,
-                submittedBy: 'Current User',
-                submittedOn: new Date().toISOString(),
-                reviewer: reviewer,
-                qcChecklist: 'Standard QC Checklist',
-                reviewerComments: '',
-                qcStatus: 'Pending',
-                qcDecisionDate: ''
-            };
-
-            legalCRM.create('qcItems', newQCItem);
-            alert('Document submitted to QC successfully!');
-            renderQCTab();
+            window.location.href = `submit-to-qc.html?matterId=${matterId}`;
         }
     </script>
     <script src="js/navigation.js"></script>

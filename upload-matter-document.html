@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal CRM Portal - Upload Matter Document</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Matter Management</div>
+            <a href="matter-list.html" class="nav-item">
+                <div class="nav-icon">⚖️</div>
+                <div class="nav-label">Matters</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div style="margin-bottom: 16px;">
+            <a href="#" onclick="goBack()" style="color: #64748b; text-decoration: none;">← Back to Matter Details</a>
+        </div>
+
+        <div class="page-header">
+            <div>
+                <h2 id="pageTitle">Upload Document</h2>
+                <p id="matterInfo">Upload a new document for this matter</p>
+            </div>
+        </div>
+
+        <form id="documentForm" onsubmit="saveDocument(event)">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Document Information</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Document Name *</label>
+                            <input type="text" id="documentName" class="form-control" required placeholder="e.g., BPR Report - Zone 1 Properties">
+                        </div>
+
+                        <div class="form-group">
+                            <label>File Type *</label>
+                            <select id="fileType" class="form-control" required>
+                                <option value="">Select File Type</option>
+                                <option value="PDF">PDF</option>
+                                <option value="Word">Word Document</option>
+                                <option value="Excel">Excel Spreadsheet</option>
+                                <option value="PowerPoint">PowerPoint Presentation</option>
+                                <option value="Image">Image (JPG/PNG)</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>File Size (MB) *</label>
+                            <input type="number" id="fileSize" class="form-control" step="0.1" min="0.1" required placeholder="e.g., 2.5">
+                        </div>
+
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Folder / Category *</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;">
+                                    <input type="radio" name="folder" value="Input Documents" required style="margin-right: 8px;">
+                                    <div>
+                                        <div style="font-weight: 500; color: #0f172a;">📥 Input Documents</div>
+                                        <div style="font-size: 12px; color: #64748b;">Client provided documents, source files</div>
+                                    </div>
+                                </label>
+                                <label style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;">
+                                    <input type="radio" name="folder" value="Interim Deliverables" style="margin-right: 8px;">
+                                    <div>
+                                        <div style="font-weight: 500; color: #0f172a;">📋 Interim Deliverables</div>
+                                        <div style="font-size: 12px; color: #64748b;">Draft reports, work-in-progress</div>
+                                    </div>
+                                </label>
+                                <label style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;">
+                                    <input type="radio" name="folder" value="QC Approved" style="margin-right: 8px;">
+                                    <div>
+                                        <div style="font-weight: 500; color: #0f172a;">✅ QC Approved</div>
+                                        <div style="font-size: 12px; color: #64748b;">Quality checked and approved</div>
+                                    </div>
+                                </label>
+                                <label style="display: flex; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer;">
+                                    <input type="radio" name="folder" value="Final Deliverables" style="margin-right: 8px;">
+                                    <div>
+                                        <div style="font-weight: 500; color: #0f172a;">📦 Final Deliverables</div>
+                                        <div style="font-size: 12px; color: #64748b;">Client-ready final documents</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Version & Metadata</h3>
+                </div>
+                <div class="card-body">
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+                        <div class="form-group">
+                            <label>Version Number</label>
+                            <input type="text" id="versionNumber" class="form-control" readonly value="v1.0" style="background-color: #f8fafc;">
+                            <small id="versionInfo">Auto-incremented based on existing documents</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Uploaded By</label>
+                            <input type="text" id="uploadedBy" class="form-control" readonly value="Current User" style="background-color: #f8fafc;">
+                        </div>
+
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Tags (comma-separated)</label>
+                            <input type="text" id="tags" class="form-control" placeholder="e.g., BPR, HDFC, Zone-1, Draft">
+                            <small>Add tags to make documents easier to find</small>
+                        </div>
+
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>Description / Notes</label>
+                            <textarea id="description" class="form-control" rows="4" placeholder="Add any relevant notes about this document..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <h3>Access & Notifications</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="notifyTeam">
+                            Notify matter team members about this upload
+                        </label>
+                    </div>
+                    <div class="form-group" style="margin-top: 12px;">
+                        <label>
+                            <input type="checkbox" id="isConfidential">
+                            Mark as confidential (restricted access)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+                <button type="submit" class="btn-primary">📤 Upload Document</button>
+                <button type="button" onclick="goBack()" class="btn-secondary">Cancel</button>
+            </div>
+        </form>
+
+        <div class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let matterId = null;
+        let currentMatter = null;
+        let existingDocuments = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get matter ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            matterId = urlParams.get('matterId');
+
+            if (!matterId) {
+                alert('No matter ID provided');
+                window.history.back();
+                return;
+            }
+
+            currentMatter = legalCRM.getById('matters', matterId);
+            if (!currentMatter) {
+                alert('Matter not found');
+                window.history.back();
+                return;
+            }
+
+            // Update page info
+            document.getElementById('matterInfo').textContent = `Upload a new document for ${currentMatter.matterName}`;
+
+            // Set current user
+            document.getElementById('uploadedBy').value = 'Current User';
+
+            // Load existing documents to calculate version
+            loadExistingDocuments();
+
+            // Listen to document name changes to auto-calculate version
+            document.getElementById('documentName').addEventListener('blur', calculateVersion);
+        });
+
+        function loadExistingDocuments() {
+            existingDocuments = legalCRM.getMatterDocuments(matterId);
+        }
+
+        function calculateVersion() {
+            const documentName = document.getElementById('documentName').value.trim();
+            if (!documentName) return;
+
+            // Find documents with similar names
+            const similarDocs = existingDocuments.filter(doc =>
+                doc.documentName.toLowerCase().includes(documentName.toLowerCase()) ||
+                documentName.toLowerCase().includes(doc.documentName.toLowerCase())
+            );
+
+            if (similarDocs.length === 0) {
+                document.getElementById('versionNumber').value = 'v1.0';
+                document.getElementById('versionInfo').textContent = 'First version of this document';
+            } else {
+                // Extract version numbers and find the highest
+                const versions = similarDocs.map(doc => {
+                    const match = doc.versionNumber.match(/v(\d+)\.(\d+)/);
+                    if (match) {
+                        return parseFloat(`${match[1]}.${match[2]}`);
+                    }
+                    return 1.0;
+                });
+                const maxVersion = Math.max(...versions);
+                const newVersion = (maxVersion + 0.1).toFixed(1);
+                document.getElementById('versionNumber').value = `v${newVersion}`;
+                document.getElementById('versionInfo').textContent = `${similarDocs.length} similar document(s) found. Auto-incremented version.`;
+            }
+        }
+
+        function saveDocument(event) {
+            event.preventDefault();
+
+            // Get selected folder
+            const folderRadio = document.querySelector('input[name="folder"]:checked');
+            if (!folderRadio) {
+                alert('Please select a folder');
+                return;
+            }
+
+            // Parse tags
+            const tagsInput = document.getElementById('tags').value.trim();
+            const tagsArray = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+
+            const newDocument = {
+                id: `MDOC-${Date.now()}`,
+                matterId: matterId,
+                documentName: document.getElementById('documentName').value,
+                folder: folderRadio.value,
+                fileType: document.getElementById('fileType').value,
+                fileSize: parseFloat(document.getElementById('fileSize').value),
+                versionNumber: document.getElementById('versionNumber').value,
+                uploadedBy: document.getElementById('uploadedBy').value,
+                uploadDate: new Date().toISOString().split('T')[0],
+                description: document.getElementById('description').value,
+                tags: tagsArray,
+                isConfidential: document.getElementById('isConfidential').checked,
+                downloadCount: 0,
+                lastAccessedDate: null
+            };
+
+            legalCRM.create('matterDocuments', newDocument);
+
+            // If notify team is checked, create a notification/activity log entry
+            if (document.getElementById('notifyTeam').checked) {
+                console.log(`Notification: New document "${newDocument.documentName}" uploaded to matter ${currentMatter.matterName}`);
+                // In a real system, this would trigger email/notification to team members
+            }
+
+            alert('Document uploaded successfully!');
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+
+        function goBack() {
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+    </script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>

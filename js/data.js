@@ -1005,6 +1005,9 @@ class LegalCRMData {
                     percentComplete: 60,
                     priority: 'High',
                     instructions: 'Complete BPR report for 15 properties in Mumbai Zone 1. Follow standard BPR template.',
+                    dependsOn: [],
+                    blockedBy: [],
+                    isCritical: true,
                     createdDate: '2025-11-05',
                     lastUpdatedDate: '2025-11-16'
                 },
@@ -1022,6 +1025,9 @@ class LegalCRMData {
                     percentComplete: 0,
                     priority: 'High',
                     instructions: 'QC review of all BPR reports prepared by juniors',
+                    dependsOn: ['MTASK-2025-0001'],
+                    blockedBy: [],
+                    isCritical: true,
                     createdDate: '2025-11-05',
                     lastUpdatedDate: '2025-11-05'
                 },
@@ -1039,6 +1045,9 @@ class LegalCRMData {
                     percentComplete: 75,
                     priority: 'Normal',
                     instructions: 'Coordinate with SBI Bangalore branch to collect all property title documents',
+                    dependsOn: [],
+                    blockedBy: [],
+                    isCritical: false,
                     createdDate: '2025-11-02',
                     lastUpdatedDate: '2025-11-15'
                 },
@@ -1056,6 +1065,9 @@ class LegalCRMData {
                     percentComplete: 25,
                     priority: 'High',
                     instructions: 'Interview all relevant witnesses as per POSH guidelines',
+                    dependsOn: [],
+                    blockedBy: [],
+                    isCritical: true,
                     createdDate: '2025-11-12',
                     lastUpdatedDate: '2025-11-16'
                 }
@@ -1613,6 +1625,159 @@ class LegalCRMData {
         this.createDefaultFolders(matterId);
 
         return newMatter;
+    }
+
+    // Task Dependencies and Completion Validation
+
+    // Check if matter can be marked as completed
+    canCompleteMatter(matterId) {
+        const tasks = this.getMatterTasks(matterId);
+        const incompleteTasks = tasks.filter(t =>
+            t.status !== 'Completed' && t.status !== 'Cancelled'
+        );
+
+        if (incompleteTasks.length > 0) {
+            return {
+                canComplete: false,
+                incompleteTasks: incompleteTasks,
+                message: `Cannot complete matter. ${incompleteTasks.length} task(s) are still pending.`
+            };
+        }
+
+        // Check if all critical tasks are completed
+        const criticalTasks = tasks.filter(t => t.isCritical);
+        const incompleteCritical = criticalTasks.filter(t => t.status !== 'Completed');
+
+        if (incompleteCritical.length > 0) {
+            return {
+                canComplete: false,
+                incompleteTasks: incompleteCritical,
+                message: `Cannot complete matter. ${incompleteCritical.length} critical task(s) are still pending.`
+            };
+        }
+
+        return {
+            canComplete: true,
+            incompleteTasks: [],
+            message: 'All tasks completed. Matter can be closed.'
+        };
+    }
+
+    // Get matter task completion progress
+    getMatterTaskProgress(matterId) {
+        const tasks = this.getMatterTasks(matterId);
+
+        if (tasks.length === 0) {
+            return {
+                totalTasks: 0,
+                completedTasks: 0,
+                percentComplete: 100,
+                criticalPending: 0,
+                delayedTasks: 0
+            };
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        const completed = tasks.filter(t => t.status === 'Completed').length;
+        const criticalTasks = tasks.filter(t => t.isCritical);
+        const criticalPending = criticalTasks.filter(t => t.status !== 'Completed').length;
+        const delayedTasks = tasks.filter(t =>
+            t.status !== 'Completed' && t.dueDate < today
+        ).length;
+
+        return {
+            totalTasks: tasks.length,
+            completedTasks: completed,
+            percentComplete: Math.round((completed / tasks.length) * 100),
+            criticalPending: criticalPending,
+            delayedTasks: delayedTasks
+        };
+    }
+
+    // Check if task dependencies are met
+    checkTaskDependencies(taskId) {
+        const task = this.getById('matterTasks', taskId);
+        if (!task || !task.dependsOn || task.dependsOn.length === 0) {
+            return { canStart: true, blockedBy: [] };
+        }
+
+        const blockedBy = [];
+        task.dependsOn.forEach(depTaskId => {
+            const depTask = this.getById('matterTasks', depTaskId);
+            if (depTask && depTask.status !== 'Completed') {
+                blockedBy.push({
+                    id: depTask.id,
+                    title: depTask.taskTitle,
+                    status: depTask.status
+                });
+            }
+        });
+
+        return {
+            canStart: blockedBy.length === 0,
+            blockedBy: blockedBy
+        };
+    }
+
+    // Auto-update matter risk status based on tasks
+    autoUpdateMatterRisk(matterId) {
+        const matter = this.getById('matters', matterId);
+        if (!matter) return;
+
+        const progress = this.getMatterTaskProgress(matterId);
+        const newRiskFlags = [...matter.riskFlags];
+
+        // Add risk flag if critical tasks are delayed
+        if (progress.delayedTasks > 0) {
+            if (!newRiskFlags.includes('Delayed tasks')) {
+                newRiskFlags.push('Delayed tasks');
+            }
+        } else {
+            const index = newRiskFlags.indexOf('Delayed tasks');
+            if (index > -1) newRiskFlags.splice(index, 1);
+        }
+
+        // Update matter status if tasks are significantly delayed
+        let newStatus = matter.status;
+        if (progress.delayedTasks > 0 && progress.criticalPending > 0) {
+            if (matter.status !== 'At Risk' && matter.status !== 'Completed') {
+                newStatus = 'At Risk';
+            }
+        }
+
+        // Update if changes detected
+        if (JSON.stringify(newRiskFlags) !== JSON.stringify(matter.riskFlags) || newStatus !== matter.status) {
+            this.update('matters', matterId, {
+                riskFlags: newRiskFlags,
+                status: newStatus,
+                lastUpdatedDate: new Date().toISOString().split('T')[0]
+            });
+        }
+    }
+
+    // Get tasks filtered by user role
+    getTasksForUser(matterId, userName, userRole) {
+        const tasks = this.getMatterTasks(matterId);
+
+        if (userRole === 'Junior') {
+            // Juniors see only tasks assigned to them
+            return tasks.filter(t => t.assignee === userName);
+        } else if (userRole === 'Primary') {
+            // Primary advocates see tasks they own or are assigned to
+            return tasks.filter(t => t.owner === userName || t.assignee === userName);
+        } else {
+            // Internal/Managers see all tasks
+            return tasks;
+        }
+    }
+
+    // Get blocked tasks (tasks waiting for dependencies)
+    getBlockedTasks(matterId) {
+        const tasks = this.getMatterTasks(matterId);
+        return tasks.filter(task => {
+            const depCheck = this.checkTaskDependencies(task.id);
+            return !depCheck.canStart;
+        });
     }
 }
 
