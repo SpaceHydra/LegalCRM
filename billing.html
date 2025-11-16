@@ -458,9 +458,9 @@
                         <option value="Pending">Pending</option>
                         <option value="Overdue">Overdue</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddInvoiceModal()">
+                    <a class="btn btn-primary" href="add-invoice.html">
                         ➕ Create Invoice
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -691,18 +691,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadInvoices(statusFilter, searchTerm);
             });
-        }
-
-        function openAddInvoiceModal() {
-            document.getElementById('modalTitle').textContent = 'Create New Invoice';
-            document.getElementById('invoiceForm').reset();
-            document.getElementById('invoiceId').value = '';
-            document.getElementById('lineItemsContainer').innerHTML = '';
-            document.getElementById('status').value = 'Pending';
-            lineItemCounter = 0;
-            addLineItem(); // Add one line item by default
-            updateInvoicePreview();
-            document.getElementById('invoiceModal').classList.add('active');
         }
 
         function closeInvoiceModal() {

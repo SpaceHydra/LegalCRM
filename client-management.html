@@ -477,9 +477,9 @@
                         <option value="Construction">Construction</option>
                         <option value="Manufacturing">Manufacturing</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddClientModal()">
+                    <a class="btn btn-primary" href="add-client.html">
                         ➕ Add New Client
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -695,16 +695,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadClients(categoryFilter, industryFilter, searchTerm);
             });
-        }
-
-        function openAddClientModal() {
-            document.getElementById('modalTitle').textContent = 'Add New Client';
-            document.getElementById('clientForm').reset();
-            document.getElementById('clientId').value = '';
-            document.getElementById('spocContainer').innerHTML = '';
-            spocCounter = 0;
-            addSPOC(); // Add one SPOC by default
-            document.getElementById('clientModal').classList.add('active');
         }
 
         function closeClientModal() {

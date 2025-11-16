@@ -464,9 +464,9 @@
                         <option value="Litigation">Litigation</option>
                         <option value="Contract Law">Contract Law</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddProjectModal()">
+                    <a class="btn btn-primary" href="add-project.html">
                         ➕ Add New Project
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -714,15 +714,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadProjects(statusFilter, practiceFilter, searchTerm);
             });
-        }
-
-        function openAddProjectModal() {
-            document.getElementById('modalTitle').textContent = 'Add New Project';
-            document.getElementById('projectForm').reset();
-            document.getElementById('projectId').value = '';
-            document.getElementById('milestoneContainer').innerHTML = '';
-            milestoneCounter = 0;
-            document.getElementById('projectModal').classList.add('active');
         }
 
         function closeProjectModal() {

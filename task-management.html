@@ -454,9 +454,9 @@
                         <option value="Medium">Medium</option>
                         <option value="Low">Low</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddTaskModal()">
+                    <a class="btn btn-primary" href="add-task.html">
                         ➕ Add New Task
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -703,15 +703,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadTasks(statusFilter, priorityFilter, searchTerm);
             });
-        }
-
-        function openAddTaskModal() {
-            document.getElementById('modalTitle').textContent = 'Add New Task';
-            document.getElementById('taskForm').reset();
-            document.getElementById('taskId').value = '';
-            document.getElementById('priority').value = 'Medium';
-            document.getElementById('status').value = 'New';
-            document.getElementById('taskModal').classList.add('active');
         }
 
         function closeTaskModal() {

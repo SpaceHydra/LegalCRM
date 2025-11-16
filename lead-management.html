@@ -473,9 +473,9 @@
                         <option value="LinkedIn">LinkedIn</option>
                         <option value="Phone">Phone</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddLeadModal()">
+                    <a class="btn btn-primary" href="add-lead.html">
                         ➕ Add New Lead
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -723,14 +723,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadLeads(statusFilter, sourceFilter, searchTerm);
             });
-        }
-
-        function openAddLeadModal() {
-            currentEditId = null;
-            document.getElementById('modalTitle').textContent = 'Add New Lead';
-            document.getElementById('leadForm').reset();
-            document.getElementById('leadId').value = '';
-            document.getElementById('leadModal').classList.add('active');
         }
 
         function closeLeadModal() {

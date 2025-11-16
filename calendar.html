@@ -487,9 +487,9 @@
                         <option value="Completed">Completed</option>
                         <option value="Cancelled">Cancelled</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddMeetingModal()">
+                    <a class="btn btn-primary" href="add-meeting.html">
                         ➕ Schedule Meeting
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -745,14 +745,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadMeetings(typeFilter, statusFilter, searchTerm);
             });
-        }
-
-        function openAddMeetingModal() {
-            document.getElementById('modalTitle').textContent = 'Schedule New Meeting';
-            document.getElementById('meetingForm').reset();
-            document.getElementById('meetingId').value = '';
-            document.getElementById('status').value = 'Upcoming';
-            document.getElementById('meetingModal').classList.add('active');
         }
 
         function closeMeetingModal() {
