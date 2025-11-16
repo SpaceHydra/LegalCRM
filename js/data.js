@@ -917,6 +917,270 @@ class LegalCRMData {
                     user: 'System',
                     relatedId: 'INV-2025-0456'
                 }
+            ],
+            // Section B: Matter Management Data
+            matters: [
+                {
+                    id: 'MAT-2025-0001',
+                    matterName: 'HDFC Bank - Litigation & BPR Implementation',
+                    linkedOpportunityId: '',
+                    clientId: 'CLT-2024-0067',
+                    clientName: 'DLF Limited',
+                    practiceArea: 'Banking',
+                    matterType: 'BPR',
+                    region: 'North',
+                    city: 'Mumbai',
+                    slaStartDate: '2025-10-01',
+                    targetEndDate: '2025-12-31',
+                    priority: 'High',
+                    internalMatterOwner: 'Vikram Sharma',
+                    description: 'Complete BPR implementation and litigation support for HDFC Bank portfolio',
+                    currentStage: 'Implementation',
+                    status: 'In Execution',
+                    riskFlags: ['Tight deadline'],
+                    createdBy: 'Prateek Mehta',
+                    createdDate: '2025-09-28',
+                    lastUpdatedBy: 'Vikram Sharma',
+                    lastUpdatedDate: '2025-11-15'
+                },
+                {
+                    id: 'MAT-2025-0002',
+                    matterName: 'SBI - Title Search Report Project',
+                    linkedOpportunityId: '',
+                    clientId: 'CLT-2024-0089',
+                    clientName: 'Tech Mahindra',
+                    practiceArea: 'Banking',
+                    matterType: 'TSR',
+                    region: 'South',
+                    city: 'Bangalore',
+                    slaStartDate: '2025-11-01',
+                    targetEndDate: '2025-11-30',
+                    priority: 'Normal',
+                    internalMatterOwner: 'Meera Patel',
+                    description: 'Title Search Report generation for SBI property portfolio',
+                    currentStage: 'Data Collection',
+                    status: 'In Execution',
+                    riskFlags: [],
+                    createdBy: 'Meera Patel',
+                    createdDate: '2025-10-25',
+                    lastUpdatedBy: 'Meera Patel',
+                    lastUpdatedDate: '2025-11-14'
+                },
+                {
+                    id: 'MAT-2025-0003',
+                    matterName: 'POSH Investigation - TCS Complaint',
+                    linkedOpportunityId: '',
+                    clientId: 'CLT-2024-0078',
+                    clientName: 'TCS - Tata Consultancy Services',
+                    practiceArea: 'POSH',
+                    matterType: 'POSH Investigation',
+                    region: 'West',
+                    city: 'Mumbai',
+                    slaStartDate: '2025-11-10',
+                    targetEndDate: '2025-12-10',
+                    priority: 'High',
+                    internalMatterOwner: 'Harish Kumar',
+                    description: 'Internal POSH complaint investigation and report preparation',
+                    currentStage: 'Review',
+                    status: 'At Risk',
+                    riskFlags: ['Missing documents', 'Sensitive matter'],
+                    createdBy: 'Harish Kumar',
+                    createdDate: '2025-11-08',
+                    lastUpdatedBy: 'Harish Kumar',
+                    lastUpdatedDate: '2025-11-16'
+                }
+            ],
+            matterTasks: [
+                {
+                    id: 'MTASK-2025-0001',
+                    matterId: 'MAT-2025-0001',
+                    taskTitle: 'Draft BPR Report for HDFC Portfolio - Zone 1',
+                    taskType: 'Drafting',
+                    createdBy: 'Vikram Sharma',
+                    owner: 'Advocate Rajesh Kumar',
+                    assignee: 'Advocate Priya Desai',
+                    assigneeRole: 'Junior',
+                    dueDate: '2025-11-20',
+                    status: 'In Progress',
+                    percentComplete: 60,
+                    priority: 'High',
+                    instructions: 'Complete BPR report for 15 properties in Mumbai Zone 1. Follow standard BPR template.',
+                    createdDate: '2025-11-05',
+                    lastUpdatedDate: '2025-11-16'
+                },
+                {
+                    id: 'MTASK-2025-0002',
+                    matterId: 'MAT-2025-0001',
+                    taskTitle: 'Review and QC - Zone 1 BPR Reports',
+                    taskType: 'Review',
+                    createdBy: 'Vikram Sharma',
+                    owner: 'Advocate Rajesh Kumar',
+                    assignee: 'Advocate Rajesh Kumar',
+                    assigneeRole: 'Primary',
+                    dueDate: '2025-11-25',
+                    status: 'Open',
+                    percentComplete: 0,
+                    priority: 'High',
+                    instructions: 'QC review of all BPR reports prepared by juniors',
+                    createdDate: '2025-11-05',
+                    lastUpdatedDate: '2025-11-05'
+                },
+                {
+                    id: 'MTASK-2025-0003',
+                    matterId: 'MAT-2025-0002',
+                    taskTitle: 'Collect property documents from SBI branch',
+                    taskType: 'Data Compilation',
+                    createdBy: 'Meera Patel',
+                    owner: 'Advocate Ananya Iyer',
+                    assignee: 'Internal Operations',
+                    assigneeRole: 'Internal',
+                    dueDate: '2025-11-18',
+                    status: 'In Progress',
+                    percentComplete: 75,
+                    priority: 'Normal',
+                    instructions: 'Coordinate with SBI Bangalore branch to collect all property title documents',
+                    createdDate: '2025-11-02',
+                    lastUpdatedDate: '2025-11-15'
+                },
+                {
+                    id: 'MTASK-2025-0004',
+                    matterId: 'MAT-2025-0003',
+                    taskTitle: 'Conduct witness interviews',
+                    taskType: 'Analysis',
+                    createdBy: 'Harish Kumar',
+                    owner: 'Advocate Kavita Sharma',
+                    assignee: 'Advocate Kavita Sharma',
+                    assigneeRole: 'Primary',
+                    dueDate: '2025-11-22',
+                    status: 'On Hold',
+                    percentComplete: 25,
+                    priority: 'High',
+                    instructions: 'Interview all relevant witnesses as per POSH guidelines',
+                    createdDate: '2025-11-12',
+                    lastUpdatedDate: '2025-11-16'
+                }
+            ],
+            matterDocuments: [
+                {
+                    id: 'MDOC-2025-0001',
+                    matterId: 'MAT-2025-0001',
+                    folderPath: '/01. Client Inputs',
+                    fileName: 'HDFC_Property_List_Zone1.xlsx',
+                    fileType: 'Client Input',
+                    versionNo: 'v1',
+                    uploadedBy: 'Vikram Sharma',
+                    uploadedOn: '2025-10-05T10:30:00',
+                    notes: 'Initial property list from HDFC Bank',
+                    isFinalDeliverable: false,
+                    linkedQCItemId: ''
+                },
+                {
+                    id: 'MDOC-2025-0002',
+                    matterId: 'MAT-2025-0001',
+                    folderPath: '/02. Drafts',
+                    fileName: 'BPR_Zone1_Property_001_Draft.pdf',
+                    fileType: 'BPR Draft',
+                    versionNo: 'v2',
+                    uploadedBy: 'Advocate Priya Desai',
+                    uploadedOn: '2025-11-15T16:45:00',
+                    notes: 'Second draft after incorporating feedback',
+                    isFinalDeliverable: false,
+                    linkedQCItemId: ''
+                },
+                {
+                    id: 'MDOC-2025-0003',
+                    matterId: 'MAT-2025-0002',
+                    folderPath: '/01. Client Inputs',
+                    fileName: 'SBI_Title_Documents_Batch1.zip',
+                    fileType: 'Client Input',
+                    versionNo: 'v1',
+                    uploadedBy: 'Internal Operations',
+                    uploadedOn: '2025-11-10T09:00:00',
+                    notes: 'First batch of title documents from SBI',
+                    isFinalDeliverable: false,
+                    linkedQCItemId: ''
+                },
+                {
+                    id: 'MDOC-2025-0004',
+                    matterId: 'MAT-2025-0003',
+                    folderPath: '/04. Internal Notes',
+                    fileName: 'Investigation_Notes_Confidential.docx',
+                    fileType: 'Internal Note',
+                    versionNo: 'v1',
+                    uploadedBy: 'Advocate Kavita Sharma',
+                    uploadedOn: '2025-11-14T14:20:00',
+                    notes: 'Confidential investigation notes - restricted access',
+                    isFinalDeliverable: false,
+                    linkedQCItemId: ''
+                }
+            ],
+            advocateAssignments: [
+                {
+                    id: 'ASGN-2025-0001',
+                    matterId: 'MAT-2025-0001',
+                    primaryAdvocate: 'Advocate Rajesh Kumar',
+                    supportingAdvocates: ['Advocate Priya Desai', 'Advocate Suresh Menon'],
+                    panel: 'Mumbai Panel - Banking Litigation',
+                    zone: 'North',
+                    branchCluster: 'Mumbai Metro Cluster',
+                    assignmentStartDate: '2025-10-01',
+                    assignmentEndDate: '',
+                    status: 'Active'
+                },
+                {
+                    id: 'ASGN-2025-0002',
+                    matterId: 'MAT-2025-0002',
+                    primaryAdvocate: 'Advocate Ananya Iyer',
+                    supportingAdvocates: ['Advocate Vikram Malhotra'],
+                    panel: 'Bangalore Panel - Title Search',
+                    zone: 'South',
+                    branchCluster: 'Karnataka Regional Cluster',
+                    assignmentStartDate: '2025-11-01',
+                    assignmentEndDate: '',
+                    status: 'Active'
+                },
+                {
+                    id: 'ASGN-2025-0003',
+                    matterId: 'MAT-2025-0003',
+                    primaryAdvocate: 'Advocate Kavita Sharma',
+                    supportingAdvocates: [],
+                    panel: 'POSH Investigation Panel',
+                    zone: 'West',
+                    branchCluster: '',
+                    assignmentStartDate: '2025-11-10',
+                    assignmentEndDate: '',
+                    status: 'Active'
+                }
+            ],
+            qcItems: [
+                {
+                    id: 'QC-2025-0001',
+                    matterId: 'MAT-2025-0001',
+                    documentId: 'MDOC-2025-0002',
+                    deliverableName: 'BPR_Zone1_Property_001_Final.pdf',
+                    deliverableType: 'BPR Report',
+                    submittedBy: 'Advocate Rajesh Kumar',
+                    submittedOn: '2025-11-16T10:00:00',
+                    reviewer: 'Vikram Sharma',
+                    qcChecklist: 'Standard BPR QC Checklist',
+                    reviewerComments: '',
+                    qcStatus: 'Pending',
+                    qcDecisionDate: ''
+                },
+                {
+                    id: 'QC-2025-0002',
+                    matterId: 'MAT-2025-0001',
+                    documentId: 'MDOC-2025-0005',
+                    deliverableName: 'BPR_Zone1_Property_002_Final.pdf',
+                    deliverableType: 'BPR Report',
+                    submittedBy: 'Advocate Rajesh Kumar',
+                    submittedOn: '2025-11-14T15:30:00',
+                    reviewer: 'Vikram Sharma',
+                    qcChecklist: 'Standard BPR QC Checklist',
+                    reviewerComments: 'Minor formatting issues. Please update section 3.2 with latest encumbrance details.',
+                    qcStatus: 'Changes Required',
+                    qcDecisionDate: '2025-11-15T11:00:00'
+                }
             ]
         };
 
@@ -1120,6 +1384,235 @@ class LegalCRMData {
         });
 
         return newClient;
+    }
+
+    // Section B: Matter Management Helper Methods
+
+    // Get Matter Statistics for Delivery Dashboard
+    getMatterStats() {
+        const matters = this.get('matters');
+        const matterTasks = this.get('matterTasks');
+        const qcItems = this.get('qcItems');
+        const today = new Date().toISOString().split('T')[0];
+
+        // Active Matters
+        const activeMatters = matters.filter(m =>
+            m.status === 'In Execution' || m.status === 'At Risk'
+        ).length;
+
+        // Matters at Risk
+        const atRiskMatters = matters.filter(m => m.status === 'At Risk').length;
+
+        // SLA Compliance
+        const mattersWithinSLA = matters.filter(m => {
+            if (!m.targetEndDate || m.status === 'Completed') return true;
+            return m.targetEndDate >= today;
+        }).length;
+        const slaCompliancePercent = matters.length > 0
+            ? Math.round((mattersWithinSLA / matters.length) * 100)
+            : 100;
+
+        // Open Tasks
+        const openTasks = matterTasks.filter(t =>
+            t.status !== 'Completed' && t.status !== 'Cancelled'
+        ).length;
+
+        // Delayed Tasks
+        const delayedTasks = matterTasks.filter(t =>
+            t.status !== 'Completed' && t.dueDate < today
+        ).length;
+
+        // Pending QC Items
+        const pendingQC = qcItems.filter(q => q.qcStatus === 'Pending').length;
+
+        return {
+            activeMatters,
+            atRiskMatters,
+            slaCompliancePercent,
+            openTasks,
+            delayedTasks,
+            pendingQC,
+            totalMatters: matters.length
+        };
+    }
+
+    // Get Advocate Workload for Matter Tasks
+    getAdvocateWorkload() {
+        const matterTasks = this.get('matterTasks');
+        const advocates = this.get('advocates');
+        const advocateAssignments = this.get('advocateAssignments');
+        const today = new Date().toISOString().split('T')[0];
+
+        const workloadMap = {};
+
+        // Initialize workload for all active advocates
+        advocateAssignments.forEach(assignment => {
+            if (assignment.status === 'Active') {
+                if (!workloadMap[assignment.primaryAdvocate]) {
+                    workloadMap[assignment.primaryAdvocate] = {
+                        name: assignment.primaryAdvocate,
+                        activeMatters: 0,
+                        openTasks: 0,
+                        delayedTasks: 0,
+                        completedTasks: 0
+                    };
+                }
+                workloadMap[assignment.primaryAdvocate].activeMatters++;
+
+                assignment.supportingAdvocates.forEach(junior => {
+                    if (!workloadMap[junior]) {
+                        workloadMap[junior] = {
+                            name: junior,
+                            activeMatters: 0,
+                            openTasks: 0,
+                            delayedTasks: 0,
+                            completedTasks: 0
+                        };
+                    }
+                });
+            }
+        });
+
+        // Calculate task workload
+        matterTasks.forEach(task => {
+            const assignee = task.assignee;
+            if (!workloadMap[assignee]) {
+                workloadMap[assignee] = {
+                    name: assignee,
+                    activeMatters: 0,
+                    openTasks: 0,
+                    delayedTasks: 0,
+                    completedTasks: 0
+                };
+            }
+
+            if (task.status === 'Completed') {
+                workloadMap[assignee].completedTasks++;
+            } else {
+                workloadMap[assignee].openTasks++;
+                if (task.dueDate < today) {
+                    workloadMap[assignee].delayedTasks++;
+                }
+            }
+        });
+
+        return Object.values(workloadMap);
+    }
+
+    // Get Matter by Practice Area
+    getMattersByPracticeArea() {
+        const matters = this.get('matters');
+        const practiceAreaMap = {};
+
+        matters.forEach(matter => {
+            const area = matter.practiceArea;
+            if (!practiceAreaMap[area]) {
+                practiceAreaMap[area] = {
+                    practiceArea: area,
+                    count: 0,
+                    inExecution: 0,
+                    atRisk: 0,
+                    completed: 0
+                };
+            }
+            practiceAreaMap[area].count++;
+            if (matter.status === 'In Execution') practiceAreaMap[area].inExecution++;
+            if (matter.status === 'At Risk') practiceAreaMap[area].atRisk++;
+            if (matter.status === 'Completed') practiceAreaMap[area].completed++;
+        });
+
+        return Object.values(practiceAreaMap);
+    }
+
+    // Get Tasks for a specific Matter
+    getMatterTasks(matterId) {
+        const matterTasks = this.get('matterTasks');
+        return matterTasks.filter(task => task.matterId === matterId);
+    }
+
+    // Get Documents for a specific Matter
+    getMatterDocuments(matterId) {
+        const matterDocuments = this.get('matterDocuments');
+        return matterDocuments.filter(doc => doc.matterId === matterId);
+    }
+
+    // Get Advocate Assignment for a specific Matter
+    getMatterAdvocates(matterId) {
+        const advocateAssignments = this.get('advocateAssignments');
+        return advocateAssignments.find(assignment => assignment.matterId === matterId);
+    }
+
+    // Get QC Items for a specific Matter
+    getMatterQCItems(matterId) {
+        const qcItems = this.get('qcItems');
+        return qcItems.filter(item => item.matterId === matterId);
+    }
+
+    // Auto-create default folder structure for a Matter
+    createDefaultFolders(matterId) {
+        const folders = [
+            { path: '/01. Client Inputs', description: 'Client provided documents and data' },
+            { path: '/02. Drafts', description: 'Work in progress drafts' },
+            { path: '/03. Final Deliverables', description: 'Approved final deliverables' },
+            { path: '/04. Internal Notes', description: 'Internal team notes and discussions' }
+        ];
+
+        // Store folder structure in localStorage for this matter
+        const matterFolders = this.get('matterFolders') || [];
+        folders.forEach(folder => {
+            matterFolders.push({
+                id: `FOLDER-${matterId}-${Date.now()}`,
+                matterId: matterId,
+                path: folder.path,
+                description: folder.description,
+                createdDate: new Date().toISOString()
+            });
+        });
+        this.set('matterFolders', matterFolders);
+
+        return folders;
+    }
+
+    // Convert Project/Opportunity to Matter
+    convertToMatter(entityType, entityId) {
+        let sourceEntity;
+        if (entityType === 'project') {
+            sourceEntity = this.getById('projects', entityId);
+        } else if (entityType === 'opportunity') {
+            sourceEntity = this.getById('opportunities', entityId);
+        }
+
+        if (!sourceEntity) return null;
+
+        const matterId = this.generateId('matters', 'MAT');
+        const newMatter = {
+            id: matterId,
+            matterName: sourceEntity.name || sourceEntity.title,
+            linkedOpportunityId: entityType === 'opportunity' ? entityId : '',
+            clientId: sourceEntity.clientId || '',
+            clientName: sourceEntity.clientName || '',
+            practiceArea: sourceEntity.practiceArea || 'General',
+            matterType: 'Implementation',
+            region: sourceEntity.region || '',
+            city: sourceEntity.city || '',
+            slaStartDate: new Date().toISOString().split('T')[0],
+            targetEndDate: sourceEntity.expectedEndDate || '',
+            priority: sourceEntity.priority || 'Normal',
+            internalMatterOwner: sourceEntity.leadAdvocate || sourceEntity.owner || '',
+            description: sourceEntity.description || '',
+            currentStage: 'Drafting',
+            status: 'New',
+            riskFlags: [],
+            createdBy: 'Current User',
+            createdDate: new Date().toISOString().split('T')[0],
+            lastUpdatedBy: 'Current User',
+            lastUpdatedDate: new Date().toISOString().split('T')[0]
+        };
+
+        this.create('matters', newMatter);
+        this.createDefaultFolders(matterId);
+
+        return newMatter;
     }
 }
 

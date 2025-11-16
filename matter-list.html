@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal CRM Portal - Matter Management</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="searchBox" placeholder="Search matters...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <!-- Core Modules - MVP Phase -->
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Matter Management (Section B)</div>
+            <a href="matter-list.html" class="nav-item active">
+                <div class="nav-icon">⚖️</div>
+                <div class="nav-label">Matters</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="qc-review.html" class="nav-item">
+                <div class="nav-icon">✓</div>
+                <div class="nav-label">QC Review</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="delivery-dashboard.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Delivery Dashboard</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h2>Matter Management</h2>
+                <p>Manage all post-deal matters, documents, and advocate assignments</p>
+            </div>
+            <button onclick="window.location.href='add-matter.html'" class="btn-primary">
+                ➕ Create New Matter
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 24px;">
+            <div class="stat-card">
+                <div class="stat-icon blue">⚖️</div>
+                <div class="stat-info">
+                    <h3 id="totalMatters">0</h3>
+                    <p>Total Matters</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">✓</div>
+                <div class="stat-info">
+                    <h3 id="activeMatters">0</h3>
+                    <p>In Execution</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">⚠️</div>
+                <div class="stat-info">
+                    <h3 id="atRiskMatters">0</h3>
+                    <p>At Risk</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">📊</div>
+                <div class="stat-info">
+                    <h3 id="slaCompliance">0%</h3>
+                    <p>SLA Compliance</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-body">
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="filterStatus" class="form-control" onchange="applyFilters()">
+                            <option value="">All Status</option>
+                            <option value="New">New</option>
+                            <option value="In Execution">In Execution</option>
+                            <option value="At Risk">At Risk</option>
+                            <option value="Completed">Completed</option>
+                            <option value="On Hold">On Hold</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Practice Area</label>
+                        <select id="filterPracticeArea" class="form-control" onchange="applyFilters()">
+                            <option value="">All Practice Areas</option>
+                            <option value="Banking">Banking</option>
+                            <option value="Litigation">Litigation</option>
+                            <option value="Real Estate">Real Estate</option>
+                            <option value="Compliance">Compliance</option>
+                            <option value="POSH">POSH</option>
+                            <option value="Corporate">Corporate</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Client</label>
+                        <select id="filterClient" class="form-control" onchange="applyFilters()">
+                            <option value="">All Clients</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Owner</label>
+                        <select id="filterOwner" class="form-control" onchange="applyFilters()">
+                            <option value="">All Owners</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matters Table -->
+        <div class="card">
+            <div class="card-header">
+                <h3>Matters List</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="exportMatters()" class="btn-secondary">📥 Export</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Matter ID</th>
+                                <th>Matter Name</th>
+                                <th>Client</th>
+                                <th>Practice Area</th>
+                                <th>Type</th>
+                                <th>Stage</th>
+                                <th>Status</th>
+                                <th>Internal Owner</th>
+                                <th>Primary Advocate</th>
+                                <th>SLA Due</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="mattersTableBody">
+                            <!-- Dynamic content -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let allMatters = [];
+        let filteredMatters = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMatterList();
+            loadFilterOptions();
+            updateStats();
+        });
+
+        function loadMatterList() {
+            allMatters = legalCRM.get('matters');
+            filteredMatters = [...allMatters];
+            renderMattersTable();
+        }
+
+        function loadFilterOptions() {
+            // Load clients
+            const clients = legalCRM.get('clients');
+            const clientFilter = document.getElementById('filterClient');
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.companyName;
+                option.textContent = client.companyName;
+                clientFilter.appendChild(option);
+            });
+
+            // Load owners (unique from matters)
+            const owners = [...new Set(allMatters.map(m => m.internalMatterOwner))];
+            const ownerFilter = document.getElementById('filterOwner');
+            owners.forEach(owner => {
+                const option = document.createElement('option');
+                option.value = owner;
+                option.textContent = owner;
+                ownerFilter.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const practiceAreaFilter = document.getElementById('filterPracticeArea').value;
+            const clientFilter = document.getElementById('filterClient').value;
+            const ownerFilter = document.getElementById('filterOwner').value;
+
+            filteredMatters = allMatters.filter(matter => {
+                if (statusFilter && matter.status !== statusFilter) return false;
+                if (practiceAreaFilter && matter.practiceArea !== practiceAreaFilter) return false;
+                if (clientFilter && matter.clientName !== clientFilter) return false;
+                if (ownerFilter && matter.internalMatterOwner !== ownerFilter) return false;
+                return true;
+            });
+
+            renderMattersTable();
+        }
+
+        function renderMattersTable() {
+            const tbody = document.getElementById('mattersTableBody');
+
+            if (filteredMatters.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="11" style="text-align: center; padding: 40px;">
+                            <p>No matters found</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredMatters.map(matter => {
+                const statusClass = getStatusClass(matter.status);
+                const advocates = legalCRM.getMatterAdvocates(matter.id);
+                const primaryAdvocate = advocates ? advocates.primaryAdvocate : 'Not Assigned';
+
+                return `
+                    <tr onclick="viewMatter('${matter.id}')">
+                        <td><strong>${matter.id}</strong></td>
+                        <td>${matter.matterName}</td>
+                        <td>${matter.clientName}</td>
+                        <td><span class="badge badge-info">${matter.practiceArea}</span></td>
+                        <td>${matter.matterType}</td>
+                        <td>${matter.currentStage}</td>
+                        <td><span class="status-badge ${statusClass}">${matter.status}</span></td>
+                        <td>${matter.internalMatterOwner}</td>
+                        <td>${primaryAdvocate}</td>
+                        <td>${formatDate(matter.targetEndDate)}</td>
+                        <td>
+                            <button onclick="event.stopPropagation(); viewMatter('${matter.id}')" class="btn-icon" title="View Details">👁️</button>
+                            <button onclick="event.stopPropagation(); editMatter('${matter.id}')" class="btn-icon" title="Edit">✏️</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getStatusClass(status) {
+            const statusMap = {
+                'New': 'status-new',
+                'In Execution': 'status-in-progress',
+                'At Risk': 'status-at-risk',
+                'Completed': 'status-completed',
+                'On Hold': 'status-on-hold',
+                'Cancelled': 'status-cancelled'
+            };
+            return statusMap[status] || 'status-default';
+        }
+
+        function updateStats() {
+            const stats = legalCRM.getMatterStats();
+
+            document.getElementById('totalMatters').textContent = stats.totalMatters;
+            document.getElementById('activeMatters').textContent = stats.activeMatters;
+            document.getElementById('atRiskMatters').textContent = stats.atRiskMatters;
+            document.getElementById('slaCompliance').textContent = stats.slaCompliancePercent + '%';
+        }
+
+        function viewMatter(matterId) {
+            window.location.href = `matter-details.html?id=${matterId}`;
+        }
+
+        function editMatter(matterId) {
+            window.location.href = `add-matter.html?id=${matterId}`;
+        }
+
+        function exportMatters() {
+            // Simple CSV export
+            const headers = ['Matter ID', 'Matter Name', 'Client', 'Practice Area', 'Type', 'Stage', 'Status', 'Owner', 'SLA Due'];
+            const rows = filteredMatters.map(m => [
+                m.id,
+                m.matterName,
+                m.clientName,
+                m.practiceArea,
+                m.matterType,
+                m.currentStage,
+                m.status,
+                m.internalMatterOwner,
+                m.targetEndDate
+            ]);
+
+            let csvContent = headers.join(',') + '\n';
+            rows.forEach(row => {
+                csvContent += row.map(cell => `"${cell}"`).join(',') + '\n';
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'matters_export.csv';
+            a.click();
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Search functionality
+        document.getElementById('searchBox').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+
+            filteredMatters = allMatters.filter(matter => {
+                return matter.id.toLowerCase().includes(searchTerm) ||
+                       matter.matterName.toLowerCase().includes(searchTerm) ||
+                       matter.clientName.toLowerCase().includes(searchTerm) ||
+                       matter.practiceArea.toLowerCase().includes(searchTerm);
+            });
+
+            renderMattersTable();
+        });
+    </script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>

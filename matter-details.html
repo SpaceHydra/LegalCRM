@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Legal CRM Portal - Matter Details</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e5e7eb;
+            margin-bottom: 24px;
+        }
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: #64748b;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+        .tab:hover {
+            color: #3b82f6;
+        }
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .matter-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+        .matter-header h1 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+        }
+        .matter-header p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .info-item {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        .info-item label {
+            font-size: 11px;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .info-item value {
+            font-size: 15px;
+            color: #0f172a;
+            font-weight: 500;
+        }
+        .task-list-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .task-list-item:hover {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+        .document-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .document-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        .risk-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #fee2e2;
+            color: #dc2626;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <!-- Core Modules - MVP Phase -->
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Matter Management (Section B)</div>
+            <a href="matter-list.html" class="nav-item active">
+                <div class="nav-icon">⚖️</div>
+                <div class="nav-label">Matters</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="qc-review.html" class="nav-item">
+                <div class="nav-icon">✓</div>
+                <div class="nav-label">QC Review</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="delivery-dashboard.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Delivery Dashboard</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Breadcrumb -->
+        <div style="margin-bottom: 16px;">
+            <a href="matter-list.html" style="color: #64748b; text-decoration: none;">← Back to Matters</a>
+        </div>
+
+        <!-- Matter Header -->
+        <div class="matter-header">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div>
+                    <h1 id="matterName">Loading...</h1>
+                    <p id="matterDescription">Loading...</p>
+                    <div style="margin-top: 16px; display: flex; gap: 12px; align-items: center;">
+                        <span id="matterStatus" class="status-badge"></span>
+                        <span id="matterPriority"></span>
+                        <span id="riskFlags"></span>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="editMatter()" class="btn-secondary">✏️ Edit Matter</button>
+                    <button onclick="viewDeliveryDashboard()" class="btn-secondary">📊 View Dashboard</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Info Grid -->
+        <div class="info-grid" id="infoGrid">
+            <!-- Dynamic content -->
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('overview')">Overview</button>
+            <button class="tab" onclick="switchTab('tasks')">Tasks</button>
+            <button class="tab" onclick="switchTab('documents')">Documents</button>
+            <button class="tab" onclick="switchTab('advocates')">Advocates</button>
+            <button class="tab" onclick="switchTab('qc')">QC / Approvals</button>
+            <button class="tab" onclick="switchTab('history')">History</button>
+        </div>
+
+        <!-- Tab Content: Overview -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Matter Information</h3>
+                </div>
+                <div class="card-body">
+                    <div id="overviewContent">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Tasks -->
+        <div id="tasks-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Matter Tasks</h3>
+                    <button onclick="addNewTask()" class="btn-primary">➕ Add Task</button>
+                </div>
+                <div class="card-body">
+                    <div id="tasksContent">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Documents -->
+        <div id="documents-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Matter Documents</h3>
+                    <button onclick="uploadDocument()" class="btn-primary">📤 Upload Document</button>
+                </div>
+                <div class="card-body">
+                    <div id="documentsContent">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Advocates -->
+        <div id="advocates-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Advocate Assignment</h3>
+                    <button onclick="manageAdvocates()" class="btn-primary">👨‍⚖️ Manage Advocates</button>
+                </div>
+                <div class="card-body">
+                    <div id="advocatesContent">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: QC -->
+        <div id="qc-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>QC / Approvals</h3>
+                    <button onclick="submitToQC()" class="btn-primary">✓ Submit for QC</button>
+                </div>
+                <div class="card-body">
+                    <div id="qcContent">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: History -->
+        <div id="history-tab" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Audit Trail & History</h3>
+                </div>
+                <div class="card-body">
+                    <div id="historyContent">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let currentMatter = null;
+        let matterId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get matter ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            matterId = urlParams.get('id');
+
+            if (!matterId) {
+                alert('No matter ID provided');
+                window.location.href = 'matter-list.html';
+                return;
+            }
+
+            loadMatterDetails();
+        });
+
+        function loadMatterDetails() {
+            currentMatter = legalCRM.getById('matters', matterId);
+
+            if (!currentMatter) {
+                alert('Matter not found');
+                window.location.href = 'matter-list.html';
+                return;
+            }
+
+            renderMatterHeader();
+            renderInfoGrid();
+            renderOverviewTab();
+            renderTasksTab();
+            renderDocumentsTab();
+            renderAdvocatesTab();
+            renderQCTab();
+            renderHistoryTab();
+        }
+
+        function renderMatterHeader() {
+            document.getElementById('matterName').textContent = currentMatter.id + ' - ' + currentMatter.matterName;
+            document.getElementById('matterDescription').textContent = currentMatter.description;
+
+            const statusClass = getStatusClass(currentMatter.status);
+            document.getElementById('matterStatus').innerHTML = `<span class="${statusClass}">${currentMatter.status}</span>`;
+
+            document.getElementById('matterPriority').innerHTML = `<span style="padding: 4px 12px; background: ${getPriorityColor(currentMatter.priority)}; color: white; border-radius: 12px; font-size: 12px;">${currentMatter.priority} Priority</span>`;
+
+            if (currentMatter.riskFlags && currentMatter.riskFlags.length > 0) {
+                document.getElementById('riskFlags').innerHTML = currentMatter.riskFlags.map(flag =>
+                    `<span class="risk-tag">⚠️ ${flag}</span>`
+                ).join('');
+            }
+        }
+
+        function renderInfoGrid() {
+            const advocates = legalCRM.getMatterAdvocates(matterId);
+            const primaryAdvocate = advocates ? advocates.primaryAdvocate : 'Not Assigned';
+
+            document.getElementById('infoGrid').innerHTML = `
+                <div class="info-item">
+                    <label>Client</label>
+                    <value>${currentMatter.clientName}</value>
+                </div>
+                <div class="info-item">
+                    <label>Practice Area</label>
+                    <value>${currentMatter.practiceArea}</value>
+                </div>
+                <div class="info-item">
+                    <label>Matter Type</label>
+                    <value>${currentMatter.matterType}</value>
+                </div>
+                <div class="info-item">
+                    <label>Internal Owner</label>
+                    <value>${currentMatter.internalMatterOwner}</value>
+                </div>
+                <div class="info-item">
+                    <label>Primary Advocate</label>
+                    <value>${primaryAdvocate}</value>
+                </div>
+                <div class="info-item">
+                    <label>Current Stage</label>
+                    <value>${currentMatter.currentStage}</value>
+                </div>
+                <div class="info-item">
+                    <label>SLA Start Date</label>
+                    <value>${formatDate(currentMatter.slaStartDate)}</value>
+                </div>
+                <div class="info-item">
+                    <label>Target End Date</label>
+                    <value>${formatDate(currentMatter.targetEndDate)}</value>
+                </div>
+                <div class="info-item">
+                    <label>Region / City</label>
+                    <value>${currentMatter.region} / ${currentMatter.city}</value>
+                </div>
+            `;
+        }
+
+        function renderOverviewTab() {
+            document.getElementById('overviewContent').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+                    <div>
+                        <h4 style="margin: 0 0 16px 0;">Basic Information</h4>
+                        <table style="width: 100%;">
+                            <tr><td style="padding: 8px 0; color: #64748b;">Matter ID:</td><td style="font-weight: 500;">${currentMatter.id}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Matter Name:</td><td style="font-weight: 500;">${currentMatter.matterName}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Client:</td><td style="font-weight: 500;">${currentMatter.clientName}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Practice Area:</td><td style="font-weight: 500;">${currentMatter.practiceArea}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Matter Type:</td><td style="font-weight: 500;">${currentMatter.matterType}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Priority:</td><td style="font-weight: 500;">${currentMatter.priority}</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0 0 16px 0;">Dates & Timeline</h4>
+                        <table style="width: 100%;">
+                            <tr><td style="padding: 8px 0; color: #64748b;">SLA Start Date:</td><td style="font-weight: 500;">${formatDate(currentMatter.slaStartDate)}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Target End Date:</td><td style="font-weight: 500;">${formatDate(currentMatter.targetEndDate)}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Created Date:</td><td style="font-weight: 500;">${formatDate(currentMatter.createdDate)}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Last Updated:</td><td style="font-weight: 500;">${formatDate(currentMatter.lastUpdatedDate)}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Created By:</td><td style="font-weight: 500;">${currentMatter.createdBy}</td></tr>
+                            <tr><td style="padding: 8px 0; color: #64748b;">Last Updated By:</td><td style="font-weight: 500;">${currentMatter.lastUpdatedBy}</td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div style="margin-top: 24px;">
+                    <h4 style="margin: 0 0 8px 0;">Description</h4>
+                    <p style="color: #64748b;">${currentMatter.description}</p>
+                </div>
+            `;
+        }
+
+        function renderTasksTab() {
+            const tasks = legalCRM.getMatterTasks(matterId);
+            const today = new Date().toISOString().split('T')[0];
+
+            if (tasks.length === 0) {
+                document.getElementById('tasksContent').innerHTML = '<p style="text-align: center; color: #64748b; padding: 40px;">No tasks found for this matter</p>';
+                return;
+            }
+
+            document.getElementById('tasksContent').innerHTML = tasks.map(task => {
+                const isOverdue = task.dueDate < today && task.status !== 'Completed';
+                const statusClass = task.status === 'Completed' ? 'status-completed' :
+                                   isOverdue ? 'status-at-risk' :
+                                   task.status === 'In Progress' ? 'status-in-progress' : 'status-new';
+
+                return `
+                    <div class="task-list-item">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0 0 4px 0; color: #0f172a;">${task.taskTitle}</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 13px;">${task.instructions}</p>
+                            </div>
+                            <span class="${statusClass}">${task.status}</span>
+                        </div>
+                        <div style="display: flex; gap: 16px; font-size: 12px; color: #64748b;">
+                            <span>Type: <strong>${task.taskType}</strong></span>
+                            <span>Assignee: <strong>${task.assignee}</strong> (${task.assigneeRole})</span>
+                            <span>Owner: <strong>${task.owner}</strong></span>
+                            <span>Due: <strong>${formatDate(task.dueDate)}</strong></span>
+                            <span>Progress: <strong>${task.percentComplete}%</strong></span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderDocumentsTab() {
+            const documents = legalCRM.getMatterDocuments(matterId);
+
+            if (documents.length === 0) {
+                document.getElementById('documentsContent').innerHTML = '<p style="text-align: center; color: #64748b; padding: 40px;">No documents found for this matter</p>';
+                return;
+            }
+
+            // Group documents by folder
+            const documentsByFolder = {};
+            documents.forEach(doc => {
+                if (!documentsByFolder[doc.folderPath]) {
+                    documentsByFolder[doc.folderPath] = [];
+                }
+                documentsByFolder[doc.folderPath].push(doc);
+            });
+
+            let html = '';
+            Object.keys(documentsByFolder).forEach(folder => {
+                html += `
+                    <div style="margin-bottom: 24px;">
+                        <h4 style="margin: 0 0 12px 0; color: #0f172a;">📁 ${folder}</h4>
+                        ${documentsByFolder[folder].map(doc => `
+                            <div class="document-item">
+                                <div class="document-icon">📄</div>
+                                <div style="flex: 1;">
+                                    <h5 style="margin: 0 0 4px 0; color: #0f172a;">${doc.fileName}</h5>
+                                    <p style="margin: 0; font-size: 12px; color: #64748b;">
+                                        ${doc.fileType} | ${doc.versionNo} | Uploaded by ${doc.uploadedBy} on ${formatDateTime(doc.uploadedOn)}
+                                    </p>
+                                    ${doc.notes ? `<p style="margin: 4px 0 0 0; font-size: 12px; color: #64748b;">${doc.notes}</p>` : ''}
+                                </div>
+                                <div>
+                                    <button class="btn-icon" title="Download">⬇️</button>
+                                    <button class="btn-icon" title="View">👁️</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            });
+
+            document.getElementById('documentsContent').innerHTML = html;
+        }
+
+        function renderAdvocatesTab() {
+            const advocates = legalCRM.getMatterAdvocates(matterId);
+
+            if (!advocates) {
+                document.getElementById('advocatesContent').innerHTML = '<p style="text-align: center; color: #64748b; padding: 40px;">No advocates assigned to this matter</p>';
+                return;
+            }
+
+            document.getElementById('advocatesContent').innerHTML = `
+                <div style="margin-bottom: 24px;">
+                    <h4 style="margin: 0 0 12px 0;">Primary Advocate</h4>
+                    <div class="info-item">
+                        <value style="font-size: 16px;">👨‍⚖️ ${advocates.primaryAdvocate}</value>
+                    </div>
+                </div>
+
+                ${advocates.supportingAdvocates && advocates.supportingAdvocates.length > 0 ? `
+                    <div style="margin-bottom: 24px;">
+                        <h4 style="margin: 0 0 12px 0;">Supporting Advocates (Juniors)</h4>
+                        ${advocates.supportingAdvocates.map(adv => `
+                            <div class="info-item" style="margin-bottom: 8px;">
+                                <value>👤 ${adv}</value>
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : ''}
+
+                <div>
+                    <h4 style="margin: 0 0 12px 0;">Assignment Details</h4>
+                    <table style="width: 100%;">
+                        <tr><td style="padding: 8px 0; color: #64748b;">Panel / Firm:</td><td style="font-weight: 500;">${advocates.panel || 'N/A'}</td></tr>
+                        <tr><td style="padding: 8px 0; color: #64748b;">Zone:</td><td style="font-weight: 500;">${advocates.zone || 'N/A'}</td></tr>
+                        <tr><td style="padding: 8px 0; color: #64748b;">Branch / Cluster:</td><td style="font-weight: 500;">${advocates.branchCluster || 'N/A'}</td></tr>
+                        <tr><td style="padding: 8px 0; color: #64748b;">Assignment Start:</td><td style="font-weight: 500;">${formatDate(advocates.assignmentStartDate)}</td></tr>
+                        <tr><td style="padding: 8px 0; color: #64748b;">Status:</td><td style="font-weight: 500;">${advocates.status}</td></tr>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderQCTab() {
+            const qcItems = legalCRM.getMatterQCItems(matterId);
+
+            if (qcItems.length === 0) {
+                document.getElementById('qcContent').innerHTML = '<p style="text-align: center; color: #64748b; padding: 40px;">No QC items found for this matter</p>';
+                return;
+            }
+
+            document.getElementById('qcContent').innerHTML = qcItems.map(qc => {
+                const statusClass = qc.qcStatus === 'Approved' ? 'status-completed' :
+                                   qc.qcStatus === 'Changes Required' ? 'status-at-risk' :
+                                   qc.qcStatus === 'Rejected' ? 'status-cancelled' : 'status-new';
+
+                return `
+                    <div class="task-list-item">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                            <div style="flex: 1;">
+                                <h4 style="margin: 0 0 4px 0; color: #0f172a;">${qc.deliverableName}</h4>
+                                <p style="margin: 0; color: #64748b; font-size: 13px;">Type: ${qc.deliverableType}</p>
+                            </div>
+                            <span class="${statusClass}">${qc.qcStatus}</span>
+                        </div>
+                        <div style="margin-top: 12px; font-size: 12px; color: #64748b;">
+                            <p><strong>Submitted by:</strong> ${qc.submittedBy} on ${formatDateTime(qc.submittedOn)}</p>
+                            <p><strong>Reviewer:</strong> ${qc.reviewer}</p>
+                            ${qc.reviewerComments ? `<p><strong>Comments:</strong> ${qc.reviewerComments}</p>` : ''}
+                            ${qc.qcDecisionDate ? `<p><strong>Decision Date:</strong> ${formatDateTime(qc.qcDecisionDate)}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderHistoryTab() {
+            document.getElementById('historyContent').innerHTML = `
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon success">✓</div>
+                        <div class="timeline-content">
+                            <h4>Matter Created</h4>
+                            <p>Matter ${currentMatter.id} was created by ${currentMatter.createdBy}</p>
+                            <div class="timeline-time">${formatDate(currentMatter.createdDate)}</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon info">ℹ️</div>
+                        <div class="timeline-content">
+                            <h4>Last Updated</h4>
+                            <p>Matter was last updated by ${currentMatter.lastUpdatedBy}</p>
+                            <div class="timeline-time">${formatDate(currentMatter.lastUpdatedDate)}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function switchTab(tabName) {
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // Add active class to selected tab
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        function getStatusClass(status) {
+            const statusMap = {
+                'New': 'status-new',
+                'In Execution': 'status-in-progress',
+                'At Risk': 'status-at-risk',
+                'Completed': 'status-completed',
+                'On Hold': 'status-on-hold',
+                'Cancelled': 'status-cancelled'
+            };
+            return statusMap[status] || 'status-default';
+        }
+
+        function getPriorityColor(priority) {
+            const colorMap = {
+                'High': '#dc2626',
+                'Normal': '#3b82f6',
+                'Low': '#10b981'
+            };
+            return colorMap[priority] || '#64748b';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return 'N/A';
+            const date = new Date(dateTimeString);
+            return date.toLocaleString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function editMatter() {
+            window.location.href = `add-matter.html?id=${matterId}`;
+        }
+
+        function viewDeliveryDashboard() {
+            window.location.href = `delivery-dashboard.html?matterId=${matterId}`;
+        }
+
+        function addNewTask() {
+            // TODO: Implement add task modal or page
+            alert('Add new task functionality to be implemented');
+        }
+
+        function uploadDocument() {
+            // TODO: Implement upload document modal
+            alert('Upload document functionality to be implemented');
+        }
+
+        function manageAdvocates() {
+            // TODO: Implement manage advocates modal
+            alert('Manage advocates functionality to be implemented');
+        }
+
+        function submitToQC() {
+            // TODO: Implement submit to QC modal
+            alert('Submit to QC functionality to be implemented');
+        }
+    </script>
+    <script src="js/navigation.js"></script>
+</body>
+</html>
