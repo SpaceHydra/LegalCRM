@@ -4,52 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Drafting Request - Legal CRM Portal</title>
-    <link rel="stylesheet" href="css/common-styles.css">
-    <style>
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 16px;
-        }
-        .form-card {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
-            border: 1px solid #eef2ff;
-        }
-        .form-card h3 {
-            margin-top: 0;
-            font-size: 18px;
-            color: #0f172a;
-        }
-        label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #4b5563;
-            display: block;
-            margin-bottom: 6px;
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            font-size: 14px;
-        }
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            justify-content: flex-end;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modules/drafting.css">
 </head>
 <body>
+    <!-- Navigation injected by navigation.js -->
     <div class="page-container">
         <header class="page-header">
             <div>
@@ -184,5 +143,6 @@
             window.location.href = 'drafting-requests.html';
         });
     </script>
+    <script src="js/navigation.js"></script>
 </body>
 </html>
