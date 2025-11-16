@@ -4,64 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Draft Requests & Allocation - Legal CRM Portal</title>
-    <link rel="stylesheet" href="css/common-styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modules/drafting.css">
     <style>
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-            align-items: center;
-        }
-        .filters input,
-        .filters select {
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            font-size: 14px;
-            min-width: 180px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        thead {
-            background: #f8fafc;
-        }
-        tbody tr:not(:last-child) td {
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .status-pill {
-            padding: 6px 12px;
-            border-radius: 999px;
-            display: inline-block;
-            font-weight: 600;
-            font-size: 12px;
-        }
-        .status-pill[data-status="New"] { background: #e0f2fe; color: #0369a1; }
-        .status-pill[data-status="In Draft"] { background: #ede9fe; color: #5b21b6; }
-        .status-pill[data-status="Under Review"] { background: #fef3c7; color: #92400e; }
-        .status-pill[data-status="Approved"] { background: #dcfce7; color: #15803d; }
-        .status-pill[data-status="Shared"] { background: #cffafe; color: #0e7490; }
-        .status-pill[data-status="Executed"] { background: #c7d2fe; color: #3730a3; }
         .layout {
             display: grid;
             grid-template-columns: 1.6fr 1fr;
-            gap: 20px;
-        }
-        .panel {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
-            border: 1px solid #eef2ff;
-        }
-        .panel h2 {
-            margin-top: 0;
+            gap: var(--space-lg);
+            margin-top: var(--margin-section);
         }
         .kanban-board {
             display: grid;
@@ -69,52 +19,59 @@
             gap: 12px;
         }
         .kanban-column {
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 14px;
-            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: var(--space-md);
+            background: var(--bg-secondary);
         }
         .kanban-column h4 {
             margin: 0 0 10px;
-            font-size: 15px;
-            color: #0f172a;
+            font-size: var(--body-regular);
+            color: var(--text-primary);
         }
         .kanban-card {
             background: white;
-            border-radius: 12px;
+            border-radius: var(--radius-lg);
             padding: 12px;
             margin-bottom: 10px;
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+            box-shadow: var(--shadow-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .kanban-card:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
         }
         .kanban-card strong {
             display: block;
             margin-bottom: 6px;
-            font-size: 14px;
+            font-size: var(--body-regular);
         }
         .request-meta {
-            font-size: 13px;
-            color: #475569;
+            font-size: var(--body-small);
+            color: var(--text-secondary);
         }
         .detail-card {
             background: #0f172a;
             color: white;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
             height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: var(--space-lg);
         }
         .detail-card h3 {
             margin: 0;
         }
         .detail-meta {
-            font-size: 14px;
+            font-size: var(--body-regular);
             line-height: 1.6;
             color: rgba(255,255,255,0.8);
         }
         .detail-meta span {
             display: block;
+            margin-bottom: var(--space-xs);
         }
         .btn-inline {
             display: inline-flex;
@@ -122,19 +79,18 @@
             gap: 8px;
             text-decoration: none;
             color: white;
-            font-weight: 600;
+            font-weight: var(--weight-semibold);
         }
         @media (max-width: 1024px) {
             .layout {
                 grid-template-columns: 1fr;
             }
-            .detail-card {
-                min-height: auto;
-            }
         }
     </style>
 </head>
 <body>
+    <!-- Navigation injected by navigation.js -->
+
     <div class="page-container">
         <header class="page-header">
             <div>
@@ -150,15 +106,15 @@
 
         <div class="panel">
             <div class="filters">
-                <input type="search" id="searchInput" placeholder="Search request title or ID...">
-                <select id="typeFilter">
+                <input type="search" class="form-input" id="searchInput" placeholder="Search request title or ID...">
+                <select class="form-select" id="typeFilter">
                     <option value="">All Document Types</option>
                     <option value="NDA">NDA</option>
                     <option value="Loan Agreement">Loan Agreement</option>
                     <option value="Service Agreement">Service Agreement</option>
                     <option value="Policy">Policy</option>
                 </select>
-                <select id="statusFilter">
+                <select class="form-select" id="statusFilter">
                     <option value="">All Status</option>
                     <option value="New">New</option>
                     <option value="In Draft">In Draft</option>
@@ -167,13 +123,13 @@
                     <option value="Shared">Shared</option>
                     <option value="Executed">Executed</option>
                 </select>
-                <select id="priorityFilter">
+                <select class="form-select" id="priorityFilter">
                     <option value="">All Priority</option>
                     <option value="High">High</option>
                     <option value="Normal">Normal</option>
                     <option value="Low">Low</option>
                 </select>
-                <select id="practiceFilter">
+                <select class="form-select" id="practiceFilter">
                     <option value="">All Practice Areas</option>
                     <option value="Banking">Banking</option>
                     <option value="Corporate">Corporate</option>
@@ -183,7 +139,7 @@
             </div>
 
             <div style="overflow-x:auto;">
-                <table>
+                <table class="data-table">
                     <thead>
                         <tr>
                             <th>Request</th>
@@ -214,13 +170,18 @@
                 </div>
                 <div>
                     <a class="btn-inline" href="drafting-templates.html">
-                        Browse recommended templates
+                        Browse recommended templates →
                     </a>
                 </div>
             </div>
         </div>
+
+        <footer class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </footer>
     </div>
 
+    <script src="js/navigation.js"></script>
     <script src="js/drafting-data.js"></script>
     <script>
         const requestsTable = document.getElementById('requestsTable');
@@ -255,7 +216,7 @@
         function renderRequests() {
             const filtered = applyFilters(cachedRequests);
             requestsTable.innerHTML = filtered.map(item => `
-                <tr data-id="${item.id}">
+                <tr data-id="${item.id}" style="cursor: pointer;">
                     <td>
                         <strong>${item.title}</strong>
                         <div class="muted">${item.id}</div>
@@ -308,7 +269,7 @@
                 <span><strong>Request ID:</strong> ${request.id}</span>
                 <span><strong>Document Type:</strong> ${request.type} (${request.practiceArea})</span>
                 <span><strong>Linked To:</strong> ${request.linkedTo} • ${request.bank || '—'}</span>
-                <span><strong>SLA:</strong> ${request.slaHours || 48} hours • Due ${request.dueDate}</span>
+                <span><strong>SLA:</strong> ${request.slaHours || 48} hours • Due ${request.dueDate}</strong></span>
                 <span><strong>Assignee:</strong> ${request.assignee || 'Unassigned'} | Requester: ${request.requester || 'N/A'}</span>
                 <span><strong>Attachments:</strong> ${request.attachments || 0} • Last Updated: ${request.lastUpdated || '—'}</span>
                 <span style="margin-top:8px;">${request.description || ''}</span>
