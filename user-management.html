@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User & Role Management - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-active { background: #e8f5e9; color: #27ae60; }
+        .status-inactive { background: #ffebee; color: #e74c3c; }
+        .status-on-leave { background: #fff8e1; color: #f39c12; }
+
+        .role-badge {
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .role-senior-advocate { background: #f3e5f5; color: #9c27b0; }
+        .role-advocate { background: #e3f2fd; color: #2196f3; }
+        .role-associate { background: #fff8e1; color: #f39c12; }
+        .role-junior-associate { background: #e8f5e9; color: #27ae60; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .permission-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-actions {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .permission-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item active">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>👤 User & Role Management</h2>
+            <p>Manage team members and their permissions</p>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-value" id="totalUsers">0</div>
+                <div class="summary-label">Total Users</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="activeUsers">0</div>
+                <div class="summary-label">Active Users</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="advocates">0</div>
+                <div class="summary-label">Advocates</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="associates">0</div>
+                <div class="summary-label">Associates</div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="table-title">All Users</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search users...">
+                    <select class="filter-select" id="roleFilter">
+                        <option value="">All Roles</option>
+                        <option value="Senior Advocate">Senior Advocate</option>
+                        <option value="Advocate">Advocate</option>
+                        <option value="Associate">Associate</option>
+                        <option value="Junior Associate">Junior Associate</option>
+                    </select>
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="On Leave">On Leave</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddUserModal()">
+                        ➕ Add New User
+                    </button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div class="modal" id="userModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New User</h3>
+                <button class="close-btn" onclick="closeUserModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="userForm">
+                    <input type="hidden" id="userId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Full Name</label>
+                            <input type="text" class="form-input" id="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" id="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Phone</label>
+                            <input type="tel" class="form-input" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Role</label>
+                            <select class="form-select" id="role" required>
+                                <option value="">Select Role</option>
+                                <option value="Senior Advocate">Senior Advocate</option>
+                                <option value="Advocate">Advocate</option>
+                                <option value="Associate">Associate</option>
+                                <option value="Junior Associate">Junior Associate</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Department</label>
+                            <select class="form-select" id="department" required>
+                                <option value="">Select Department</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Corporate">Corporate</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Tax">Tax</option>
+                                <option value="IP">Intellectual Property</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Designation</label>
+                            <input type="text" class="form-input" id="designation" placeholder="e.g., Senior Partner">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Join Date</label>
+                            <input type="date" class="form-input" id="joinDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="On Leave">On Leave</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Permissions</label>
+                            <div class="permission-list" id="permissionList">
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_leads" value="Lead Management">
+                                    <label for="perm_leads">Lead Management</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_clients" value="Client Management">
+                                    <label for="perm_clients">Client Management</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_matters" value="Matter Management">
+                                    <label for="perm_matters">Matter Management</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_tasks" value="Task Management">
+                                    <label for="perm_tasks">Task Management</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_docs" value="Document Management">
+                                    <label for="perm_docs">Document Management</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_reports" value="Basic Reporting">
+                                    <label for="perm_reports">Basic Reporting</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_billing" value="Billing">
+                                    <label for="perm_billing">Billing</label>
+                                </div>
+                                <div class="permission-item">
+                                    <input type="checkbox" id="perm_all" value="All Access">
+                                    <label for="perm_all"><strong>All Access</strong></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeUserModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveUser()">Save User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        // Load users on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+            updateStats();
+            setupFilters();
+        });
+
+        function loadUsers(filterRole = '', filterStatus = '', searchTerm = '') {
+            let users = legalCRM.get('users');
+
+            // Apply filters
+            if (filterRole) {
+                users = users.filter(u => u.role === filterRole);
+            }
+            if (filterStatus) {
+                users = users.filter(u => u.status === filterStatus);
+            }
+            if (searchTerm) {
+                searchTerm = searchTerm.toLowerCase();
+                users = users.filter(u =>
+                    u.name.toLowerCase().includes(searchTerm) ||
+                    u.email.toLowerCase().includes(searchTerm) ||
+                    u.id.toLowerCase().includes(searchTerm) ||
+                    u.phone.includes(searchTerm)
+                );
+            }
+
+            const tbody = document.getElementById('usersTableBody');
+
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👤</div>
+                                <h3>No users found</h3>
+                                <p>Start by adding your first user</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><strong>${user.id}</strong></td>
+                    <td>
+                        <strong>${user.name}</strong><br>
+                        <small style="color: #7f8c8d;">${user.designation}</small>
+                    </td>
+                    <td>${user.email}</td>
+                    <td>${user.phone}</td>
+                    <td>
+                        <span class="role-badge role-${user.role.toLowerCase().replace(/\s+/g, '-')}">
+                            ${user.role}
+                        </span>
+                    </td>
+                    <td>${user.department}</td>
+                    <td>
+                        <span class="status-badge status-${user.status.toLowerCase().replace(/\s+/g, '-')}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="editUser('${user.id}')" title="Edit">
+                                ✏️
+                            </button>
+                            <button class="icon-btn btn-success" onclick="viewUser('${user.id}')" title="View Details">
+                                👁️
+                            </button>
+                            <button class="icon-btn btn-danger" onclick="deleteUser('${user.id}')" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            const users = legalCRM.get('users');
+            const totalUsers = users.length;
+            const activeUsers = users.filter(u => u.status === 'Active').length;
+            const advocates = users.filter(u => u.role.includes('Advocate')).length;
+            const associates = users.filter(u => u.role.includes('Associate')).length;
+
+            document.getElementById('totalUsers').textContent = totalUsers;
+            document.getElementById('activeUsers').textContent = activeUsers;
+            document.getElementById('advocates').textContent = advocates;
+            document.getElementById('associates').textContent = associates;
+        }
+
+        function setupFilters() {
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                const roleFilter = document.getElementById('roleFilter').value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                loadUsers(roleFilter, statusFilter, searchTerm);
+            });
+
+            document.getElementById('roleFilter').addEventListener('change', function(e) {
+                const roleFilter = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadUsers(roleFilter, statusFilter, searchTerm);
+            });
+
+            document.getElementById('statusFilter').addEventListener('change', function(e) {
+                const statusFilter = e.target.value;
+                const roleFilter = document.getElementById('roleFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadUsers(roleFilter, statusFilter, searchTerm);
+            });
+        }
+
+        function openAddUserModal() {
+            document.getElementById('modalTitle').textContent = 'Add New User';
+            document.getElementById('userForm').reset();
+            document.getElementById('userId').value = '';
+            document.getElementById('status').value = 'Active';
+            // Uncheck all permissions
+            document.querySelectorAll('.permission-item input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').classList.remove('active');
+        }
+
+        function saveUser() {
+            const id = document.getElementById('userId').value;
+
+            // Collect permissions
+            const permissions = [];
+            document.querySelectorAll('.permission-item input[type="checkbox"]:checked').forEach(cb => {
+                permissions.push(cb.value);
+            });
+
+            const userData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                role: document.getElementById('role').value,
+                department: document.getElementById('department').value,
+                designation: document.getElementById('designation').value,
+                status: document.getElementById('status').value,
+                joinDate: document.getElementById('joinDate').value || new Date().toISOString().split('T')[0],
+                permissions: permissions
+            };
+
+            // Validate required fields
+            if (!userData.name || !userData.email || !userData.phone || !userData.role || !userData.department) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (id) {
+                // Update existing user
+                legalCRM.update('users', id, userData);
+                showNotification('User updated successfully!');
+            } else {
+                // Create new user
+                const newUser = {
+                    id: legalCRM.generateId('users', 'USR'),
+                    ...userData
+                };
+                legalCRM.create('users', newUser);
+                showNotification('User created successfully!');
+            }
+
+            closeUserModal();
+            loadUsers();
+            updateStats();
+        }
+
+        function editUser(id) {
+            const user = legalCRM.getById('users', id);
+            if (!user) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit User';
+            document.getElementById('userId').value = user.id;
+            document.getElementById('name').value = user.name;
+            document.getElementById('email').value = user.email;
+            document.getElementById('phone').value = user.phone;
+            document.getElementById('role').value = user.role;
+            document.getElementById('department').value = user.department;
+            document.getElementById('designation').value = user.designation || '';
+            document.getElementById('joinDate').value = user.joinDate;
+            document.getElementById('status').value = user.status;
+
+            // Set permissions
+            document.querySelectorAll('.permission-item input[type="checkbox"]').forEach(cb => {
+                cb.checked = user.permissions && user.permissions.includes(cb.value);
+            });
+
+            document.getElementById('userModal').classList.add('active');
+        }
+
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                legalCRM.delete('users', id);
+                showNotification('User deleted successfully!');
+                loadUsers();
+                updateStats();
+            }
+        }
+
+        function viewUser(id) {
+            const user = legalCRM.getById('users', id);
+            if (!user) return;
+
+            const permList = user.permissions && user.permissions.length > 0
+                ? user.permissions.join(', ')
+                : 'No permissions assigned';
+
+            alert(`
+User Details:
+=============
+ID: ${user.id}
+Name: ${user.name}
+Email: ${user.email}
+Phone: ${user.phone}
+Role: ${user.role}
+Department: ${user.department}
+Designation: ${user.designation || 'N/A'}
+Status: ${user.status}
+Join Date: ${formatDate(user.joinDate)}
+
+Permissions: ${permList}
+            `);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('userModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeUserModal();
+            }
+        });
+    </script>
+</body>
+</html>
