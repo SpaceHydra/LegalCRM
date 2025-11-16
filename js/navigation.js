@@ -63,7 +63,12 @@ function createTopNavigation() {
 function createSidebar(activePage = '') {
     const createNavItem = (module, isSubmenu = false) => {
         const isActive = activePage.includes(module.url) ? 'active' : '';
-        const badge = module.phase ? `<span class="phase-badge ${module.phase}">${module.phase.toUpperCase()}</span>` : '';
+        const badgeText = module.phase === 'mvp'
+            ? '1'
+            : module.phase === 'phase2'
+                ? '2'
+                : module.phase?.toUpperCase() || '';
+        const badge = badgeText ? `<span class="phase-badge ${module.phase}">${badgeText}</span>` : '';
         const indent = isSubmenu ? 'style="padding-left: 50px;"' : '';
 
         return `
