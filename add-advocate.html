@@ -568,7 +568,74 @@
                     </div>
                 </div>
 
-                <!-- Section 2: Professional Information -->
+                <!-- Section 2: Entity Type & Firm Details -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏢</div>
+                        <div>
+                            <div class="section-title">Entity Type & Firm Details</div>
+                            <div class="section-subtitle">Individual advocate or law firm</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Entity Type <span class="required-mark">*</span></label>
+                            <select id="entityType" required onchange="toggleFirmDetails()">
+                                <option value="Individual">Individual Advocate</option>
+                                <option value="Firm">Law Firm / Partnership</option>
+                                <option value="Company">Company</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Incorporation (if firm/company)</label>
+                            <input type="date" id="incorporationDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Category <span class="required-mark">*</span></label>
+                            <select id="category" required>
+                                <option value="General">General</option>
+                                <option value="SC">SC (Scheduled Caste)</option>
+                                <option value="ST">ST (Scheduled Tribe)</option>
+                                <option value="OBC">OBC (Other Backward Class)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Firm Partners Section (Hidden by default) -->
+                    <div id="firmPartnersSection" style="display: none; margin-top: 20px;">
+                        <h4 style="margin-bottom: 15px; color: #2c3e50;">Firm Partners Details</h4>
+                        <div id="partnersContainer">
+                            <div class="partner-entry" style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px;">
+                                <div class="form-grid">
+                                    <div class="form-group">
+                                        <label>Partner Name</label>
+                                        <input type="text" class="partnerName" placeholder="Partner full name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Designation</label>
+                                        <input type="text" class="partnerDesignation" placeholder="e.g., Senior Partner">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Experience (Years)</label>
+                                        <input type="number" class="partnerExperience" placeholder="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Specialization</label>
+                                        <input type="text" class="partnerSpecialization" placeholder="Practice area">
+                                    </div>
+                                    <div class="form-group full-width">
+                                        <label>Brief Resume</label>
+                                        <textarea class="partnerResume" placeholder="Brief professional background"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addPartner()">+ Add Another Partner</button>
+                    </div>
+                </div>
+
+                <!-- Section 3: Professional Information -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon">⚖️</div>
@@ -644,10 +711,115 @@
                                 <option value="WhatsApp">WhatsApp</option>
                             </select>
                         </div>
+                        <div class="form-group">
+                            <label>Practicing In <span class="required-mark">*</span></label>
+                            <select id="practicingSide" required>
+                                <option value="Both">Both Civil & Criminal</option>
+                                <option value="Civil">Civil Side Only</option>
+                                <option value="Criminal">Criminal Side Only</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Principal Place of Practice <span class="required-mark">*</span></label>
+                            <input type="text" id="principalPlace" required placeholder="e.g., Delhi, Mumbai">
+                        </div>
                     </div>
                 </div>
 
-                <!-- Section 3: Financial Details -->
+                <!-- Section 4: Existing Representations & Depanelment -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏛️</div>
+                        <div>
+                            <div class="section-title">Existing Representations & History</div>
+                            <div class="section-subtitle">Current clients and empanelment history</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Are you appearing on behalf of any Bank(s) / Financial Institution(s) / Company(ies)?</label>
+                            <select id="hasExistingClients" onchange="toggleExistingClients()">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                        <div id="existingClientsSection" style="display: none; grid-column: 1 / -1;">
+                            <label>Provide Details</label>
+                            <textarea id="existingClientsDetails" placeholder="List all banks, financial institutions, or companies you are currently representing"></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Have you been depanelled anytime from any institution?</label>
+                            <select id="hasDepanelment" onchange="toggleDepanelment()">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                        <div id="depanelmentSection" style="display: none; grid-column: 1 / -1;">
+                            <label>Provide Details of Depanelment</label>
+                            <textarea id="depanelmentDetails" placeholder="Institution name, reason for depanelment, year, etc."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Conflict of Interest Declaration -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">⚠️</div>
+                        <div>
+                            <div class="section-title">Conflict of Interest Declaration</div>
+                            <div class="section-subtitle">Important disclosures</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Are you appearing in any suit or other proceedings against State Bank of India or our institution?</label>
+                            <select id="hasConflict" onchange="toggleConflict()">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                        <div id="conflictSection" style="display: none; grid-column: 1 / -1;">
+                            <label>Provide Details of Cases</label>
+                            <textarea id="conflictDetails" placeholder="Case details, court, case number, party names, etc."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Professional Conduct & Compliance -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">✓</div>
+                        <div>
+                            <div class="section-title">Professional Conduct & Compliance</div>
+                            <div class="section-subtitle">Bar Council disciplinary matters</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Have you suffered any professional misconduct proceedings before Bar Council?</label>
+                            <select id="hasMisconduct" onchange="toggleMisconduct()">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                        <div id="misconductSection" style="display: none; grid-column: 1 / -1;">
+                            <label>Provide Details of Proceedings</label>
+                            <textarea id="misconductDetails" placeholder="Nature of proceedings, outcome, year, etc."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Are you an Income Tax Assessee?</label>
+                            <select id="isTaxAssessee">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: Financial Details -->
                 <div class="form-section">
                     <div class="section-header">
                         <div class="section-icon">💰</div>
@@ -852,37 +1024,74 @@
                     </div>
                 </div>
 
-                <!-- Section 7: Compliance Checklist -->
+                <!-- Section 11: Undertakings & Declarations -->
                 <div class="form-section">
                     <div class="section-header">
-                        <div class="section-icon">✅</div>
+                        <div class="section-icon">📜</div>
                         <div>
-                            <div class="section-title">Verification & Compliance</div>
-                            <div class="section-subtitle">Mandatory declarations</div>
+                            <div class="section-title">Undertakings & Declarations</div>
+                            <div class="section-subtitle">Mandatory undertakings as per empanelment norms</div>
                         </div>
                     </div>
 
                     <div class="compliance-checklist">
+                        <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 16px;">I hereby undertake and declare that:</h4>
+
                         <div class="compliance-item">
-                            <input type="checkbox" id="verifyInfo" required>
-                            <label for="verifyInfo">I verify that all information provided is accurate and complete</label>
+                            <input type="checkbox" id="undertaking1" required>
+                            <label for="undertaking1">I will refrain from appearing against State Bank of India / the Institution in any suit, proceedings, enquiries which are pending disposal or proposed to be filed</label>
                         </div>
+
                         <div class="compliance-item">
-                            <input type="checkbox" id="barActive" required>
-                            <label for="barActive">I confirm that my Bar Council enrollment is active and in good standing</label>
+                            <input type="checkbox" id="undertaking2" required>
+                            <label for="undertaking2">I will not offer any advice or opinions to any clients/parties, including companies and institutions, which may affect the interests of the bank/institution</label>
                         </div>
+
                         <div class="compliance-item">
-                            <input type="checkbox" id="noDisciplinary" required>
-                            <label for="noDisciplinary">I declare that I have no pending disciplinary proceedings</label>
+                            <input type="checkbox" id="undertaking3" required>
+                            <label for="undertaking3">I am agreeable to the advocates' fee structure fixed by the institution for the matters entrusted to me</label>
                         </div>
+
                         <div class="compliance-item">
-                            <input type="checkbox" id="acceptTerms" required>
-                            <label for="acceptTerms">I accept the terms and conditions of empanelment</label>
+                            <input type="checkbox" id="undertaking4" required>
+                            <label for="undertaking4">I understand that I am NOT entitled to: (a) Retained fee, (b) Travelling expenses, and (c) Claim Junior Advocate's fee, unless specifically agreed to in writing by the Bank/Institution</label>
                         </div>
+
+                        <div class="compliance-item">
+                            <input type="checkbox" id="undertaking5" required>
+                            <label for="undertaking5">I acknowledge that the Bank/Institution has the right to take necessary action against me if any of the particulars given herein are found to be misleading/untrue or on account of professional misconduct or negligence attributable to me/us or my/our authorized representatives</label>
+                        </div>
+
+                        <div class="compliance-item">
+                            <input type="checkbox" id="undertaking6" required>
+                            <label for="undertaking6">I confirm that my Bar Council enrollment is active and in good standing with no pending disciplinary proceedings</label>
+                        </div>
+
+                        <div class="compliance-item">
+                            <input type="checkbox" id="undertaking7" required>
+                            <label for="undertaking7">I verify that all information provided in this application is accurate and complete to the best of my knowledge</label>
+                        </div>
+
+                        <div class="compliance-item">
+                            <input type="checkbox" id="undertaking8" required>
+                            <label for="undertaking8">I have enclosed copies of LL.B degree certificate, Bar Council enrollment certificate, and all other required documents duly attested</label>
+                        </div>
+
+                        <div class="compliance-item">
+                            <input type="checkbox" id="undertaking9" required>
+                            <label for="undertaking9">I request the institution to consider my name for empanelment in the panel of Advocates for Title Investigation Report (TIR) and Litigation work</label>
+                        </div>
+
                         <div class="compliance-item">
                             <input type="checkbox" id="dataConsent" required>
-                            <label for="dataConsent">I consent to processing of my personal data for onboarding purposes</label>
+                            <label for="dataConsent">I consent to processing of my personal data for empanelment and related purposes</label>
                         </div>
+                    </div>
+
+                    <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-left: 4px solid #f39c12; border-radius: 6px;">
+                        <p style="margin: 0; font-size: 13px; color: #856404;">
+                            <strong>Note:</strong> By submitting this form, you are making a legal declaration. Any false information may result in immediate depanelment and legal action.
+                        </p>
                     </div>
                 </div>
 
@@ -1021,6 +1230,91 @@
             setupChipsInput('languagesInput', 'languagesChips', languages);
         });
 
+        // Toggle functions for conditional sections
+        function toggleFirmDetails() {
+            const entityType = document.getElementById('entityType').value;
+            const firmSection = document.getElementById('firmPartnersSection');
+            firmSection.style.display = (entityType === 'Firm' || entityType === 'Company') ? 'block' : 'none';
+        }
+
+        function toggleExistingClients() {
+            const hasClients = document.getElementById('hasExistingClients').value;
+            const section = document.getElementById('existingClientsSection');
+            section.style.display = hasClients === 'Yes' ? 'block' : 'none';
+        }
+
+        function toggleDepanelment() {
+            const hasDepanelment = document.getElementById('hasDepanelment').value;
+            const section = document.getElementById('depanelmentSection');
+            section.style.display = hasDepanelment === 'Yes' ? 'block' : 'none';
+        }
+
+        function toggleConflict() {
+            const hasConflict = document.getElementById('hasConflict').value;
+            const section = document.getElementById('conflictSection');
+            section.style.display = hasConflict === 'Yes' ? 'block' : 'none';
+        }
+
+        function toggleMisconduct() {
+            const hasMisconduct = document.getElementById('hasMisconduct').value;
+            const section = document.getElementById('misconductSection');
+            section.style.display = hasMisconduct === 'Yes' ? 'block' : 'none';
+        }
+
+        // Add partner functionality
+        function addPartner() {
+            const container = document.getElementById('partnersContainer');
+            const partnerEntry = document.createElement('div');
+            partnerEntry.className = 'partner-entry';
+            partnerEntry.style.cssText = 'background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 15px;';
+            partnerEntry.innerHTML = `
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Partner Name</label>
+                        <input type="text" class="partnerName" placeholder="Partner full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Designation</label>
+                        <input type="text" class="partnerDesignation" placeholder="e.g., Senior Partner">
+                    </div>
+                    <div class="form-group">
+                        <label>Experience (Years)</label>
+                        <input type="number" class="partnerExperience" placeholder="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Specialization</label>
+                        <input type="text" class="partnerSpecialization" placeholder="Practice area">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Brief Resume</label>
+                        <textarea class="partnerResume" placeholder="Brief professional background"></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <button type="button" class="remove-file" onclick="this.closest('.partner-entry').remove()">Remove Partner</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(partnerEntry);
+        }
+
+        // Get partners data
+        function getPartnersData() {
+            const partners = [];
+            document.querySelectorAll('.partner-entry').forEach(entry => {
+                const name = entry.querySelector('.partnerName')?.value;
+                if (name) {
+                    partners.push({
+                        name: name,
+                        designation: entry.querySelector('.partnerDesignation')?.value || '',
+                        experience: parseInt(entry.querySelector('.partnerExperience')?.value) || 0,
+                        specialization: entry.querySelector('.partnerSpecialization')?.value || '',
+                        resume: entry.querySelector('.partnerResume')?.value || ''
+                    });
+                }
+            });
+            return partners;
+        }
+
         // Form submission
         document.getElementById('advocateOnboardingForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1052,9 +1346,10 @@
                 return;
             }
 
-            // Create advocate object
+            // Create advocate object with all new fields
             const advocateData = {
                 id: legalCRM.generateId('advocates', 'ADV'),
+                // Personal Information
                 name: document.getElementById('advocateName').value,
                 email: document.getElementById('advocateEmail').value,
                 phone: document.getElementById('advocatePhone').value,
@@ -1070,6 +1365,12 @@
                     name: document.getElementById('emergencyContactName').value,
                     phone: document.getElementById('emergencyContactNumber').value
                 },
+                // Entity & Firm Details
+                entityType: document.getElementById('entityType').value,
+                incorporationDate: document.getElementById('incorporationDate').value,
+                category: document.getElementById('category').value,
+                firmPartners: getPartnersData(),
+                // Professional Information
                 barCouncilNo: document.getElementById('barCouncilNo').value,
                 barCouncilState: document.getElementById('barCouncilState').value,
                 enrollmentYear: document.getElementById('enrollmentYear').value,
@@ -1080,10 +1381,26 @@
                 languagesKnown: languages,
                 availabilityStatus: document.getElementById('availabilityStatus').value,
                 preferredMode: document.getElementById('preferredMode').value,
+                practicingSide: document.getElementById('practicingSide').value,
+                principalPlace: document.getElementById('principalPlace').value,
+                // Existing Representations & History
+                hasExistingClients: document.getElementById('hasExistingClients').value,
+                existingClientsDetails: document.getElementById('existingClientsDetails')?.value || '',
+                hasDepanelment: document.getElementById('hasDepanelment').value,
+                depanelmentDetails: document.getElementById('depanelmentDetails')?.value || '',
+                // Conflict of Interest
+                hasConflict: document.getElementById('hasConflict').value,
+                conflictDetails: document.getElementById('conflictDetails')?.value || '',
+                // Professional Conduct
+                hasMisconduct: document.getElementById('hasMisconduct').value,
+                misconductDetails: document.getElementById('misconductDetails')?.value || '',
+                isTaxAssessee: document.getElementById('isTaxAssessee').value,
+                // Financial Details
                 hourlyRate: parseInt(document.getElementById('hourlyRate').value),
                 retainerRate: parseInt(document.getElementById('retainerRate').value) || 0,
                 consultationFee: parseInt(document.getElementById('consultationFee').value) || 0,
                 courtAppearanceFee: parseInt(document.getElementById('courtAppearanceFee').value) || 0,
+                // Bank Details
                 bankAccountDetails: {
                     accountName: document.getElementById('accountName').value,
                     accountNumber: document.getElementById('accountNumber').value,
@@ -1092,14 +1409,19 @@
                     branch: document.getElementById('branchName').value,
                     accountType: document.getElementById('accountType').value
                 },
+                // Compliance & KYC
                 panNumber: document.getElementById('panNumber').value,
                 aadhaarNumber: document.getElementById('aadhaarNumber').value,
                 gstNumber: document.getElementById('gstNumber').value || '',
                 professionalTaxNo: document.getElementById('professionalTaxNo').value || '',
+                // Documents
                 documents: Object.keys(uploadedDocuments),
+                uploadedFiles: uploadedDocuments,
+                // Additional Information
                 specialSkills: document.getElementById('specialSkills').value,
                 previousExperience: document.getElementById('previousExperience').value,
                 notes: document.getElementById('additionalNotes').value,
+                // System Fields
                 rating: 0,
                 casesHandled: 0,
                 successRate: 0,
@@ -1107,8 +1429,10 @@
                 activeAssignments: 0,
                 totalEarnings: 0,
                 empaneledDate: new Date().toISOString().split('T')[0],
-                status: 'Active',
-                onboardingComplete: true
+                status: 'Pending Approval',  // Changed to Pending for review workflow
+                onboardingComplete: true,
+                undertakingsAccepted: true,
+                submittedDate: new Date().toISOString()
             };
 
             // Save to database
