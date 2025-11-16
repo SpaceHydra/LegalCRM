@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Legal CRM Portal - Index</title>
+  <link rel="stylesheet" href="css/common-styles.css" />
+</head>
+<body>
+  <main class="page-container">
+    <header class="page-header">
+      <h1>Legal CRM Portal</h1>
+      <p class="lead">
+        A quick index of every HTML module and supporting resource so you can jump straight in.
+      </p>
+    </header>
+
+    <section>
+      <h2>Core Modules</h2>
+      <ul class="module-list">
+        <li><a href="dashboard.html">Dashboard</a> – seen-first welcome with live stats, quick actions, and activity logs.</li>
+        <li><a href="lead-management.html">Lead Management</a> – full lead CRUD, scoring, aging, and conversion.</li>
+        <li><a href="client-management.html">Client Management</a> – master client records with SPOCs, PAN/GSTIN, and segmentation.</li>
+        <li><a href="project-management.html">Project Management</a> – lifecycle tracking, milestones, and timelines.</li>
+        <li><a href="task-management.html">Task Management</a> – priority handling, dependencies, and time logs.</li>
+        <li><a href="document-management.html">Document Management</a> – versions, tags, and access controls.</li>
+        <li><a href="user-management.html">User & Role Management</a> – RBAC, departments, and granular status.</li>
+        <li><a href="reporting.html">Reporting</a> – revenue trends, team metrics, and exportable analytics.</li>
+        <li><a href="billing.html">Billing</a> – GST invoices, payments, and due alerts.</li>
+        <li><a href="calendar.html">Calendar</a> – meetings, agendas, and attendee tracking.</li>
+        <li><a href="legal_crm_dashboard (1).html">Static Dashboard</a> – legacy snapshot of the original dashboard design.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Documentation & Guides</h2>
+      <ul class="module-list">
+        <li><a href="fsd.md">Functional Specification (FSD)</a> – narrative of requirements, workflows, and module scope.</li>
+        <li><a href="USAGE_GUIDE.md">Usage Guide</a> – walk-through for navigating and operating the prototype.</li>
+        <li><a href="SYMBOL_GUIDE.md">Sync Guide</a> – explains how the supplied `sync.bat` and `sync.sh` keep your repo in sync.</li>
+        <li><a href="credentials.md">Credentials Notes</a> – placeholder for storing secure reference coordinates (keep it empty!).</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Local Environment</h2>
+      <p>All modules share the <code>js/data.js</code> data layer and <code>css/common-styles.css</code> styling. Launch a quick server to browse:</p>
+      <pre><code>python -m http.server 8000
+npx http-server
+</code></pre>
+      <p>Then open <code>http://localhost:8000/dashboard.html</code> or <code>index.html</code> to pick a module.</p>
+    </section>
+  </main>
+</body>
+</html>
