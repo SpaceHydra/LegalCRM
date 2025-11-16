@@ -4,29 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Empaneled Advocates - Legal CRM</title>
-    <link rel="stylesheet" href="css/common-styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <style>
-        /* Advocates specific styles */
+        /* Advocates Dashboard Stats */
+        .advocates-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--margin-section);
+        }
+
+        .stat-box {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            border-left: 4px solid;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .stat-box.total { border-left-color: #3498db; }
+        .stat-box.available { border-left-color: #27ae60; }
+        .stat-box.busy { border-left-color: #f39c12; }
+        .stat-box.leave { border-left-color: #e74c3c; }
+
+        .stat-box-header {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-box-value {
+            font-size: 36px;
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            line-height: 1;
+        }
+
+        .stat-box-meta {
+            font-size: var(--body-tiny);
+            color: var(--text-muted);
+            margin-top: var(--space-xs);
+        }
+
+        /* Advocates Grid */
         .advocates-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: var(--space-lg);
         }
 
         .advocate-card {
             background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-light);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             cursor: pointer;
             border-left: 4px solid #3498db;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advocate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: var(--primary-gradient);
+            opacity: 0.05;
+            border-radius: 50%;
+            transform: translate(30%, -30%);
         }
 
         .advocate-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            box-shadow: var(--shadow-medium);
         }
 
         .advocate-card.busy {
@@ -35,59 +97,70 @@
 
         .advocate-card.on-leave {
             border-left-color: #e74c3c;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         .advocate-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 15px;
+            margin-bottom: var(--space-md);
         }
 
         .advocate-info h3 {
-            font-size: 18px;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            font-size: var(--h4-size);
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+            font-weight: var(--weight-semibold);
         }
 
-        .advocate-info p {
-            font-size: 13px;
-            color: #7f8c8d;
+        .advocate-contact {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
             margin-bottom: 3px;
+        }
+
+        .advocate-contact span {
+            margin-right: 4px;
         }
 
         .availability-badge {
             padding: 5px 12px;
             border-radius: 20px;
             font-size: 11px;
-            font-weight: 600;
+            font-weight: var(--weight-semibold);
             text-transform: uppercase;
         }
 
         .availability-badge.available {
-            background: #d4edda;
-            color: #27ae60;
+            background: var(--success-light);
+            color: var(--success-color);
         }
 
         .availability-badge.busy {
-            background: #fff3cd;
-            color: #f39c12;
+            background: var(--warning-light);
+            color: var(--warning-color);
         }
 
         .availability-badge.on-leave {
-            background: #f8d7da;
-            color: #e74c3c;
+            background: var(--danger-light);
+            color: var(--danger-color);
         }
 
-        .advocate-stats {
+        .rating-stars {
+            color: #f39c12;
+            font-size: 14px;
+            margin: var(--space-xs) 0;
+        }
+
+        .advocate-stats-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-            padding: 15px 0;
-            border-top: 1px solid #ecf0f1;
-            border-bottom: 1px solid #ecf0f1;
+            gap: var(--space-sm);
+            margin: var(--space-md) 0;
+            padding: var(--space-md) 0;
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
         }
 
         .stat-item {
@@ -96,29 +169,23 @@
 
         .stat-value {
             font-size: 20px;
-            font-weight: 700;
-            color: #2c3e50;
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
             display: block;
         }
 
         .stat-label {
             font-size: 11px;
-            color: #7f8c8d;
+            color: var(--text-muted);
             text-transform: uppercase;
             margin-top: 3px;
-        }
-
-        .rating-stars {
-            color: #f39c12;
-            font-size: 14px;
-            margin: 5px 0;
         }
 
         .specialization-tags {
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
-            margin-top: 10px;
+            margin-top: var(--space-sm);
         }
 
         .spec-tag {
@@ -127,350 +194,139 @@
             padding: 4px 10px;
             border-radius: 12px;
             font-size: 11px;
-            font-weight: 500;
+            font-weight: var(--weight-medium);
+        }
+
+        .advocate-meta {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            margin-top: var(--space-sm);
+            padding-top: var(--space-sm);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .advocate-meta strong {
+            color: var(--text-primary);
         }
 
         .advocate-actions {
             display: flex;
-            gap: 10px;
-            margin-top: 15px;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
         }
 
-        .advocate-actions button {
+        .advocate-actions .btn {
             flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            padding: 10px;
+            font-size: var(--body-small);
         }
 
-        .btn-assign {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-view {
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
-
-        .btn-assign:hover {
-            transform: scale(1.05);
-        }
-
-        .btn-view:hover {
-            background: #d5dbdb;
-        }
-
-        /* Filter Section */
-        .filters-section {
+        /* Filters Section */
+        .filters-panel {
             background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--margin-section);
         }
 
         .filters-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-md);
         }
 
-        .filter-item label {
-            display: block;
-            font-size: 13px;
-            color: #7f8c8d;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .filter-item select,
-        .filter-item input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            overflow-y: auto;
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            overflow-y: auto;
-            margin: 20px;
-        }
-
-        .modal-header {
-            padding: 25px;
-            border-bottom: 1px solid #ecf0f1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            font-size: 22px;
-            color: #2c3e50;
-        }
-
-        .close-btn {
-            font-size: 28px;
-            cursor: pointer;
-            color: #7f8c8d;
-        }
-
-        .close-btn:hover {
-            color: #2c3e50;
-        }
-
-        .modal-body {
-            padding: 25px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group.full-width {
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-xxl);
             grid-column: 1 / -1;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .modal-footer {
-            padding: 20px 25px;
-            border-top: 1px solid #ecf0f1;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: #ecf0f1;
-            color: #2c3e50;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #95a5a6;
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: var(--space-lg);
+            opacity: 0.3;
         }
 
         .empty-state h3 {
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: var(--h3-size);
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .advocates-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .advocates-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Top Navigation Bar -->
-    <div class="top-nav">
-        <div class="logo-section">
-            <div class="logo">LC</div>
-            <div class="system-title">
-                <h1>Legal CRM Portal</h1>
-                <p>SNG & Partners - Business Development Platform</p>
-            </div>
-        </div>
-        <div class="user-section">
-            <div class="search-box">
-                <span>🔍</span>
-                <input type="text" placeholder="Search advocates...">
-            </div>
-            <div class="notification-icon">
-                <span style="font-size: 24px;">🔔</span>
-                <div class="badge" id="notificationCount">0</div>
-            </div>
-            <div class="user-profile">
-                <div class="user-avatar">PM</div>
-                <div>
-                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
-                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Navigation injected by navigation.js -->
 
-    <!-- Sidebar Navigation -->
-    <div class="sidebar">
-        <div class="nav-section">
-            <div class="nav-section-title">Core Modules (MVP)</div>
-            <a href="dashboard.html" class="nav-item">
-                <div class="nav-icon">📊</div>
-                <div class="nav-label">Dashboard</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="lead-management.html" class="nav-item">
-                <div class="nav-icon">🎯</div>
-                <div class="nav-label">Lead Management</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="client-management.html" class="nav-item">
-                <div class="nav-icon">👥</div>
-                <div class="nav-label">Client Management</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="project-management.html" class="nav-item">
-                <div class="nav-icon">📁</div>
-                <div class="nav-label">Matter/Project Management</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="task-management.html" class="nav-item">
-                <div class="nav-icon">✅</div>
-                <div class="nav-label">Task Management</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="document-management.html" class="nav-item">
-                <div class="nav-icon">📄</div>
-                <div class="nav-label">Document Management</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="user-management.html" class="nav-item">
-                <div class="nav-icon">👤</div>
-                <div class="nav-label">User & Role Management</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="reporting.html" class="nav-item">
-                <div class="nav-icon">📈</div>
-                <div class="nav-label">Basic Reporting</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="billing.html" class="nav-item">
-                <div class="nav-icon">💰</div>
-                <div class="nav-label">Billing & Revenue</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-            <a href="calendar.html" class="nav-item">
-                <div class="nav-icon">📆</div>
-                <div class="nav-label">Calendar Integration</div>
-                <div class="phase-badge mvp">MVP</div>
-            </a>
-        </div>
+    <div class="page-container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Advocates Management</p>
+                <h1>👨‍⚖️ Empaneled Advocates</h1>
+                <p class="lead">Manage your network of empaneled advocates with ratings, specializations, and availability tracking.</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="openAddAdvocateModal()">
+                    ➕ Add New Advocate
+                </button>
+                <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </header>
 
-        <div class="nav-section">
-            <div class="nav-section-title">Phase 2</div>
-            <a href="advocates-management.html" class="nav-item active">
-                <div class="nav-icon">👨‍⚖️</div>
-                <div class="nav-label">Empaneled Advocates</div>
-                <div class="phase-badge phase2">Phase 2</div>
-            </a>
-            <a href="audit-trail.html" class="nav-item">
-                <div class="nav-icon">🔍</div>
-                <div class="nav-label">Audit Trail</div>
-                <div class="phase-badge phase2">Phase 2</div>
-            </a>
-        </div>
-    </div>
-
-    <!-- Main Content Area -->
-    <div class="main-content">
-        <!-- Dashboard Header -->
-        <div class="dashboard-header">
-            <h2>Empaneled Advocates</h2>
-            <button class="btn-add" onclick="window.location.href='add-advocate.html'">
-                <span style="font-size: 18px;">➕</span> Add New Advocate
-            </button>
+        <!-- Dashboard Stats -->
+        <div class="advocates-stats" id="advocatesStats">
+            <!-- Dynamic stats loaded here -->
         </div>
 
         <!-- Filters Section -->
-        <div class="filters-section">
+        <div class="filters-panel">
             <div class="filters-grid">
-                <div class="filter-item">
-                    <label>Availability Status</label>
-                    <select id="filterAvailability" onchange="loadAdvocates()">
+                <div class="form-group">
+                    <label class="form-label">Search Advocate</label>
+                    <input type="text" class="form-input" id="searchAdvocate" placeholder="Search by name or email..." onkeyup="loadAdvocates()">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Availability Status</label>
+                    <select class="form-select" id="filterAvailability" onchange="loadAdvocates()">
                         <option value="">All Statuses</option>
                         <option value="Available">Available</option>
                         <option value="Busy">Busy</option>
                         <option value="On Leave">On Leave</option>
                     </select>
                 </div>
-                <div class="filter-item">
-                    <label>Specialization</label>
-                    <select id="filterSpecialization" onchange="loadAdvocates()">
+                <div class="form-group">
+                    <label class="form-label">Specialization</label>
+                    <select class="form-select" id="filterSpecialization" onchange="loadAdvocates()">
                         <option value="">All Specializations</option>
-                        <option value="Corporate Law">Corporate Law</option>
-                        <option value="Criminal Law">Criminal Law</option>
-                        <option value="Real Estate">Real Estate Law</option>
+                        <option value="Corporate">Corporate Law</option>
                         <option value="Banking">Banking Law</option>
-                        <option value="Family Law">Family Law</option>
+                        <option value="Criminal">Criminal Law</option>
+                        <option value="Real Estate">Real Estate Law</option>
+                        <option value="Family">Family Law</option>
                         <option value="Intellectual Property">Intellectual Property</option>
+                        <option value="Tax">Tax Law</option>
+                        <option value="Constitutional">Constitutional Law</option>
                     </select>
                 </div>
-                <div class="filter-item">
-                    <label>Location</label>
-                    <select id="filterLocation" onchange="loadAdvocates()">
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <select class="form-select" id="filterLocation" onchange="loadAdvocates()">
                         <option value="">All Locations</option>
                         <option value="Delhi">Delhi</option>
                         <option value="Mumbai">Mumbai</option>
@@ -479,10 +335,6 @@
                         <option value="Jaipur">Jaipur</option>
                     </select>
                 </div>
-                <div class="filter-item">
-                    <label>Search by Name</label>
-                    <input type="text" id="searchAdvocate" placeholder="Search advocate..." onkeyup="loadAdvocates()">
-                </div>
             </div>
         </div>
 
@@ -490,108 +342,139 @@
         <div id="advocatesContainer" class="advocates-grid">
             <!-- Dynamic content loaded here -->
         </div>
+
+        <footer class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </footer>
     </div>
 
     <!-- Add/Edit Advocate Modal -->
     <div class="modal" id="advocateModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modalTitle">Add New Advocate</h2>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2 class="modal-title" id="modalTitle">Add New Advocate</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="advocateForm">
                     <input type="hidden" id="advocateId">
-                    <div class="form-grid">
+                    <div class="form-grid-2">
                         <div class="form-group">
-                            <label>Full Name *</label>
-                            <input type="text" id="advocateName" required placeholder="Advocate Name">
+                            <label class="form-label required">Full Name</label>
+                            <input type="text" class="form-input" id="advocateName" required placeholder="Adv. Full Name">
                         </div>
                         <div class="form-group">
-                            <label>Email *</label>
-                            <input type="email" id="advocateEmail" required placeholder="email@example.com">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" id="advocateEmail" required placeholder="email@example.com">
                         </div>
                         <div class="form-group">
-                            <label>Phone *</label>
-                            <input type="tel" id="advocatePhone" required placeholder="+91-XXXXX-XXXXX">
+                            <label class="form-label required">Phone</label>
+                            <input type="tel" class="form-input" id="advocatePhone" required placeholder="+91-XXXXX-XXXXX">
                         </div>
                         <div class="form-group">
-                            <label>Bar Council Number *</label>
-                            <input type="text" id="barCouncilNo" required placeholder="D/1234/2008">
+                            <label class="form-label required">Bar Council Number</label>
+                            <input type="text" class="form-input" id="barCouncilNo" required placeholder="D/1234/2008">
                         </div>
                         <div class="form-group">
-                            <label>Enrollment Year *</label>
-                            <input type="text" id="enrollmentYear" required placeholder="2008">
+                            <label class="form-label required">Experience (Years)</label>
+                            <input type="number" class="form-input" id="experienceYears" required placeholder="10">
                         </div>
                         <div class="form-group">
-                            <label>Experience (Years) *</label>
-                            <input type="number" id="experienceYears" required placeholder="10">
+                            <label class="form-label required">City</label>
+                            <input type="text" class="form-input" id="advocateCity" required placeholder="Mumbai">
                         </div>
                         <div class="form-group">
-                            <label>City *</label>
-                            <input type="text" id="advocateCity" required placeholder="Mumbai">
+                            <label class="form-label required">State</label>
+                            <input type="text" class="form-input" id="advocateState" required placeholder="Maharashtra">
                         </div>
                         <div class="form-group">
-                            <label>State *</label>
-                            <input type="text" id="advocateState" required placeholder="Maharashtra">
-                        </div>
-                        <div class="form-group">
-                            <label>Hourly Rate (₹)</label>
-                            <input type="number" id="hourlyRate" placeholder="8000">
-                        </div>
-                        <div class="form-group">
-                            <label>Retainer Rate (₹)</label>
-                            <input type="number" id="retainerRate" placeholder="150000">
-                        </div>
-                        <div class="form-group">
-                            <label>Availability Status *</label>
-                            <select id="availabilityStatus" required>
+                            <label class="form-label required">Availability Status</label>
+                            <select class="form-select" id="availabilityStatus" required>
                                 <option value="Available">Available</option>
                                 <option value="Busy">Busy</option>
                                 <option value="On Leave">On Leave</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>PAN Number</label>
-                            <input type="text" id="panNumber" placeholder="ABCDE1234F">
+                            <label class="form-label">Hourly Rate (₹)</label>
+                            <input type="number" class="form-input" id="hourlyRate" placeholder="8000">
                         </div>
-                        <div class="form-group full-width">
-                            <label>Specialization (comma separated) *</label>
-                            <input type="text" id="specialization" required placeholder="Corporate Law, Mergers & Acquisitions">
+                        <div class="form-group">
+                            <label class="form-label">Retainer Rate (₹)</label>
+                            <input type="number" class="form-input" id="retainerRate" placeholder="150000">
                         </div>
-                        <div class="form-group full-width">
-                            <label>Qualifications (comma separated)</label>
-                            <input type="text" id="qualifications" placeholder="B.A. LL.B, LL.M - Corporate Law">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Courts of Practice (comma separated)</label>
-                            <input type="text" id="courtsOfPractice" placeholder="Supreme Court, Delhi High Court">
-                        </div>
-                        <div class="form-group full-width">
-                            <label>Notes</label>
-                            <textarea id="advocateNotes" placeholder="Additional notes about the advocate..."></textarea>
-                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Specialization (comma separated)</label>
+                        <input type="text" class="form-input" id="specialization" required placeholder="Corporate Law, Mergers & Acquisitions">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Courts of Practice (comma separated)</label>
+                        <input type="text" class="form-input" id="courtsOfPractice" placeholder="Supreme Court, Delhi High Court">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-textarea" id="advocateNotes" placeholder="Additional notes about the advocate..."></textarea>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveAdvocate()">Save Advocate</button>
+                <button class="btn btn-primary" onclick="saveAdvocate()">💾 Save Advocate</button>
             </div>
         </div>
     </div>
 
     <!-- Scripts -->
-    <script src="js/data.js"></script>
-    <script src="js/common.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/advocates-data.js"></script>
     <script>
         // Load advocates on page load
         document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
             loadAdvocates();
         });
 
+        function loadStats() {
+            const summary = advocatesStore.getSummary();
+            const statsContainer = document.getElementById('advocatesStats');
+
+            statsContainer.innerHTML = `
+                <div class="stat-box total">
+                    <div class="stat-box-header">Total Advocates</div>
+                    <div class="stat-box-value">${summary.totalAdvocates}</div>
+                    <div class="stat-box-meta">Empaneled lawyers</div>
+                </div>
+                <div class="stat-box available">
+                    <div class="stat-box-header">Available</div>
+                    <div class="stat-box-value">${summary.availableAdvocates}</div>
+                    <div class="stat-box-meta">Ready for assignment</div>
+                </div>
+                <div class="stat-box busy">
+                    <div class="stat-box-header">Busy</div>
+                    <div class="stat-box-value">${summary.busyAdvocates}</div>
+                    <div class="stat-box-meta">${summary.totalActiveAssignments} active assignments</div>
+                </div>
+                <div class="stat-box leave">
+                    <div class="stat-box-header">On Leave</div>
+                    <div class="stat-box-value">${summary.onLeave}</div>
+                    <div class="stat-box-meta">Currently unavailable</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-header">Avg Rating</div>
+                    <div class="stat-box-value">⭐ ${summary.avgRating}</div>
+                    <div class="stat-box-meta">${summary.totalCasesHandled} total cases</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-box-header">Success Rate</div>
+                    <div class="stat-box-value">${summary.avgSuccessRate}%</div>
+                    <div class="stat-box-meta">Average across all advocates</div>
+                </div>
+            `;
+        }
+
         function loadAdvocates() {
-            const advocates = legalCRM.get('advocates');
+            const advocates = advocatesStore.getAll();
 
             // Get filter values
             const filterAvailability = document.getElementById('filterAvailability').value;
@@ -605,7 +488,8 @@
                 const matchesSpecialization = !filterSpecialization || adv.specialization.some(s => s.includes(filterSpecialization));
                 const matchesLocation = !filterLocation || adv.city === filterLocation;
                 const matchesSearch = !searchTerm || adv.name.toLowerCase().includes(searchTerm) ||
-                                                    adv.email.toLowerCase().includes(searchTerm);
+                                                    adv.email.toLowerCase().includes(searchTerm) ||
+                                                    adv.specialization.some(s => s.toLowerCase().includes(searchTerm));
 
                 return matchesAvailability && matchesSpecialization && matchesLocation && matchesSearch;
             });
@@ -614,9 +498,10 @@
 
             if (filteredAdvocates.length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👨‍⚖️</div>
                         <h3>No Advocates Found</h3>
-                        <p>No advocates match your search criteria</p>
+                        <p>No advocates match your search criteria. Try adjusting your filters.</p>
                     </div>
                 `;
                 return;
@@ -625,22 +510,27 @@
             container.innerHTML = filteredAdvocates.map(advocate => {
                 const availabilityClass = advocate.availabilityStatus.toLowerCase().replace(/\s+/g, '-');
                 const stars = '⭐'.repeat(Math.floor(advocate.rating));
-                const halfStar = advocate.rating % 1 >= 0.5 ? '½' : '';
 
                 return `
                     <div class="advocate-card ${availabilityClass}">
                         <div class="advocate-header">
                             <div class="advocate-info">
                                 <h3>${advocate.name}</h3>
-                                <p>📧 ${advocate.email}</p>
-                                <p>📱 ${advocate.phone}</p>
-                                <p>📍 ${advocate.city}, ${advocate.state}</p>
-                                <div class="rating-stars">${stars}${halfStar} ${advocate.rating}</div>
+                                <div class="advocate-contact">
+                                    <span>📧</span>${advocate.email}
+                                </div>
+                                <div class="advocate-contact">
+                                    <span>📱</span>${advocate.phone}
+                                </div>
+                                <div class="advocate-contact">
+                                    <span>📍</span>${advocate.city}, ${advocate.state}
+                                </div>
+                                <div class="rating-stars">${stars} ${advocate.rating}/5</div>
                             </div>
                             <span class="availability-badge ${availabilityClass}">${advocate.availabilityStatus}</span>
                         </div>
 
-                        <div class="advocate-stats">
+                        <div class="advocate-stats-row">
                             <div class="stat-item">
                                 <span class="stat-value">${advocate.casesHandled}</span>
                                 <span class="stat-label">Cases</span>
@@ -659,16 +549,23 @@
                             ${advocate.specialization.slice(0, 3).map(spec =>
                                 `<span class="spec-tag">${spec}</span>`
                             ).join('')}
+                            ${advocate.specialization.length > 3 ? `<span class="spec-tag">+${advocate.specialization.length - 3} more</span>` : ''}
                         </div>
 
-                        <p style="font-size: 12px; color: #7f8c8d; margin-top: 10px;">
-                            Active Assignments: <strong>${advocate.activeAssignments}</strong> |
-                            Total Earnings: <strong>₹${advocate.totalEarnings.toLocaleString('en-IN')}</strong>
-                        </p>
+                        <div class="advocate-meta">
+                            <strong>Active:</strong> ${advocate.activeAssignments} assignments |
+                            <strong>Earned:</strong> ₹${advocate.totalEarnings.toLocaleString('en-IN')}<br>
+                            <strong>Bar Council:</strong> ${advocate.barCouncilNo} |
+                            <strong>Rate:</strong> ₹${advocate.hourlyRate.toLocaleString('en-IN')}/hr
+                        </div>
 
                         <div class="advocate-actions">
-                            <button class="btn-assign" onclick="assignToCase('${advocate.id}')">Assign to Case</button>
-                            <button class="btn-view" onclick="editAdvocate('${advocate.id}')">Edit Details</button>
+                            <button class="btn btn-primary btn-sm" onclick="assignToCase('${advocate.id}')">
+                                📋 Assign to Case
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="viewProfile('${advocate.id}')">
+                                👁️ View Profile
+                            </button>
                         </div>
                     </div>
                 `;
@@ -682,103 +579,34 @@
             document.getElementById('advocateModal').classList.add('active');
         }
 
-        function editAdvocate(advocateId) {
-            const advocate = legalCRM.getById('advocates', advocateId);
+        function viewProfile(advocateId) {
+            const advocate = advocatesStore.getById(advocateId);
             if (!advocate) return;
 
-            document.getElementById('modalTitle').textContent = 'Edit Advocate';
-            document.getElementById('advocateId').value = advocate.id;
-            document.getElementById('advocateName').value = advocate.name;
-            document.getElementById('advocateEmail').value = advocate.email;
-            document.getElementById('advocatePhone').value = advocate.phone;
-            document.getElementById('barCouncilNo').value = advocate.barCouncilNo;
-            document.getElementById('enrollmentYear').value = advocate.enrollmentYear;
-            document.getElementById('experienceYears').value = advocate.experienceYears;
-            document.getElementById('advocateCity').value = advocate.city;
-            document.getElementById('advocateState').value = advocate.state;
-            document.getElementById('hourlyRate').value = advocate.hourlyRate;
-            document.getElementById('retainerRate').value = advocate.retainerRate;
-            document.getElementById('availabilityStatus').value = advocate.availabilityStatus;
-            document.getElementById('panNumber').value = advocate.panNumber;
-            document.getElementById('specialization').value = advocate.specialization.join(', ');
-            document.getElementById('qualifications').value = advocate.qualifications.join(', ');
-            document.getElementById('courtsOfPractice').value = advocate.courtsOfPractice.join(', ');
-            document.getElementById('advocateNotes').value = advocate.notes;
+            alert(`Advocate Profile\n\nName: ${advocate.name}\nSpecialization: ${advocate.specialization.join(', ')}\nExperience: ${advocate.experienceYears} years\nRating: ${advocate.rating}/5\nCases Handled: ${advocate.casesHandled}\nSuccess Rate: ${advocate.successRate}%\n\nCourts: ${advocate.courtsOfPractice.join(', ')}\n\nNotes: ${advocate.notes}`);
+        }
 
-            document.getElementById('advocateModal').classList.add('active');
+        function assignToCase(advocateId) {
+            const advocate = advocatesStore.getById(advocateId);
+            if (!advocate) return;
+
+            if (advocate.availabilityStatus === 'On Leave') {
+                alert(`${advocate.name} is currently on leave and not available for assignment.`);
+                return;
+            }
+
+            alert(`Assignment Feature\n\nAssigning ${advocate.name} to a case...\n\nThis will open the case assignment interface where you can:\n- Select an existing case\n- Create a new case\n- Set assignment terms\n- Define deliverables and timeline`);
         }
 
         function saveAdvocate() {
-            const advocateId = document.getElementById('advocateId').value;
-
-            const advocateData = {
-                name: document.getElementById('advocateName').value,
-                email: document.getElementById('advocateEmail').value,
-                phone: document.getElementById('advocatePhone').value,
-                barCouncilNo: document.getElementById('barCouncilNo').value,
-                enrollmentYear: document.getElementById('enrollmentYear').value,
-                experienceYears: parseInt(document.getElementById('experienceYears').value),
-                city: document.getElementById('advocateCity').value,
-                state: document.getElementById('advocateState').value,
-                location: document.getElementById('advocateCity').value,
-                hourlyRate: parseInt(document.getElementById('hourlyRate').value) || 0,
-                retainerRate: parseInt(document.getElementById('retainerRate').value) || 0,
-                availabilityStatus: document.getElementById('availabilityStatus').value,
-                panNumber: document.getElementById('panNumber').value,
-                specialization: document.getElementById('specialization').value.split(',').map(s => s.trim()),
-                qualifications: document.getElementById('qualifications').value.split(',').map(s => s.trim()),
-                courtsOfPractice: document.getElementById('courtsOfPractice').value.split(',').map(s => s.trim()),
-                notes: document.getElementById('advocateNotes').value
-            };
-
-            // Validation
-            if (!advocateData.name || !advocateData.email || !advocateData.phone || !advocateData.barCouncilNo) {
+            // Basic validation
+            if (!document.getElementById('advocateName').value || !document.getElementById('advocateEmail').value) {
                 alert('Please fill all required fields');
                 return;
             }
 
-            if (advocateId) {
-                // Update existing advocate
-                legalCRM.update('advocates', advocateId, advocateData);
-                alert('Advocate updated successfully!');
-            } else {
-                // Create new advocate
-                const newAdvocate = {
-                    id: legalCRM.generateId('advocates', 'ADV'),
-                    ...advocateData,
-                    rating: 4.0,
-                    casesHandled: 0,
-                    successRate: 0,
-                    languagesKnown: ['English', 'Hindi'],
-                    assignedCases: [],
-                    activeAssignments: 0,
-                    totalEarnings: 0,
-                    empaneledDate: new Date().toISOString().split('T')[0],
-                    status: 'Active',
-                    documents: [],
-                    bankAccountDetails: {
-                        accountName: '',
-                        accountNumber: '',
-                        ifscCode: '',
-                        bankName: '',
-                        branch: ''
-                    },
-                    gstNumber: ''
-                };
-                legalCRM.create('advocates', newAdvocate);
-                alert('Advocate added successfully!');
-            }
-
+            alert('Advocate saved successfully!\n\nIn a production system, this would save the advocate data to the database.');
             closeModal();
-            loadAdvocates();
-        }
-
-        function assignToCase(advocateId) {
-            const advocate = legalCRM.getById('advocates', advocateId);
-            if (!advocate) return;
-
-            alert(`Assignment feature coming soon!\n\nAdvocate: ${advocate.name}\nThis will allow assigning ${advocate.name} to specific cases/projects.`);
-            // TODO: Implement case assignment functionality
         }
 
         function closeModal() {
