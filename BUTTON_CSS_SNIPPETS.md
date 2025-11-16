@@ -1,6 +1,9 @@
-/* Legal CRM - Modern Button System */
+# 🎨 Button System - CSS Code Snippets
 
-/* Base Button Styles */
+## Base Button Styles
+
+```css
+/* Base Button */
 .btn {
     padding: 11px 24px;
     border-radius: var(--radius-lg);
@@ -38,7 +41,13 @@
     width: 300px;
     height: 300px;
 }
+```
 
+---
+
+## Primary Button (Blue)
+
+```css
 /* PRIMARY BUTTON - Modern Gradient */
 .btn-primary {
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -62,7 +71,13 @@
     outline: 2px solid rgba(42, 82, 152, 0.5);
     outline-offset: 2px;
 }
+```
 
+---
+
+## Secondary Button (Outlined)
+
+```css
 /* SECONDARY BUTTON - Outlined Clean */
 .btn-secondary {
     background: white;
@@ -88,7 +103,13 @@
     outline: 2px solid var(--primary-blue);
     outline-offset: 2px;
 }
+```
 
+---
+
+## Success Button (Green)
+
+```css
 /* SUCCESS BUTTON - Green */
 .btn-success {
     background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
@@ -106,7 +127,13 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(39, 174, 96, 0.25);
 }
+```
 
+---
+
+## Danger Button (Red)
+
+```css
 /* DANGER BUTTON - Red */
 .btn-danger {
     background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
@@ -124,44 +151,14 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(231, 76, 60, 0.25);
 }
+```
 
-/* WARNING BUTTON - Orange */
-.btn-warning {
-    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.25);
-}
+---
 
-.btn-warning:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(243, 156, 18, 0.35);
-    background: linear-gradient(135deg, #d68910 0%, #c46d1a 100%);
-}
+## Gradient Buttons (Color-Coded)
 
-.btn-warning:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.25);
-}
-
-/* INFO BUTTON - Blue */
-.btn-info {
-    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.25);
-}
-
-.btn-info:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(52, 152, 219, 0.35);
-    background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
-}
-
-.btn-info:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
-}
-
-/* GRADIENT ACTION BUTTONS - Colorful & Modern */
+```css
+/* GRADIENT ACTION BUTTONS */
 .btn-gradient {
     padding: 13px 28px;
     border: none;
@@ -200,7 +197,7 @@
     transform: translateY(-2px);
 }
 
-/* Gradient Color Variants */
+/* Color Variants */
 .btn-gradient.purple {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
@@ -248,7 +245,147 @@
 .btn-gradient.teal:hover {
     background: linear-gradient(135deg, #1eb5b6 0%, #290557 100%);
 }
+```
 
+---
+
+## Icon Button
+
+```css
+/* ICON BUTTON - For compact spaces */
+.btn-icon {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.btn-icon.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: 0 4px 12px rgba(30, 60, 114, 0.2);
+}
+
+.btn-icon.btn-primary:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(30, 60, 114, 0.3);
+}
+
+.btn-icon.btn-secondary {
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+    box-shadow: 0 2px 8px rgba(30, 60, 114, 0.1);
+}
+
+.btn-icon.btn-secondary:hover {
+    background: var(--primary-blue);
+    color: white;
+    transform: scale(1.08);
+}
+```
+
+---
+
+## Size Variants
+
+```css
+/* BUTTON SIZES */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: var(--body-small);
+    border-radius: var(--radius-md);
+}
+
+.btn-lg {
+    padding: 15px 32px;
+    font-size: var(--body-large);
+}
+
+.btn-xl {
+    padding: 18px 40px;
+    font-size: var(--h5-size);
+    border-radius: var(--radius-xl);
+}
+```
+
+---
+
+## Button States
+
+```css
+/* BUTTON STATES */
+.btn:disabled,
+.btn[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #bdc3c7;
+}
+
+.btn:disabled:hover,
+.btn[disabled]:hover {
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.btn:disabled::before,
+.btn[disabled]::before {
+    display: none;
+}
+
+/* LOADING STATE */
+.btn.btn-loading {
+    color: transparent;
+    pointer-events: none;
+}
+
+.btn.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+```
+
+---
+
+## Focus States
+
+```css
+/* FOCUS STATES - Accessibility */
+.btn:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+.btn:focus:not(:focus-visible) {
+    outline: none;
+}
+```
+
+---
+
+## Additional Variants
+
+```css
 /* OUTLINE BUTTON - Subtle & Elegant */
 .btn-outline {
     background: transparent;
@@ -307,113 +444,139 @@
 .btn-text:active {
     background: rgba(52, 152, 219, 0.15);
 }
+```
 
-/* ICON BUTTON - For compact spaces */
-.btn-icon {
-    width: 44px;
-    height: 44px;
-    padding: 0;
-    border-radius: var(--radius-lg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-}
+---
 
-.btn-icon.btn-primary {
-    background: var(--primary-gradient);
-    color: white;
-    box-shadow: 0 4px 12px rgba(30, 60, 114, 0.2);
-}
+## HTML Usage Examples
 
-.btn-icon.btn-primary:hover {
-    transform: scale(1.08);
-    box-shadow: 0 6px 16px rgba(30, 60, 114, 0.3);
-}
+```html
+<!-- Primary Button -->
+<button class="btn btn-primary">Submit</button>
 
-.btn-icon.btn-secondary {
-    background: white;
-    color: var(--primary-blue);
-    border: 2px solid var(--primary-blue);
-    box-shadow: 0 2px 8px rgba(30, 60, 114, 0.1);
-}
+<!-- Secondary Button -->
+<button class="btn btn-secondary">Cancel</button>
 
-.btn-icon.btn-secondary:hover {
-    background: var(--primary-blue);
-    color: white;
-    transform: scale(1.08);
-}
+<!-- Success Button -->
+<button class="btn btn-success">Save</button>
 
-/* BUTTON SIZES */
-.btn-sm {
-    padding: 8px 16px;
-    font-size: var(--body-small);
-    border-radius: var(--radius-md);
-}
+<!-- Danger Button -->
+<button class="btn btn-danger">Delete</button>
 
-.btn-lg {
-    padding: 15px 32px;
-    font-size: var(--body-large);
-}
+<!-- Small Button -->
+<button class="btn btn-sm btn-primary">Small</button>
 
-.btn-xl {
-    padding: 18px 40px;
-    font-size: var(--h5-size);
-    border-radius: var(--radius-xl);
-}
+<!-- Large Button -->
+<button class="btn btn-lg btn-primary">Large</button>
 
-/* BUTTON STATES */
-.btn:disabled,
-.btn[disabled] {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background: #bdc3c7;
-}
+<!-- Icon Button -->
+<button class="btn btn-icon btn-primary" aria-label="Edit">✏️</button>
 
-.btn:disabled:hover,
-.btn[disabled]:hover {
-    transform: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
+<!-- Gradient Buttons -->
+<button class="btn btn-gradient purple">Lead Action</button>
+<button class="btn btn-gradient green">Client Action</button>
 
-.btn:disabled::before,
-.btn[disabled]::before {
-    display: none;
-}
+<!-- Disabled Button -->
+<button class="btn btn-primary" disabled>Disabled</button>
 
-/* LOADING STATE */
-.btn.btn-loading {
-    color: transparent;
-    pointer-events: none;
-}
+<!-- Loading Button -->
+<button class="btn btn-primary btn-loading">Loading...</button>
 
-.btn.btn-loading::after {
-    content: '';
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    top: 50%;
-    left: 50%;
-    margin-left: -8px;
-    margin-top: -8px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: white;
-    animation: spin 0.8s linear infinite;
-}
+<!-- Link Button -->
+<a href="/page" class="btn btn-primary">Navigate</a>
 
+<!-- Button Group -->
+<div style="display: flex; gap: 10px;">
+    <button class="btn btn-secondary">Cancel</button>
+    <button class="btn btn-primary">Save</button>
+</div>
+
+<!-- Icon + Text -->
+<button class="btn btn-primary">
+    <span>➕</span>
+    Add New Lead
+</button>
+```
+
+---
+
+## CSS Variables Used
+
+```css
+/* All CSS variables from css/base/variables.css */
+--primary-blue: #1e3c72
+--primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)
+--success-color: #27ae60
+--danger-color: #e74c3c
+--warning-color: #f39c12
+--info-color: #3498db
+--radius-lg: 12px
+--radius-md: 8px
+--body-regular: 14px
+--body-small: 13px
+--weight-semibold: 600
+--shadow-light: 0 2px 8px rgba(0,0,0,0.08)
+```
+
+---
+
+## Animation Keyframes
+
+```css
+/* Spin animation for loading state */
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-/* FOCUS STATES - Accessibility */
-.btn:focus-visible {
-    outline: 2px solid currentColor;
+/* Shimmer animation (built-in via ::after) */
+/* Duration: 0.5s linear */
+/* Left position: -100% → 100% */
+
+/* Ripple animation (built-in via ::before) */
+/* Duration: 0.6s */
+/* Width/Height: 0 → 300px */
+```
+
+---
+
+## Integration Notes
+
+1. **Import Location**: All styles in `css/components/buttons.css`
+2. **Master File**: Imported via `css/styles.css`
+3. **Variables**: Uses CSS custom properties from `css/base/variables.css`
+4. **Fallbacks**: Not needed for modern browsers
+5. **Prefixes**: No vendor prefixes needed (auto-prefixed by build tool if needed)
+
+---
+
+## Customization Template
+
+```css
+/* Create custom button variant */
+.btn-custom {
+    background: linear-gradient(135deg, #your-color-1 0%, #your-color-2 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(your-rgb-values, 0.3);
+}
+
+.btn-custom:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(your-rgb-values, 0.4);
+    background: linear-gradient(135deg, #darker-color-1 0%, #darker-color-2 100%);
+}
+
+.btn-custom:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(your-rgb-values, 0.25);
+}
+
+.btn-custom:focus-visible {
+    outline: 2px solid rgba(your-rgb-values, 0.5);
     outline-offset: 2px;
 }
+```
 
-.btn:focus:not(:focus-visible) {
-    outline: none;
-}
+---
+
+**All code is production-ready and optimized for performance!** ✨

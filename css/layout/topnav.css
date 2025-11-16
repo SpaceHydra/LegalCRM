@@ -35,16 +35,22 @@
     font-size: 20px;
 }
 
+.system-title {
+    color: #ffffff;
+}
+
 .system-title h1 {
     font-size: 22px;
     font-weight: var(--weight-semibold);
     margin-bottom: 2px;
+    color: #ffffff;
 }
 
 .system-title p {
     font-size: 12px;
     opacity: 0.9;
     margin: 0;
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .user-section {
