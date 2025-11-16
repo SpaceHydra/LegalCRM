@@ -469,9 +469,9 @@
                         <option value="Inactive">Inactive</option>
                         <option value="On Leave">On Leave</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddUserModal()">
+                    <a class="btn btn-primary" href="add-user.html">
                         ➕ Add New User
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -722,16 +722,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadUsers(roleFilter, statusFilter, searchTerm);
             });
-        }
-
-        function openAddUserModal() {
-            document.getElementById('modalTitle').textContent = 'Add New User';
-            document.getElementById('userForm').reset();
-            document.getElementById('userId').value = '';
-            document.getElementById('status').value = 'Active';
-            // Uncheck all permissions
-            document.querySelectorAll('.permission-item input[type="checkbox"]').forEach(cb => cb.checked = false);
-            document.getElementById('userModal').classList.add('active');
         }
 
         function closeUserModal() {

@@ -484,9 +484,9 @@
                         <option value="Restricted">Restricted</option>
                         <option value="Confidential">Confidential</option>
                     </select>
-                    <button class="btn btn-primary" onclick="openAddDocumentModal()">
+                    <a class="btn btn-primary" href="add-document.html">
                         ➕ Upload Document
-                    </button>
+                    </a>
                 </div>
             </div>
             <div style="overflow-x: auto;">
@@ -717,15 +717,6 @@
                 const searchTerm = document.getElementById('searchInput').value;
                 loadDocuments(typeFilter, accessFilter, searchTerm);
             });
-        }
-
-        function openAddDocumentModal() {
-            document.getElementById('modalTitle').textContent = 'Upload Document';
-            document.getElementById('documentForm').reset();
-            document.getElementById('documentId').value = '';
-            document.getElementById('accessLevel').value = 'Team';
-            document.getElementById('version').value = 1;
-            document.getElementById('documentModal').classList.add('active');
         }
 
         function closeDocumentModal() {
