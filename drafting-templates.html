@@ -4,117 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Template Library - Legal CRM Portal</title>
-    <link rel="stylesheet" href="css/common-styles.css">
-    <style>
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-        .filters input,
-        .filters select {
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            font-size: 14px;
-        }
-        .template-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 18px;
-        }
-        .template-card {
-            background: white;
-            border-radius: 18px;
-            padding: 20px;
-            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
-            border: 1px solid #eef2ff;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .template-card h3 {
-            margin: 0;
-            font-size: 18px;
-            color: #111827;
-        }
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-            background: #eef2ff;
-            color: #3730a3;
-        }
-        .tag {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 999px;
-            background: #f1f5f9;
-            color: #475569;
-            margin-right: 6px;
-            display: inline-block;
-        }
-        .template-meta {
-            font-size: 13px;
-            color: #475569;
-            line-height: 1.5;
-        }
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .actions button,
-        .actions a {
-            border: none;
-            background: none;
-            color: #2563eb;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(15,23,42,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .modal.active {
-            display: flex;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 18px;
-            padding: 24px;
-            width: min(640px, 100%);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .modal-header h3 {
-            margin: 0;
-        }
-        .close-btn {
-            border: none;
-            background: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modules/drafting.css">
 </head>
 <body>
+    <!-- Navigation injected by navigation.js -->
+
     <div class="page-container">
         <header class="page-header">
             <div>
@@ -130,21 +25,21 @@
 
         <div class="panel">
             <div class="filters">
-                <input type="search" id="searchInput" placeholder="Search template name or ID">
-                <select id="typeFilter">
+                <input type="search" class="form-input" id="searchInput" placeholder="Search template name or ID">
+                <select class="form-select" id="typeFilter">
                     <option value="">All Document Types</option>
                     <option value="NDA">NDA</option>
                     <option value="Loan Agreement">Loan Agreement</option>
                     <option value="Retainer">Retainer</option>
                     <option value="Policy">Policy</option>
                 </select>
-                <select id="practiceFilter">
+                <select class="form-select" id="practiceFilter">
                     <option value="">All Practice Areas</option>
                     <option value="Banking">Banking</option>
                     <option value="Corporate">Corporate</option>
                     <option value="Compliance">Compliance</option>
                 </select>
-                <select id="statusFilter">
+                <select class="form-select" id="statusFilter">
                     <option value="">All Status</option>
                     <option value="Draft">Draft</option>
                     <option value="Active">Active</option>
@@ -154,6 +49,10 @@
 
             <div class="template-grid" id="templateGrid"></div>
         </div>
+
+        <footer class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </footer>
     </div>
 
     <div class="modal" id="previewModal">
@@ -161,14 +60,15 @@
             <div class="modal-header">
                 <div>
                     <p class="eyebrow" id="previewId"></p>
-                    <h3 id="previewTitle"></h3>
+                    <h3 class="modal-title" id="previewTitle"></h3>
                 </div>
-                <button class="close-btn" onclick="toggleModal(false)">&times;</button>
+                <button class="modal-close" onclick="toggleModal(false)">&times;</button>
             </div>
-            <div id="previewBody"></div>
+            <div class="modal-body" id="previewBody"></div>
         </div>
     </div>
 
+    <script src="js/navigation.js"></script>
     <script src="js/drafting-data.js"></script>
     <script>
         const templateGrid = document.getElementById('templateGrid');
@@ -200,7 +100,7 @@
                 <div class="template-card">
                     <div>
                         <h3>${template.name}</h3>
-                        <span class="badge">${template.version}</span>
+                        <span class="badge badge-primary">${template.version}</span>
                     </div>
                     <div class="template-meta">
                         <strong>Document:</strong> ${template.type} • ${template.practiceArea}<br>
@@ -216,9 +116,9 @@
                     <div class="template-meta">
                         Updated on ${template.updatedOn} by ${template.updatedBy}
                     </div>
-                    <div class="actions">
-                        <button onclick="showPreview('${template.id}')">Preview</button>
-                        <a href="drafting-requests.html">Use Template</a>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: var(--space-sm);">
+                        <button class="btn btn-secondary btn-sm" onclick="showPreview('${template.id}')">Preview</button>
+                        <a href="drafting-requests.html" class="btn btn-primary btn-sm">Use Template</a>
                     </div>
                 </div>
             `).join('');
@@ -233,7 +133,7 @@
                 <p>${template.notes}</p>
                 <p><strong>Merge Fields:</strong> ${template.variables.join(', ')}</p>
                 <p><strong>Sample Content:</strong></p>
-                <pre style="background:#f8fafc;padding:14px;border-radius:12px;font-size:13px;white-space:pre-wrap;">[Insert ${template.type} boilerplate here with merge fields such as ${template.variables[0]}]</pre>
+                <pre style="background:var(--bg-secondary);padding:14px;border-radius:var(--radius-lg);font-size:var(--body-small);white-space:pre-wrap;">[Insert ${template.type} boilerplate here with merge fields such as ${template.variables[0]}]</pre>
             `;
             toggleModal(true);
         }

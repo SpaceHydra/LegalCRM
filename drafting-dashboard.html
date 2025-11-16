@@ -4,187 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Drafting & Contracts Hub - Legal CRM Portal</title>
-    <link rel="stylesheet" href="css/common-styles.css">
-    <style>
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 24px;
-        }
-        .summary-card {
-            background: white;
-            border-radius: 14px;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
-            border: 1px solid #eef2ff;
-        }
-        .summary-card h4 {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-        .summary-card .value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #111827;
-        }
-        .summary-card .meta {
-            font-size: 13px;
-            color: #4b5563;
-            margin-top: 6px;
-        }
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-            margin-top: 20px;
-        }
-        .quick-actions a {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            border-radius: 16px;
-            color: white;
-            padding: 18px 22px;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 10px 20px rgba(15, 118, 110, 0.25);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .quick-actions a span {
-            font-size: 14px;
-            font-weight: normal;
-            opacity: 0.95;
-        }
-        .quick-actions a:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 24px rgba(15, 118, 110, 0.35);
-        }
-        .two-column-layout {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 20px;
-            margin-top: 30px;
-        }
-        @media (max-width: 1024px) {
-            .two-column-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-        .panel {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 6px 24px rgba(15, 23, 42, 0.08);
-            border: 1px solid #eef2ff;
-        }
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        .panel-header h3 {
-            font-size: 18px;
-            color: #111827;
-            margin: 0;
-        }
-        .panel-header a {
-            font-size: 13px;
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        thead {
-            background: #f8fafc;
-        }
-        tbody tr:not(:last-child) td {
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .status-pill {
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .status-pill[data-status="New"] { background: #dbeafe; color: #1d4ed8; }
-        .status-pill[data-status="In Draft"] { background: #ede9fe; color: #5b21b6; }
-        .status-pill[data-status="Under Review"] { background: #fef3c7; color: #b45309; }
-        .status-pill[data-status="Approved"] { background: #d1fae5; color: #047857; }
-        .status-pill[data-status="Shared"] { background: #cffafe; color: #0e7490; }
-        .status-pill[data-status="Executed"] { background: #dcfce7; color: #15803d; }
-        .renewals-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-        .renewal-item {
-            padding: 14px;
-            border: 1px dashed #cbd5f5;
-            border-radius: 12px;
-            background: #f8fafc;
-        }
-        .renewal-item strong {
-            display: block;
-            font-size: 15px;
-            color: #0f172a;
-        }
-        .workflow-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-            gap: 14px;
-        }
-        .workflow-step {
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            padding: 16px;
-            position: relative;
-            background: #fff;
-        }
-        .workflow-step h4 {
-            font-size: 15px;
-            margin-bottom: 8px;
-            color: #0f172a;
-        }
-        .workflow-step span {
-            font-size: 13px;
-            color: #4b5563;
-        }
-        .tips-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .tips-list li {
-            list-style: none;
-            padding-left: 28px;
-            position: relative;
-            font-size: 14px;
-            color: #1f2937;
-        }
-        .tips-list li::before {
-            content: "✦";
-            position: absolute;
-            left: 0;
-            color: #8b5cf6;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/modules/drafting.css">
 </head>
 <body>
+    <!-- Navigation injected by navigation.js -->
+
     <div class="page-container">
         <header class="page-header">
             <div>
@@ -229,7 +54,7 @@
                     <a href="drafting-requests.html">View All</a>
                 </div>
                 <div style="overflow-x:auto;">
-                    <table>
+                    <table class="data-table">
                         <thead>
                             <tr>
                                 <th>Request</th>
@@ -268,8 +93,13 @@
                 <ul class="tips-list" id="tipsList"></ul>
             </div>
         </section>
+
+        <footer class="footer">
+            © 2025 Cubictree (A Gaba Projects Private Limited Company)
+        </footer>
     </div>
 
+    <script src="js/navigation.js"></script>
     <script src="js/drafting-data.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
