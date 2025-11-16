@@ -39,7 +39,30 @@ const advocatesData = {
                 bankName: 'HDFC Bank',
                 branch: 'Connaught Place, Delhi'
             },
-            gstNumber: '07ABCDE1234F1Z5'
+            gstNumber: '07ABCDE1234F1Z5',
+            activeTasks: 5,
+            historicalMatters: [
+                {
+                    matterId: 'MAT-211',
+                    title: 'NDA - ABC Developers',
+                    linkedClient: 'ABC Developers',
+                    documentType: 'NDA',
+                    status: 'Executed',
+                    completionDate: '2025-09-18',
+                    value: 0,
+                    summary: 'Confidentiality NDA for collaboration.'
+                },
+                {
+                    matterId: 'MAT-205',
+                    title: 'Loan Agreement - Sunrise Buildcon',
+                    linkedClient: 'Sunrise Buildcon',
+                    documentType: 'Loan Agreement',
+                    status: 'Executed',
+                    completionDate: '2025-06-30',
+                    value: 12000000,
+                    summary: 'HL Loan agreement with customer-friendly clauses.'
+                }
+            ]
         },
         {
             id: 'ADV-002',
@@ -77,7 +100,30 @@ const advocatesData = {
                 bankName: 'ICICI Bank',
                 branch: 'Nariman Point, Mumbai'
             },
-            gstNumber: '27BCDEF2345G1Z8'
+            gstNumber: '27BCDEF2345G1Z8',
+            activeTasks: 4,
+            historicalMatters: [
+                {
+                    matterId: 'MAT-198',
+                    title: 'SARFAESI Defence - National Bank',
+                    linkedClient: 'National Bank',
+                    documentType: 'SARFAESI Defence',
+                    status: 'Under Review',
+                    completionDate: 'Pending',
+                    value: 0,
+                    summary: 'Challenge to enforcement notice on corporate borrower.'
+                },
+                {
+                    matterId: 'MAT-188',
+                    title: 'Debt Recovery - CreditCorp Finserv',
+                    linkedClient: 'CreditCorp Finserv',
+                    documentType: 'Debt Recovery',
+                    status: 'Executed',
+                    completionDate: '2024-12-11',
+                    value: 4500000,
+                    summary: 'Recovery matter resolved via settlement.'
+                }
+            ]
         },
         {
             id: 'ADV-003',
@@ -115,7 +161,30 @@ const advocatesData = {
                 bankName: 'State Bank of India',
                 branch: 'Parliament Street, Delhi'
             },
-            gstNumber: '07CDEFG3456H1Z2'
+            gstNumber: '07CDEFG3456H1Z2',
+            activeTasks: 3,
+            historicalMatters: [
+                {
+                    matterId: 'MAT-190',
+                    title: 'PIL - Citizens Alliance',
+                    linkedClient: 'Citizens Alliance',
+                    documentType: 'Writ Petition',
+                    status: 'Executed',
+                    completionDate: '2025-03-22',
+                    value: 0,
+                    summary: 'PIL on public interest infrastructure.'
+                },
+                {
+                    matterId: 'MAT-178',
+                    title: 'Constitutional Challenge - Parliament Committee',
+                    linkedClient: 'Parliament Committee',
+                    documentType: 'Constitutional Challenge',
+                    status: 'Executed',
+                    completionDate: '2024-11-05',
+                    value: 0,
+                    summary: 'Constitutional review with high court appearance.'
+                }
+            ]
         },
         {
             id: 'ADV-004',
@@ -333,6 +402,13 @@ const advocatesData = {
         { name: 'Constitutional Law', count: 1 }
     ]
 };
+
+// Backfill missing fields
+advocatesData.advocates = advocatesData.advocates.map(adv => ({
+    ...adv,
+    historicalMatters: adv.historicalMatters || [],
+    activeTasks: adv.activeTasks ?? adv.assignedCases?.length ?? 0
+}));
 
 // Helper functions
 const advocatesStore = {

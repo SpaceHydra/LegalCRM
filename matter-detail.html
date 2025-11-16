@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matter Details - Legal CRM</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        body {
+            background: #f7fafc;
+        }
+        .page-container {
+            max-width: 1024px;
+            margin: 0 auto;
+        }
+        .matter-card {
+            background: white;
+            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--margin-section);
+        }
+        .matter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        .matter-grid div {
+            background: #f8fafc;
+            padding: var(--space-md);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-light);
+        }
+        .matter-actions {
+            margin-top: var(--space-lg);
+            display: flex;
+            gap: var(--space-sm);
+        }
+        .timeline-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-light);
+            border: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Matter Detail</p>
+                <h1 id="matterTitle">Loading...</h1>
+                <p class="lead" id="matterSubtitle"></p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" href="advocates-management.html">← Back to Advocates</a>
+                <a class="btn btn-primary" id="openMatter" href="#">Open Matter</a>
+            </div>
+        </header>
+
+        <div class="matter-card" id="matterCard" style="display:none;">
+            <div class="matter-grid">
+                <div>
+                    <strong>Matter ID</strong>
+                    <p id="matterId"></p>
+                </div>
+                <div>
+                    <strong>Client</strong>
+                    <p id="matterClient"></p>
+                </div>
+                <div>
+                    <strong>Document Type</strong>
+                    <p id="matterDocType"></p>
+                </div>
+                <div>
+                    <strong>Status</strong>
+                    <p id="matterStatus"></p>
+                </div>
+                <div>
+                    <strong>Completed On</strong>
+                    <p id="matterCompleted"></p>
+                </div>
+                <div>
+                    <strong>Value</strong>
+                    <p id="matterValue"></p>
+                </div>
+            </div>
+            <div class="timeline-card" id="matterSummary"></div>
+            <div class="matter-actions">
+                <a class="btn btn-primary" href="#" id="viewMatterSource">View Source</a>
+                <a class="btn btn-secondary" href="advocate-profile.html">Back to Profile</a>
+            </div>
+        </div>
+
+        <section class="empty-state" id="matterMissing" style="display:none;">
+            <div class="empty-state-icon">⚖️</div>
+            <h3>Matter Not Found</h3>
+            <p>We couldn’t locate the requested matter. Please return to the advocates list.</p>
+            <a class="btn btn-secondary" href="advocates-management.html">Back to Advocates</a>
+        </section>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/advocates-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const matterId = params.get('id');
+            if (!matterId) {
+                document.getElementById('matterMissing').style.display = 'block';
+                return;
+            }
+
+            const matter = findMatterById(matterId);
+            if (!matter) {
+                document.getElementById('matterMissing').style.display = 'block';
+                return;
+            }
+
+            populateMatter(matter);
+        });
+
+        function findMatterById(id) {
+            for (const advocate of advocatesData.advocates) {
+                const match = (advocate.historicalMatters || []).find(m => m.matterId === id);
+                if (match) {
+                    return { ...match, advocateName: advocate.name };
+                }
+            }
+            return null;
+        }
+
+        function populateMatter(matter) {
+            document.getElementById('matterTitle').textContent = matter.title || matter.matterId;
+            document.getElementById('matterSubtitle').textContent = `Handled by ${matter.advocateName}`;
+            document.getElementById('matterId').textContent = matter.matterId;
+            document.getElementById('matterClient').textContent = matter.linkedClient;
+            document.getElementById('matterDocType').textContent = matter.documentType;
+            document.getElementById('matterStatus').textContent = matter.status;
+            document.getElementById('matterCompleted').textContent = matter.completionDate || 'Pending';
+            document.getElementById('matterValue').textContent = matter.value ? `₹ ${matter.value.toLocaleString('en-IN')}` : '—';
+            document.getElementById('matterSummary').textContent = matter.summary || 'No summary available.';
+            document.getElementById('viewMatterSource').href = `#`;
+            document.getElementById('matterCard').style.display = 'block';
+            document.getElementById('openMatter').href = '#';
+        }
+    </script>
+</body>
+</html>

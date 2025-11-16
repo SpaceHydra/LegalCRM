@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advocate Profile - Legal CRM</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .profile-header {
+            background: white;
+            padding: var(--space-xl);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--margin-section);
+            display: flex;
+            justify-content: space-between;
+            gap: var(--space-lg);
+        }
+        .profile-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        .meta-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-light);
+        }
+        .meta-card h3 {
+            margin-top: 0;
+            margin-bottom: var(--space-sm);
+            font-size: var(--h4-size);
+            color: var(--text-primary);
+        }
+        .meta-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .meta-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: var(--body-small);
+        }
+        .meta-list li:last-child {
+            border-bottom: none;
+        }
+        .availability-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-weight: var(--weight-semibold);
+            text-transform: capitalize;
+        }
+        .availability-pill.available {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .availability-pill.busy {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .availability-pill.on-leave {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+        .spec-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #3730a3;
+            margin: 4px;
+            font-size: var(--body-small);
+        }
+        .actions-row {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .profile-metrics {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .metric-tile {
+            background: #f9fafb;
+            border-radius: var(--radius-md);
+            padding: var(--space-md) var(--space-lg);
+            border: 1px solid var(--border-light);
+            min-width: 160px;
+            text-align: center;
+        }
+
+        .metric-tile .metric-label {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-tile .metric-value {
+            font-size: 24px;
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+        }
+        .profile-section + .profile-section {
+            margin-top: var(--margin-section);
+        }
+        .empty-state {
+            text-align: center;
+            padding: var(--space-xxl);
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: var(--space-md);
+        }
+        .data-table th,
+        .data-table td {
+            padding: var(--space-sm);
+            border-bottom: 1px solid #eef2f7;
+            text-align: left;
+            font-size: var(--body-small);
+        }
+        .data-table th {
+            background: #f8fafc;
+            color: var(--text-secondary);
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .table-actions {
+            display: flex;
+            gap: var(--space-xs);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Advocate Profile</p>
+                <h1 id="advocateName">Loading...</h1>
+                <p class="lead" id="advocateSummary">Fetching advocate details...</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" href="advocates-management.html">← Back to Advocates</a>
+                <button class="btn btn-primary" id="assignBtn">Assign to Case</button>
+            </div>
+            <div class="profile-metrics" id="profileMetrics">
+                <div class="metric-tile">
+                    <div class="metric-label">Active Assignments</div>
+                    <div class="metric-value" id="activeAssignmentsCount">0</div>
+                </div>
+                <div class="metric-tile">
+                    <div class="metric-label">Active Tasks</div>
+                    <div class="metric-value" id="activeTasksCount">0</div>
+                </div>
+            </div>
+        </header>
+        <section class="profile-header" id="profileHeader" style="display:none;">
+            <div>
+                <div class="availability-pill" id="availabilityBadge">Status</div>
+                <h2 id="profileName" style="margin: var(--space-sm) 0 0;"></h2>
+                <p id="profileContact" class="muted"></p>
+                <div class="actions-row" style="margin-top: var(--space-md);">
+                    <div>
+                        <div class="label">Experience</div>
+                        <strong id="experienceYears">--</strong>
+                    </div>
+                    <div>
+                        <div class="label">Success Rate</div>
+                        <strong id="successRate">--</strong>
+                    </div>
+                    <div>
+                        <div class="label">Cases Handled</div>
+                        <strong id="casesHandled">--</strong>
+                    </div>
+                    <div>
+                        <div class="label">Hourly Rate</div>
+                        <strong id="hourlyRate">--</strong>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3>Specializations</h3>
+                <div id="specializationChips"></div>
+                <h3 style="margin-top: var(--space-md);">Courts of Practice</h3>
+                <div id="courtsList"></div>
+            </div>
+        </section>
+
+        <section class="profile-section profile-meta">
+            <div class="meta-card">
+                <h3>Contact Details</h3>
+                <ul class="meta-list" id="contactDetails"></ul>
+            </div>
+            <div class="meta-card">
+                <h3>Professional Summary</h3>
+                <ul class="meta-list" id="professionalSummary"></ul>
+            </div>
+            <div class="meta-card">
+                <h3>Performance Snapshot</h3>
+                <ul class="meta-list" id="performanceDetails"></ul>
+            </div>
+        </section>
+
+        <section class="profile-section meta-card">
+            <h3>Notes & Highlights</h3>
+            <p id="advocateNotes" class="lead"></p>
+        </section>
+
+        <section class="profile-section meta-card">
+            <h3>Historical Matters</h3>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Matter</th>
+                            <th>Client</th>
+                            <th>Document Type</th>
+                            <th>Status</th>
+                            <th>Completed On</th>
+                            <th>Value (₹)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historicalMattersBody">
+                        <tr>
+                            <td colspan="7" class="empty-row">No historical matters recorded.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="empty-state" id="missingState" style="display:none;">
+            <div class="empty-state-icon">👨‍⚖️</div>
+            <h3>Advocate Not Found</h3>
+            <p>The requested advocate record does not exist. Please return to the advocates list.</p>
+            <a class="btn btn-secondary" href="advocates-management.html">Back to Advocates</a>
+        </section>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/advocates-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const advocateId = params.get('id');
+            const advocate = advocateId ? advocatesStore.getById(advocateId) : null;
+
+            if (!advocate) {
+                document.getElementById('missingState').style.display = 'block';
+                return;
+            }
+
+            populateProfile(advocate);
+        });
+
+        function populateProfile(advocate) {
+            document.getElementById('advocateName').textContent = advocate.name;
+            document.getElementById('profileName').textContent = advocate.name;
+            document.getElementById('advocateSummary').textContent = `${advocate.experienceYears} years • ${advocate.specialization.join(', ')}`;
+            document.getElementById('profileContact').textContent = `${advocate.city}, ${advocate.state} • ${advocate.email} • ${advocate.phone}`;
+
+            const badge = document.getElementById('availabilityBadge');
+            badge.textContent = advocate.availabilityStatus;
+            badge.className = `availability-pill ${advocate.availabilityStatus.toLowerCase().replace(/\s+/g, '-')}`;
+
+            document.getElementById('experienceYears').textContent = `${advocate.experienceYears} years`;
+            document.getElementById('successRate').textContent = `${advocate.successRate}%`;
+            document.getElementById('casesHandled').textContent = advocate.casesHandled;
+            document.getElementById('hourlyRate').textContent = `₹ ${advocate.hourlyRate.toLocaleString('en-IN')}`;
+
+            document.getElementById('specializationChips').innerHTML = advocate.specialization.map(spec => `<span class="spec-chip">${spec}</span>`).join('');
+            document.getElementById('courtsList').innerHTML = advocate.courtsOfPractice.map(court => `<span class="spec-chip">${court}</span>`).join('');
+
+            document.getElementById('contactDetails').innerHTML = `
+                <li><strong>Email:</strong> ${advocate.email}</li>
+                <li><strong>Phone:</strong> ${advocate.phone}</li>
+                <li><strong>Alternate Phone:</strong> ${advocate.altPhone || '—'}</li>
+                <li><strong>City:</strong> ${advocate.city}, ${advocate.state}</li>
+                <li><strong>Bar Council No:</strong> ${advocate.barCouncilNo}</li>
+            `;
+
+            document.getElementById('professionalSummary').innerHTML = `
+                <li><strong>Experience:</strong> ${advocate.experienceYears} years</li>
+                <li><strong>Education:</strong> ${advocate.education || 'Not specified'}</li>
+                <li><strong>Primary Practice Area:</strong> ${advocate.specialization[0]}</li>
+                <li><strong>Availability:</strong> ${advocate.availabilityStatus}</li>
+            `;
+
+            document.getElementById('performanceDetails').innerHTML = `
+                <li><strong>Success Rate:</strong> ${advocate.successRate}%</li>
+                <li><strong>Cases Handled:</strong> ${advocate.casesHandled}</li>
+                <li><strong>Active Assignments:</strong> ${advocate.activeAssignments}</li>
+                <li><strong>Total Earnings:</strong> ₹ ${advocate.totalEarnings.toLocaleString('en-IN')}</li>
+            `;
+
+            document.getElementById('advocateNotes').textContent = advocate.notes || 'No additional notes available.';
+
+            document.getElementById('profileHeader').style.display = 'flex';
+            document.getElementById('activeAssignmentsCount').textContent = advocate.activeAssignments || 0;
+            document.getElementById('activeTasksCount').textContent = advocate.activeTasks || 0;
+            renderHistoricalMatters(advocate);
+
+            document.getElementById('assignBtn').addEventListener('click', () => assignToCase(advocate.id));
+        }
+
+        function renderHistoricalMatters(advocate) {
+            const tableBody = document.getElementById('historicalMattersBody');
+            if (!tableBody) return;
+
+            const matters = advocate.historicalMatters || [];
+            if (!matters.length) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="empty-row">No historical matters recorded.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = matters.map(matter => `
+                <tr>
+                    <td><strong>${matter.matterId}</strong><br>${matter.summary}</td>
+                    <td>${matter.linkedClient}</td>
+                    <td>${matter.documentType}</td>
+                    <td>${matter.status}</td>
+                    <td>${matter.completionDate}</td>
+                    <td>₹ ${matter.value ? matter.value.toLocaleString('en-IN') : '0'}</td>
+                    <td>
+                        <a class="btn btn-secondary btn-sm" href="matter-detail.html?id=${matter.matterId}">View Matter</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function assignToCase(advocateId) {
+            const advocate = advocatesStore.getById(advocateId);
+            if (!advocate) return;
+
+            if (advocate.availabilityStatus === 'On Leave') {
+                alert(`${advocate.name} is currently on leave and cannot be assigned.`);
+                return;
+            }
+
+            alert(`Assignment Workflow\n\nAssigning ${advocate.name} to a case.\n\nSelect an existing case, define scope, and capture commercial terms in the assignment wizard.`);
+        }
+    </script>
+</body>
+</html>

@@ -259,6 +259,96 @@
             color: var(--text-secondary);
         }
 
+        .view-toggle {
+            display: inline-flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--border-light);
+            border-radius: 999px;
+            padding: 4px;
+            background: #fff;
+            box-shadow: var(--shadow-light);
+        }
+
+        .toggle-btn {
+            border: none;
+            background: transparent;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: var(--weight-semibold);
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .toggle-btn.active {
+            background: var(--primary-gradient);
+            color: #fff;
+            box-shadow: var(--shadow-medium);
+        }
+
+        .table-view-panel {
+            margin-top: var(--margin-section);
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg);
+            box-shadow: var(--shadow-light);
+        }
+
+        .table-view-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .table-view-header h2 {
+            margin: 0;
+            font-size: var(--h3-size);
+            color: var(--text-primary);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: var(--space-sm);
+            text-align: left;
+            border-bottom: 1px solid #eef2f7;
+            font-size: var(--body-small);
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            font-weight: var(--weight-semibold);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table tr:hover td {
+            background: #fdfdfd;
+        }
+
+        .empty-row {
+            text-align: center;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: var(--space-xs);
+        }
+
         @media (max-width: 768px) {
             .advocates-grid {
                 grid-template-columns: 1fr;
@@ -282,16 +372,24 @@
                 <p class="lead">Manage your network of empaneled advocates with ratings, specializations, and availability tracking.</p>
             </div>
             <div class="header-actions">
-                <button class="btn btn-primary" onclick="openAddAdvocateModal()">
+
+                <a class="btn btn-primary" href="add-advocate.html">
+
                     ➕ Add New Advocate
-                </button>
-                <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+
+                </a>
+
             </div>
         </header>
 
         <!-- Dashboard Stats -->
         <div class="advocates-stats" id="advocatesStats">
             <!-- Dynamic stats loaded here -->
+        </div>
+
+        <div class="view-toggle" role="group" aria-label="View options">
+            <button class="toggle-btn active" data-view-toggle="card">Card View</button>
+            <button class="toggle-btn" data-view-toggle="table">Table View</button>
         </div>
 
         <!-- Filters Section -->
@@ -339,98 +437,56 @@
         </div>
 
         <!-- Advocates Grid -->
-        <div id="advocatesContainer" class="advocates-grid">
-            <!-- Dynamic content loaded here -->
-        </div>
+        <section id="cardViewSection">
+            <div id="advocatesContainer" class="advocates-grid">
+                <!-- Dynamic content loaded here -->
+            </div>
+        </section>
+
+        <!-- Advocates Table View -->
+        <section class="table-view-panel" id="tableViewSection" style="display: none;">
+            <div class="table-view-header">
+                <div>
+                    <h2>Tabular View</h2>
+                    <p class="lead">Detailed roster for sorting and exporting your empaneled advocates.</p>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name & Contact</th>
+                            <th>Specializations</th>
+                            <th>Availability</th>
+                            <th>Location</th>
+                            <th>Experience</th>
+                            <th>Rating</th>
+                            <th>Rate (�,1)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="advocatesTableBody">
+                        <tr>
+                            <td colspan="8" class="empty-row">Loading advocates...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
         <footer class="footer">
             © 2025 Cubictree (A Gaba Projects Private Limited Company)
         </footer>
     </div>
 
-    <!-- Add/Edit Advocate Modal -->
-    <div class="modal" id="advocateModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="modalTitle">Add New Advocate</h2>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="advocateForm">
-                    <input type="hidden" id="advocateId">
-                    <div class="form-grid-2">
-                        <div class="form-group">
-                            <label class="form-label required">Full Name</label>
-                            <input type="text" class="form-input" id="advocateName" required placeholder="Adv. Full Name">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">Email</label>
-                            <input type="email" class="form-input" id="advocateEmail" required placeholder="email@example.com">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">Phone</label>
-                            <input type="tel" class="form-input" id="advocatePhone" required placeholder="+91-XXXXX-XXXXX">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">Bar Council Number</label>
-                            <input type="text" class="form-input" id="barCouncilNo" required placeholder="D/1234/2008">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">Experience (Years)</label>
-                            <input type="number" class="form-input" id="experienceYears" required placeholder="10">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">City</label>
-                            <input type="text" class="form-input" id="advocateCity" required placeholder="Mumbai">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">State</label>
-                            <input type="text" class="form-input" id="advocateState" required placeholder="Maharashtra">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label required">Availability Status</label>
-                            <select class="form-select" id="availabilityStatus" required>
-                                <option value="Available">Available</option>
-                                <option value="Busy">Busy</option>
-                                <option value="On Leave">On Leave</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Hourly Rate (₹)</label>
-                            <input type="number" class="form-input" id="hourlyRate" placeholder="8000">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Retainer Rate (₹)</label>
-                            <input type="number" class="form-input" id="retainerRate" placeholder="150000">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label required">Specialization (comma separated)</label>
-                        <input type="text" class="form-input" id="specialization" required placeholder="Corporate Law, Mergers & Acquisitions">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Courts of Practice (comma separated)</label>
-                        <input type="text" class="form-input" id="courtsOfPractice" placeholder="Supreme Court, Delhi High Court">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Notes</label>
-                        <textarea class="form-textarea" id="advocateNotes" placeholder="Additional notes about the advocate..."></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveAdvocate()">💾 Save Advocate</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
     <script src="js/navigation.js"></script>
     <script src="js/advocates-data.js"></script>
     <script>
+        let currentView = 'card';
+
         // Load advocates on page load
         document.addEventListener('DOMContentLoaded', function() {
+            initViewToggle();
             loadStats();
             loadAdvocates();
         });
@@ -504,6 +560,7 @@
                         <p>No advocates match your search criteria. Try adjusting your filters.</p>
                     </div>
                 `;
+                renderAdvocatesTable([]);
                 return;
             }
 
@@ -563,27 +620,78 @@
                             <button class="btn btn-primary btn-sm" onclick="assignToCase('${advocate.id}')">
                                 📋 Assign to Case
                             </button>
-                            <button class="btn btn-secondary btn-sm" onclick="viewProfile('${advocate.id}')">
+                            <a class="btn btn-secondary btn-sm" href="advocate-profile.html?id=${advocate.id}">
                                 👁️ View Profile
-                            </button>
+                            </a>
                         </div>
                     </div>
                 `;
             }).join('');
+
+            renderAdvocatesTable(filteredAdvocates);
         }
 
-        function openAddAdvocateModal() {
-            document.getElementById('modalTitle').textContent = 'Add New Advocate';
-            document.getElementById('advocateForm').reset();
-            document.getElementById('advocateId').value = '';
-            document.getElementById('advocateModal').classList.add('active');
+        function initViewToggle() {
+            const toggleButtons = document.querySelectorAll('[data-view-toggle]');
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const view = button.getAttribute('data-view-toggle');
+                    if (view === currentView) return;
+                    currentView = view;
+                    updateViewVisibility();
+                    loadAdvocates();
+                });
+            });
+            updateViewVisibility();
         }
 
-        function viewProfile(advocateId) {
-            const advocate = advocatesStore.getById(advocateId);
-            if (!advocate) return;
+        function updateViewVisibility() {
+            const cardSection = document.getElementById('cardViewSection');
+            const tableSection = document.getElementById('tableViewSection');
+            if (cardSection && tableSection) {
+                cardSection.style.display = currentView === 'card' ? 'block' : 'none';
+                tableSection.style.display = currentView === 'table' ? 'block' : 'none';
+            }
+            document.querySelectorAll('[data-view-toggle]').forEach(button => {
+                const view = button.getAttribute('data-view-toggle');
+                button.classList.toggle('active', view === currentView);
+            });
+        }
 
-            alert(`Advocate Profile\n\nName: ${advocate.name}\nSpecialization: ${advocate.specialization.join(', ')}\nExperience: ${advocate.experienceYears} years\nRating: ${advocate.rating}/5\nCases Handled: ${advocate.casesHandled}\nSuccess Rate: ${advocate.successRate}%\n\nCourts: ${advocate.courtsOfPractice.join(', ')}\n\nNotes: ${advocate.notes}`);
+        function renderAdvocatesTable(advocates) {
+            const tableBody = document.getElementById('advocatesTableBody');
+            if (!tableBody) return;
+
+            if (!advocates.length) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-row">No advocates available for the selected filters.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = advocates.map(advocate => `
+                <tr>
+                    <td>
+                        <strong>${advocate.name}</strong><br>
+                        <span>${advocate.email}</span><br>
+                        <span>${advocate.phone}</span>
+                    </td>
+                    <td>${advocate.specialization.slice(0, 3).join(', ')}${advocate.specialization.length > 3 ? ` +${advocate.specialization.length - 3}` : ''}</td>
+                    <td>${advocate.availabilityStatus}</td>
+                    <td>${advocate.city}, ${advocate.state}</td>
+                    <td>${advocate.experienceYears} years</td>
+                    <td>${advocate.rating}/5</td>
+                    <td>₹ ${advocate.hourlyRate.toLocaleString('en-IN')}</td>
+                    <td>
+                        <div class="table-actions">
+                            <button class="btn btn-primary btn-sm" onclick="assignToCase('${advocate.id}')">Assign</button>
+                            <a class="btn btn-secondary btn-sm" href="advocate-profile.html?id=${advocate.id}">View</a>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
         }
 
         function assignToCase(advocateId) {
@@ -598,28 +706,6 @@
             alert(`Assignment Feature\n\nAssigning ${advocate.name} to a case...\n\nThis will open the case assignment interface where you can:\n- Select an existing case\n- Create a new case\n- Set assignment terms\n- Define deliverables and timeline`);
         }
 
-        function saveAdvocate() {
-            // Basic validation
-            if (!document.getElementById('advocateName').value || !document.getElementById('advocateEmail').value) {
-                alert('Please fill all required fields');
-                return;
-            }
-
-            alert('Advocate saved successfully!\n\nIn a production system, this would save the advocate data to the database.');
-            closeModal();
-        }
-
-        function closeModal() {
-            document.getElementById('advocateModal').classList.remove('active');
-        }
-
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('advocateModal');
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
     </script>
 </body>
 </html>

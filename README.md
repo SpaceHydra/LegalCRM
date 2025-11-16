@@ -89,6 +89,10 @@ A comprehensive Legal CRM platform built with HTML, CSS, and JavaScript featurin
 ```
 LegalCRM/
 ├── dashboard.html                  # Main dashboard (dynamic)
+├── advocates-management.html       # Empaneled advocate dashboard
+├── advocate-profile.html           # Advocate detail view
+├── matter-detail.html              # Matter history detail
+├── add-advocate.html               # Advocate intake form
 ├── drafting-dashboard.html         # Drafting hub overview
 ├── drafting-requests.html          # Request queue & workflow
 ├── drafting-templates.html         # Template library
@@ -108,7 +112,8 @@ LegalCRM/
 ├── fsd.md                          # Functional Specification
 ├── js/
 │   ├── data.js                     # Shared data layer (localStorage)
-│   ├── drafting-data.js            # Drafting module sample data + helpers
+│   ├── advocates-data.js           # Advocate helpers
+│   ├── drafting-data.js            # Drafting module sample data
 │   └── common.js                   # Common utilities
 └── css/
     └── common-styles.css           # Shared styles
