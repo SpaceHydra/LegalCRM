@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Client - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(17, 153, 142, 0.4);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe6e9;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item active">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>👥 Add New Client</h2>
+                <p>Complete client onboarding with comprehensive information</p>
+            </div>
+
+            <form id="clientForm">
+                <!-- Company/Individual Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>🏢</span> Company/Individual Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Client Type</label>
+                            <select class="form-select" id="clientType" required onchange="toggleClientTypeFields()">
+                                <option value="">Select Client Type</option>
+                                <option value="Company">Company</option>
+                                <option value="Individual">Individual</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Company/Full Name</label>
+                            <input type="text" class="form-input" id="companyName" placeholder="Enter name" required>
+                        </div>
+                        <div class="form-group" id="entityTypeGroup">
+                            <label class="form-label">Entity Type</label>
+                            <select class="form-select" id="entityType">
+                                <option value="">Select Entity Type</option>
+                                <option value="Private Limited">Private Limited</option>
+                                <option value="Public Limited">Public Limited</option>
+                                <option value="LLP">LLP</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Sole Proprietorship">Sole Proprietorship</option>
+                                <option value="NGO/Trust">NGO/Trust</option>
+                                <option value="Government Entity">Government Entity</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="industryGroup">
+                            <label class="form-label">Industry</label>
+                            <select class="form-select" id="industry">
+                                <option value="">Select Industry</option>
+                                <option value="IT/Software">IT/Software</option>
+                                <option value="Manufacturing">Manufacturing</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Finance/Banking">Finance/Banking</option>
+                                <option value="Retail">Retail</option>
+                                <option value="Construction">Construction</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PAN Number</label>
+                            <input type="text" class="form-input" id="panNumber" placeholder="ABCDE1234F" maxlength="10">
+                        </div>
+                        <div class="form-group" id="gstGroup">
+                            <label class="form-label">GST Number</label>
+                            <input type="text" class="form-input" id="gstNumber" placeholder="22AAAAA0000A1Z5" maxlength="15">
+                        </div>
+                        <div class="form-group" id="cinGroup">
+                            <label class="form-label">CIN Number</label>
+                            <input type="text" class="form-input" id="cinNumber" placeholder="U12345MH2020PTC123456">
+                            <span class="help-text">Corporate Identification Number</span>
+                        </div>
+                        <div class="form-group" id="dateOfBirthGroup" style="display: none;">
+                            <label class="form-label">Date of Birth</label>
+                            <input type="date" class="form-input" id="dateOfBirth">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primary Contact Person -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>👤</span> Primary Contact Person
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Contact Person Name</label>
+                            <input type="text" class="form-input" id="contactName" placeholder="Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Designation</label>
+                            <input type="text" class="form-input" id="designation" placeholder="e.g., CEO, Director">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Email</label>
+                            <input type="email" class="form-input" id="email" placeholder="email@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Phone</label>
+                            <input type="tel" class="form-input" id="phone" placeholder="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Alternate Phone</label>
+                            <input type="tel" class="form-input" id="alternatePhone" placeholder="+91 98765 43211">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Mobile</label>
+                            <input type="tel" class="form-input" id="mobile" placeholder="+91 98765 43212">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registered Office Address -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📍</span> Registered Office Address
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label required">Address Line 1</label>
+                            <input type="text" class="form-input" id="address1" placeholder="Building No., Street Name" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" class="form-input" id="address2" placeholder="Area, Locality">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">City</label>
+                            <input type="text" class="form-input" id="city" placeholder="City" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">State</label>
+                            <select class="form-select" id="state" required>
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="West Bengal">West Bengal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">PIN Code</label>
+                            <input type="text" class="form-input" id="pincode" placeholder="400001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country</label>
+                            <input type="text" class="form-input" id="country" value="India">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Billing Address -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>💳</span> Billing Address
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sameAsRegistered" onchange="copyAddress()">
+                                <label for="sameAsRegistered">Same as Registered Office Address</label>
+                            </div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Address Line 1</label>
+                            <input type="text" class="form-input" id="billingAddress1" placeholder="Building No., Street Name">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Address Line 2</label>
+                            <input type="text" class="form-input" id="billingAddress2" placeholder="Area, Locality">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-input" id="billingCity" placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <select class="form-select" id="billingState">
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="West Bengal">West Bengal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PIN Code</label>
+                            <input type="text" class="form-input" id="billingPincode" placeholder="400001">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Details -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>💼</span> Business Details
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Client Status</label>
+                            <select class="form-select" id="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Pending">Pending Onboarding</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Client Category</label>
+                            <select class="form-select" id="category">
+                                <option value="Regular">Regular</option>
+                                <option value="Premium">Premium</option>
+                                <option value="VIP">VIP</option>
+                                <option value="Pro Bono">Pro Bono</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Payment Terms</label>
+                            <select class="form-select" id="paymentTerms">
+                                <option value="Immediate">Immediate</option>
+                                <option value="15 Days">Net 15 Days</option>
+                                <option value="30 Days">Net 30 Days</option>
+                                <option value="45 Days">Net 45 Days</option>
+                                <option value="60 Days">Net 60 Days</option>
+                                <option value="Custom">Custom</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Credit Limit</label>
+                            <input type="number" class="form-input" id="creditLimit" placeholder="Enter amount in ₹">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Billing Currency</label>
+                            <select class="form-select" id="currency">
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Source</label>
+                            <select class="form-select" id="source">
+                                <option value="">How did they find us?</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Website">Website</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="Previous Client">Previous Client</option>
+                                <option value="Cold Call">Cold Call</option>
+                                <option value="Event">Event/Seminar</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Assigned Lawyer</label>
+                            <select class="form-select" id="assignedTo">
+                                <option value="">Select Lawyer</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Anita Sharma">Anita Sharma</option>
+                                <option value="Vikram Singh">Vikram Singh</option>
+                                <option value="Neha Gupta">Neha Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Onboarding Date</label>
+                            <input type="date" class="form-input" id="onboardingDate">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📝</span> Additional Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Website</label>
+                            <input type="url" class="form-input" id="website" placeholder="https://www.company.com">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">LinkedIn Profile</label>
+                            <input type="url" class="form-input" id="linkedin" placeholder="https://linkedin.com/company/...">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">About Client</label>
+                            <textarea class="form-textarea" id="about" placeholder="Brief description about the client and their business..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Internal Notes</label>
+                            <textarea class="form-textarea" id="notes" placeholder="Internal notes about the client (not visible to client)..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Special Requirements</label>
+                            <textarea class="form-textarea" id="specialRequirements" placeholder="Any special requirements or preferences..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Tags</label>
+                            <input type="text" class="form-input" id="tags" placeholder="e.g., high-value, recurring, priority (comma separated)">
+                            <span class="help-text">Add tags for easier filtering and categorization</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                    <button type="submit" class="btn btn-primary">Save Client</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNotificationCount();
+        });
+
+        function toggleClientTypeFields() {
+            const clientType = document.getElementById('clientType').value;
+            const isCompany = clientType === 'Company';
+
+            document.getElementById('entityTypeGroup').style.display = isCompany ? 'block' : 'none';
+            document.getElementById('industryGroup').style.display = isCompany ? 'block' : 'none';
+            document.getElementById('gstGroup').style.display = isCompany ? 'block' : 'none';
+            document.getElementById('cinGroup').style.display = isCompany ? 'block' : 'none';
+            document.getElementById('dateOfBirthGroup').style.display = isCompany ? 'none' : 'block';
+        }
+
+        function copyAddress() {
+            if (document.getElementById('sameAsRegistered').checked) {
+                document.getElementById('billingAddress1').value = document.getElementById('address1').value;
+                document.getElementById('billingAddress2').value = document.getElementById('address2').value;
+                document.getElementById('billingCity').value = document.getElementById('city').value;
+                document.getElementById('billingState').value = document.getElementById('state').value;
+                document.getElementById('billingPincode').value = document.getElementById('pincode').value;
+            }
+        }
+
+        document.getElementById('clientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveClient();
+        });
+
+        function saveClient() {
+            const clientData = {
+                id: 'CLI-' + Date.now(),
+                clientType: document.getElementById('clientType').value,
+                companyName: document.getElementById('companyName').value,
+                entityType: document.getElementById('entityType').value,
+                industry: document.getElementById('industry').value,
+                panNumber: document.getElementById('panNumber').value,
+                gstNumber: document.getElementById('gstNumber').value,
+                cinNumber: document.getElementById('cinNumber').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                contactName: document.getElementById('contactName').value,
+                designation: document.getElementById('designation').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                alternatePhone: document.getElementById('alternatePhone').value,
+                mobile: document.getElementById('mobile').value,
+                address1: document.getElementById('address1').value,
+                address2: document.getElementById('address2').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                pincode: document.getElementById('pincode').value,
+                country: document.getElementById('country').value,
+                billingAddress1: document.getElementById('billingAddress1').value,
+                billingAddress2: document.getElementById('billingAddress2').value,
+                billingCity: document.getElementById('billingCity').value,
+                billingState: document.getElementById('billingState').value,
+                billingPincode: document.getElementById('billingPincode').value,
+                status: document.getElementById('status').value,
+                category: document.getElementById('category').value,
+                paymentTerms: document.getElementById('paymentTerms').value,
+                creditLimit: parseFloat(document.getElementById('creditLimit').value) || 0,
+                currency: document.getElementById('currency').value,
+                source: document.getElementById('source').value,
+                assignedTo: document.getElementById('assignedTo').value,
+                onboardingDate: document.getElementById('onboardingDate').value || new Date().toISOString().split('T')[0],
+                website: document.getElementById('website').value,
+                linkedin: document.getElementById('linkedin').value,
+                about: document.getElementById('about').value,
+                notes: document.getElementById('notes').value,
+                specialRequirements: document.getElementById('specialRequirements').value,
+                tags: document.getElementById('tags').value,
+                createdDate: new Date().toISOString().split('T')[0],
+                totalRevenue: 0,
+                activeProjects: 0
+            };
+
+            // Validate required fields
+            if (!clientData.clientType || !clientData.companyName || !clientData.contactName ||
+                !clientData.email || !clientData.phone || !clientData.address1 ||
+                !clientData.city || !clientData.state || !clientData.pincode) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Save to localStorage
+            legalCRM.add('clients', clientData);
+
+            // Add activity
+            legalCRM.add('activities', {
+                id: 'ACT-' + Date.now(),
+                type: 'client_created',
+                title: 'New Client Onboarded',
+                description: `${clientData.companyName} added as new client`,
+                timestamp: new Date().toISOString(),
+                user: 'Prateek Mehta'
+            });
+
+            alert('Client saved successfully!');
+            window.location.href = 'client-management.html';
+        }
+
+        function saveDraft() {
+            const formData = {};
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                formData[input.id] = input.value;
+            });
+            localStorage.setItem('clientDraft', JSON.stringify(formData));
+            alert('Draft saved!');
+        }
+
+        function cancelForm() {
+            if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                window.location.href = 'client-management.html';
+            }
+        }
+
+        function updateNotificationCount() {
+            const activities = legalCRM.get('activities');
+            const today = new Date().toISOString().split('T')[0];
+            const todayActivities = activities.filter(a => a.timestamp && a.timestamp.startsWith(today));
+
+            const badge = document.getElementById('notificationCount');
+            if (badge) {
+                badge.textContent = todayActivities.length;
+            }
+        }
+    </script>
+</body>
+</html>

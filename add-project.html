@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Matter/Project - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe6e9;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item active">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>📁 Add New Matter/Project</h2>
+                <p>Create a new matter or project with comprehensive details</p>
+            </div>
+
+            <form id="projectForm">
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📋</span> Basic Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Matter/Project Name</label>
+                            <input type="text" class="form-input" id="matterName" placeholder="e.g., Contract Review - Tech Corp" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Client</label>
+                            <select class="form-select" id="clientId" required>
+                                <option value="">Select Client</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Practice Area</label>
+                            <select class="form-select" id="practiceArea" required>
+                                <option value="">Select Practice Area</option>
+                                <option value="Corporate Law">Corporate Law</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Contract Law">Contract Law</option>
+                                <option value="Intellectual Property">Intellectual Property</option>
+                                <option value="Tax Law">Tax Law</option>
+                                <option value="Employment Law">Employment Law</option>
+                                <option value="Mergers & Acquisitions">Mergers & Acquisitions</option>
+                                <option value="Banking & Finance">Banking & Finance</option>
+                                <option value="Arbitration">Arbitration</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Matter Type</label>
+                            <select class="form-select" id="matterType" required>
+                                <option value="">Select Matter Type</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Advisory">Advisory</option>
+                                <option value="Transactional">Transactional</option>
+                                <option value="Compliance">Compliance</option>
+                                <option value="Due Diligence">Due Diligence</option>
+                                <option value="Contract Drafting">Contract Drafting</option>
+                                <option value="Negotiation">Negotiation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Matter Number</label>
+                            <input type="text" class="form-input" id="matterNumber" placeholder="Auto-generated or custom">
+                            <span class="help-text">Leave blank for auto-generation</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="Planning">Planning</option>
+                                <option value="Active">Active</option>
+                                <option value="On Hold">On Hold</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Matter Details -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📝</span> Matter Details
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label required">Description</label>
+                            <textarea class="form-textarea" id="description" placeholder="Detailed description of the matter..." required></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Scope of Work</label>
+                            <textarea class="form-textarea" id="scopeOfWork" placeholder="Define the scope of work..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Objectives</label>
+                            <textarea class="form-textarea" id="objectives" placeholder="Key objectives and goals..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline & Resources -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📅</span> Timeline & Resources
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Start Date</label>
+                            <input type="date" class="form-input" id="startDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expected End Date</label>
+                            <input type="date" class="form-input" id="endDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Lead Lawyer</label>
+                            <select class="form-select" id="leadLawyer" required>
+                                <option value="">Select Lead Lawyer</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Anita Sharma">Anita Sharma</option>
+                                <option value="Vikram Singh">Vikram Singh</option>
+                                <option value="Neha Gupta">Neha Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Team Members</label>
+                            <input type="text" class="form-input" id="teamMembers" placeholder="Comma separated names">
+                            <span class="help-text">Enter team member names separated by commas</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select" id="priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estimated Hours</label>
+                            <input type="number" class="form-input" id="estimatedHours" placeholder="Total estimated hours">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Details -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>💰</span> Financial Details
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Billing Type</label>
+                            <select class="form-select" id="billingType">
+                                <option value="Hourly">Hourly</option>
+                                <option value="Fixed Fee">Fixed Fee</option>
+                                <option value="Retainer">Retainer</option>
+                                <option value="Contingency">Contingency</option>
+                                <option value="Pro Bono">Pro Bono</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Hourly Rate</label>
+                            <input type="number" class="form-input" id="hourlyRate" placeholder="Rate per hour in ₹">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fixed Fee Amount</label>
+                            <input type="number" class="form-input" id="fixedFee" placeholder="Total fee in ₹">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Budget</label>
+                            <input type="number" class="form-input" id="budget" placeholder="Overall budget in ₹">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Retainer Amount</label>
+                            <input type="number" class="form-input" id="retainerAmount" placeholder="Retainer amount in ₹">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Currency</label>
+                            <select class="form-select" id="currency">
+                                <option value="INR">INR (₹)</option>
+                                <option value="USD">USD ($)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case/Court Details (for Litigation) -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>⚖️</span> Case/Court Details (If Applicable)
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Case Number</label>
+                            <input type="text" class="form-input" id="caseNumber" placeholder="Court case number">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Court Name</label>
+                            <input type="text" class="form-input" id="courtName" placeholder="Name of the court">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Court Type</label>
+                            <select class="form-select" id="courtType">
+                                <option value="">Select Court Type</option>
+                                <option value="Supreme Court">Supreme Court</option>
+                                <option value="High Court">High Court</option>
+                                <option value="District Court">District Court</option>
+                                <option value="Tribunal">Tribunal</option>
+                                <option value="Arbitration">Arbitration</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Filing Date</label>
+                            <input type="date" class="form-input" id="filingDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Next Hearing Date</label>
+                            <input type="date" class="form-input" id="nextHearingDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Opposing Party</label>
+                            <input type="text" class="form-input" id="opposingParty" placeholder="Name of opposing party">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Opposing Counsel</label>
+                            <input type="text" class="form-input" id="opposingCounsel" placeholder="Opposing lawyer/firm">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Judge Name</label>
+                            <input type="text" class="form-input" id="judgeName" placeholder="Presiding judge">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📌</span> Additional Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Key Milestones</label>
+                            <textarea class="form-textarea" id="milestones" placeholder="List key milestones..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Risks & Challenges</label>
+                            <textarea class="form-textarea" id="risks" placeholder="Identify potential risks..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Internal Notes</label>
+                            <textarea class="form-textarea" id="notes" placeholder="Internal notes about this matter..."></textarea>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Tags</label>
+                            <input type="text" class="form-input" id="tags" placeholder="e.g., urgent, high-value, complex (comma separated)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Conflict Check Status</label>
+                            <select class="form-select" id="conflictCheck">
+                                <option value="Pending">Pending</option>
+                                <option value="Cleared">Cleared</option>
+                                <option value="Issues Found">Issues Found</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confidentiality Level</label>
+                            <select class="form-select" id="confidentiality">
+                                <option value="Normal">Normal</option>
+                                <option value="Confidential">Confidential</option>
+                                <option value="Highly Confidential">Highly Confidential</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                    <button type="submit" class="btn btn-primary">Create Matter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadClients();
+            updateNotificationCount();
+        });
+
+        function loadClients() {
+            const clients = legalCRM.get('clients');
+            const select = document.getElementById('clientId');
+            clients.forEach(client => {
+                const option = document.createElement('option');
+                option.value = client.id;
+                option.textContent = client.companyName;
+                select.appendChild(option);
+            });
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveProject();
+        });
+
+        function saveProject() {
+            const projectData = {
+                id: 'PROJ-' + Date.now(),
+                matterNumber: document.getElementById('matterNumber').value || 'MAT-' + Date.now(),
+                matterName: document.getElementById('matterName').value,
+                clientId: document.getElementById('clientId').value,
+                practiceArea: document.getElementById('practiceArea').value,
+                matterType: document.getElementById('matterType').value,
+                status: document.getElementById('status').value,
+                description: document.getElementById('description').value,
+                scopeOfWork: document.getElementById('scopeOfWork').value,
+                objectives: document.getElementById('objectives').value,
+                startDate: document.getElementById('startDate').value,
+                endDate: document.getElementById('endDate').value,
+                leadLawyer: document.getElementById('leadLawyer').value,
+                teamMembers: document.getElementById('teamMembers').value,
+                priority: document.getElementById('priority').value,
+                estimatedHours: parseFloat(document.getElementById('estimatedHours').value) || 0,
+                billingType: document.getElementById('billingType').value,
+                hourlyRate: parseFloat(document.getElementById('hourlyRate').value) || 0,
+                fixedFee: parseFloat(document.getElementById('fixedFee').value) || 0,
+                budget: parseFloat(document.getElementById('budget').value) || 0,
+                retainerAmount: parseFloat(document.getElementById('retainerAmount').value) || 0,
+                currency: document.getElementById('currency').value,
+                caseNumber: document.getElementById('caseNumber').value,
+                courtName: document.getElementById('courtName').value,
+                courtType: document.getElementById('courtType').value,
+                filingDate: document.getElementById('filingDate').value,
+                nextHearingDate: document.getElementById('nextHearingDate').value,
+                opposingParty: document.getElementById('opposingParty').value,
+                opposingCounsel: document.getElementById('opposingCounsel').value,
+                judgeName: document.getElementById('judgeName').value,
+                milestones: document.getElementById('milestones').value,
+                risks: document.getElementById('risks').value,
+                notes: document.getElementById('notes').value,
+                tags: document.getElementById('tags').value,
+                conflictCheck: document.getElementById('conflictCheck').value,
+                confidentiality: document.getElementById('confidentiality').value,
+                createdDate: new Date().toISOString().split('T')[0],
+                progress: 0,
+                totalHours: 0
+            };
+
+            // Validate required fields
+            if (!projectData.matterName || !projectData.clientId || !projectData.practiceArea ||
+                !projectData.matterType || !projectData.status || !projectData.description ||
+                !projectData.startDate || !projectData.leadLawyer) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Save to localStorage
+            legalCRM.add('projects', projectData);
+
+            // Add activity
+            const client = legalCRM.getById('clients', projectData.clientId);
+            legalCRM.add('activities', {
+                id: 'ACT-' + Date.now(),
+                type: 'project_created',
+                title: 'New Matter Created',
+                description: `${projectData.matterName} for ${client ? client.companyName : 'client'}`,
+                timestamp: new Date().toISOString(),
+                user: 'Prateek Mehta'
+            });
+
+            alert('Matter created successfully!');
+            window.location.href = 'project-management.html';
+        }
+
+        function saveDraft() {
+            alert('Draft saved!');
+        }
+
+        function cancelForm() {
+            if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                window.location.href = 'project-management.html';
+            }
+        }
+
+        function updateNotificationCount() {
+            const activities = legalCRM.get('activities');
+            const today = new Date().toISOString().split('T')[0];
+            const todayActivities = activities.filter(a => a.timestamp && a.timestamp.startsWith(today));
+
+            const badge = document.getElementById('notificationCount');
+            if (badge) {
+                badge.textContent = todayActivities.length;
+            }
+        }
+    </script>
+</body>
+</html>
