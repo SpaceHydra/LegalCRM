@@ -687,23 +687,126 @@
         }
 
         function addNewTask() {
-            // TODO: Implement add task modal or page
-            alert('Add new task functionality to be implemented');
+            const taskTitle = prompt('Enter task title:');
+            if (!taskTitle) return;
+
+            const taskType = prompt('Enter task type (Drafting/Review/Analysis/Data Compilation/Follow-up):') || 'Drafting';
+            const assignee = prompt('Assign to (enter name):') || 'Current User';
+            const dueDate = prompt('Due date (YYYY-MM-DD):') || new Date(Date.now() + 7*24*60*60*1000).toISOString().split('T')[0];
+
+            const newTask = {
+                id: `MTASK-${Date.now()}`,
+                matterId: matterId,
+                taskTitle: taskTitle,
+                taskType: taskType,
+                createdBy: 'Current User',
+                owner: 'Current User',
+                assignee: assignee,
+                assigneeRole: 'Internal',
+                dueDate: dueDate,
+                status: 'Open',
+                percentComplete: 0,
+                priority: 'Normal',
+                instructions: '',
+                createdDate: new Date().toISOString().split('T')[0],
+                lastUpdatedDate: new Date().toISOString().split('T')[0]
+            };
+
+            legalCRM.create('matterTasks', newTask);
+            alert('Task created successfully!');
+            renderTasksTab();
         }
 
         function uploadDocument() {
-            // TODO: Implement upload document modal
-            alert('Upload document functionality to be implemented');
+            const fileName = prompt('Enter document file name (e.g., "Property_Deed.pdf"):');
+            if (!fileName) return;
+
+            const folder = prompt('Select folder path:\n1. /01. Client Inputs\n2. /02. Drafts\n3. /03. Final Deliverables\n4. /04. Internal Notes\n\nEnter number (1-4):');
+            const folderMap = {
+                '1': '/01. Client Inputs',
+                '2': '/02. Drafts',
+                '3': '/03. Final Deliverables',
+                '4': '/04. Internal Notes'
+            };
+            const folderPath = folderMap[folder] || '/02. Drafts';
+
+            const fileType = prompt('Enter file type (e.g., "BPR Draft", "Client Input", "TSR Final"):') || 'Document';
+
+            const newDocument = {
+                id: `MDOC-${Date.now()}`,
+                matterId: matterId,
+                folderPath: folderPath,
+                fileName: fileName,
+                fileType: fileType,
+                versionNo: 'v1',
+                uploadedBy: 'Current User',
+                uploadedOn: new Date().toISOString(),
+                notes: '',
+                isFinalDeliverable: false,
+                linkedQCItemId: ''
+            };
+
+            legalCRM.create('matterDocuments', newDocument);
+            alert('Document uploaded successfully!');
+            renderDocumentsTab();
         }
 
         function manageAdvocates() {
-            // TODO: Implement manage advocates modal
-            alert('Manage advocates functionality to be implemented');
+            const advocates = legalCRM.getMatterAdvocates(matterId);
+            let currentPrimary = advocates ? advocates.primaryAdvocate : 'None';
+
+            const newPrimary = prompt(`Current Primary Advocate: ${currentPrimary}\n\nEnter new Primary Advocate name (or press Cancel to keep current):`);
+            if (!newPrimary) return;
+
+            if (advocates) {
+                legalCRM.update('advocateAssignments', advocates.id, {
+                    primaryAdvocate: newPrimary
+                });
+            } else {
+                const newAssignment = {
+                    id: `ASGN-${Date.now()}`,
+                    matterId: matterId,
+                    primaryAdvocate: newPrimary,
+                    supportingAdvocates: [],
+                    panel: '',
+                    zone: currentMatter.region || '',
+                    branchCluster: '',
+                    assignmentStartDate: new Date().toISOString().split('T')[0],
+                    assignmentEndDate: '',
+                    status: 'Active'
+                };
+                legalCRM.create('advocateAssignments', newAssignment);
+            }
+
+            alert('Advocate assignment updated successfully!');
+            renderAdvocatesTab();
         }
 
         function submitToQC() {
-            // TODO: Implement submit to QC modal
-            alert('Submit to QC functionality to be implemented');
+            const deliverableName = prompt('Enter deliverable file name (e.g., "BPR_Final_v1.pdf"):');
+            if (!deliverableName) return;
+
+            const deliverableType = prompt('Enter deliverable type (e.g., "BPR Report", "TSR Final", "EDD Report"):') || 'Report';
+            const reviewer = prompt('Assign reviewer to:') || 'Vikram Sharma';
+
+            const newQCItem = {
+                id: `QC-${Date.now()}`,
+                matterId: matterId,
+                documentId: '',
+                deliverableName: deliverableName,
+                deliverableType: deliverableType,
+                submittedBy: 'Current User',
+                submittedOn: new Date().toISOString(),
+                reviewer: reviewer,
+                qcChecklist: 'Standard QC Checklist',
+                reviewerComments: '',
+                qcStatus: 'Pending',
+                qcDecisionDate: ''
+            };
+
+            legalCRM.create('qcItems', newQCItem);
+            alert('Document submitted to QC successfully!');
+            renderQCTab();
         }
     </script>
     <script src="js/navigation.js"></script>
