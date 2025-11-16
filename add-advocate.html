@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Advocate - Legal CRM</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-top: 3px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .required-mark {
+            color: #e74c3c;
+            margin-left: 3px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        /* Document Upload Section */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .document-upload-box {
+            background: #f8f9fa;
+            border: 2px dashed #bdc3c7;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .document-upload-box:hover {
+            border-color: #3498db;
+            background: #ecf0f1;
+        }
+
+        .document-upload-box.has-file {
+            border-style: solid;
+            border-color: #27ae60;
+            background: #d4edda;
+        }
+
+        .doc-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .doc-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .doc-subtitle {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            opacity: 0.9;
+        }
+
+        .file-name {
+            font-size: 12px;
+            color: #27ae60;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .remove-file {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        /* Chips for multi-select */
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .chip {
+            background: #e3f2fd;
+            color: #2196f3;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chip-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .chip-input {
+            padding: 10px;
+            border: 2px solid #ecf0f1;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        /* Bank Details Grid */
+        .bank-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Compliance Checklist */
+        .compliance-checklist {
+            background: #fff8e1;
+            border-left: 4px solid #f39c12;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .compliance-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .compliance-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .compliance-item label {
+            margin-bottom: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        /* Progress Indicator */
+        .progress-indicator {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: 700;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .step-number.completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .step-label.active {
+            color: #2c3e50;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Phase 2</div>
+            <a href="advocates-management.html" class="nav-item active">
+                <div class="nav-icon">👨‍⚖️</div>
+                <div class="nav-label">Empaneled Advocates</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="audit-trail.html" class="nav-item">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-label">Audit Trail</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h2>Add New Advocate</h2>
+            <button class="btn-add" onclick="window.location.href='advocates-management.html'">
+                <span style="font-size: 18px;">←</span> Back to List
+            </button>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="progress-indicator">
+            <div class="progress-steps">
+                <div class="progress-step">
+                    <div class="step-number active">1</div>
+                    <div class="step-label active">Personal Details</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Professional Info</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">3</div>
+                    <div class="step-label">Documents</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Banking & Compliance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-container">
+            <form id="advocateOnboardingForm">
+                <!-- Section 1: Personal Information -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">👤</div>
+                        <div>
+                            <div class="section-title">Personal Information</div>
+                            <div class="section-subtitle">Basic details of the advocate</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name <span class="required-mark">*</span></label>
+                            <input type="text" id="advocateName" required placeholder="Advocate Full Name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span class="required-mark">*</span></label>
+                            <input type="email" id="advocateEmail" required placeholder="email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number <span class="required-mark">*</span></label>
+                            <input type="tel" id="advocatePhone" required placeholder="+91-XXXXX-XXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label>Alternate Contact</label>
+                            <input type="tel" id="alternatePhone" placeholder="+91-XXXXX-XXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label>Date of Birth <span class="required-mark">*</span></label>
+                            <input type="date" id="dateOfBirth" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Gender <span class="required-mark">*</span></label>
+                            <select id="gender" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Current Address <span class="required-mark">*</span></label>
+                            <textarea id="currentAddress" required placeholder="Complete address with landmark"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>City <span class="required-mark">*</span></label>
+                            <input type="text" id="city" required placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label>State <span class="required-mark">*</span></label>
+                            <select id="state" required>
+                                <option value="">Select State</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="Rajasthan">Rajasthan</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="West Bengal">West Bengal</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Haryana">Haryana</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>PIN Code <span class="required-mark">*</span></label>
+                            <input type="text" id="pinCode" required placeholder="110001" maxlength="6">
+                        </div>
+                        <div class="form-group">
+                            <label>Emergency Contact Name</label>
+                            <input type="text" id="emergencyContactName" placeholder="Contact person name">
+                        </div>
+                        <div class="form-group">
+                            <label>Emergency Contact Number</label>
+                            <input type="tel" id="emergencyContactNumber" placeholder="+91-XXXXX-XXXXX">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Professional Information -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">⚖️</div>
+                        <div>
+                            <div class="section-title">Professional Information</div>
+                            <div class="section-subtitle">Bar Council and practice details</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Bar Council Number <span class="required-mark">*</span></label>
+                            <input type="text" id="barCouncilNo" required placeholder="D/1234/2008">
+                            <div class="form-help">Format: State/Number/Year</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Bar Council State <span class="required-mark">*</span></label>
+                            <select id="barCouncilState" required>
+                                <option value="">Select State</option>
+                                <option value="Delhi">Delhi Bar Council</option>
+                                <option value="Maharashtra">Maharashtra Bar Council</option>
+                                <option value="Karnataka">Karnataka Bar Council</option>
+                                <option value="Tamil Nadu">Tamil Nadu Bar Council</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh Bar Council</option>
+                                <option value="All India">Bar Council of India</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Enrollment Year <span class="required-mark">*</span></label>
+                            <input type="number" id="enrollmentYear" required placeholder="2008" min="1960" max="2025">
+                        </div>
+                        <div class="form-group">
+                            <label>Years of Experience <span class="required-mark">*</span></label>
+                            <input type="number" id="experienceYears" required placeholder="10" min="0" max="70">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Specialization Areas <span class="required-mark">*</span></label>
+                            <div class="chips-container" id="specializationChips"></div>
+                            <input type="text" id="specializationInput" class="chip-input" placeholder="Type and press Enter to add specialization">
+                            <div class="form-help">Examples: Corporate Law, Criminal Law, Family Law, Intellectual Property, etc.</div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Courts of Practice <span class="required-mark">*</span></label>
+                            <div class="chips-container" id="courtsChips"></div>
+                            <input type="text" id="courtsInput" class="chip-input" placeholder="Type and press Enter to add court">
+                            <div class="form-help">Examples: Supreme Court of India, Delhi High Court, District Court, etc.</div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Educational Qualifications <span class="required-mark">*</span></label>
+                            <div class="chips-container" id="qualificationsChips"></div>
+                            <input type="text" id="qualificationsInput" class="chip-input" placeholder="Type and press Enter to add qualification">
+                            <div class="form-help">Examples: B.A. LL.B, LL.M - Corporate Law, Diploma in IPR, etc.</div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Languages Known <span class="required-mark">*</span></label>
+                            <div class="chips-container" id="languagesChips"></div>
+                            <input type="text" id="languagesInput" class="chip-input" placeholder="Type and press Enter to add language">
+                            <div class="form-help">Examples: English, Hindi, Tamil, etc.</div>
+                        </div>
+                        <div class="form-group">
+                            <label>Availability Status <span class="required-mark">*</span></label>
+                            <select id="availabilityStatus" required>
+                                <option value="Available">Available</option>
+                                <option value="Busy">Busy</option>
+                                <option value="On Leave">On Leave</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Mode of Communication</label>
+                            <select id="preferredMode">
+                                <option value="Email">Email</option>
+                                <option value="Phone">Phone</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Financial Details -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">💰</div>
+                        <div>
+                            <div class="section-title">Financial Information</div>
+                            <div class="section-subtitle">Billing rates and payment details</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Hourly Rate (₹) <span class="required-mark">*</span></label>
+                            <input type="number" id="hourlyRate" required placeholder="8000" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Monthly Retainer Rate (₹)</label>
+                            <input type="number" id="retainerRate" placeholder="150000" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Consultation Fee (₹)</label>
+                            <input type="number" id="consultationFee" placeholder="5000" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Court Appearance Fee (₹)</label>
+                            <input type="number" id="courtAppearanceFee" placeholder="10000" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 4: Bank Account Details -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">🏦</div>
+                        <div>
+                            <div class="section-title">Bank Account Details</div>
+                            <div class="section-subtitle">For payment processing</div>
+                        </div>
+                    </div>
+
+                    <div class="bank-grid">
+                        <div class="form-group">
+                            <label>Account Holder Name <span class="required-mark">*</span></label>
+                            <input type="text" id="accountName" required placeholder="As per bank records">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Number <span class="required-mark">*</span></label>
+                            <input type="text" id="accountNumber" required placeholder="1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label>IFSC Code <span class="required-mark">*</span></label>
+                            <input type="text" id="ifscCode" required placeholder="HDFC0001234">
+                        </div>
+                        <div class="form-group">
+                            <label>Bank Name <span class="required-mark">*</span></label>
+                            <input type="text" id="bankName" required placeholder="HDFC Bank">
+                        </div>
+                        <div class="form-group">
+                            <label>Branch Name <span class="required-mark">*</span></label>
+                            <input type="text" id="branchName" required placeholder="Connaught Place">
+                        </div>
+                        <div class="form-group">
+                            <label>Account Type <span class="required-mark">*</span></label>
+                            <select id="accountType" required>
+                                <option value="">Select Type</option>
+                                <option value="Savings">Savings Account</option>
+                                <option value="Current">Current Account</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 5: Compliance & KYC -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">📋</div>
+                        <div>
+                            <div class="section-title">Compliance & KYC Details</div>
+                            <div class="section-subtitle">PAN, Aadhaar, GST information</div>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>PAN Number <span class="required-mark">*</span></label>
+                            <input type="text" id="panNumber" required placeholder="ABCDE1234F" maxlength="10" style="text-transform: uppercase;">
+                        </div>
+                        <div class="form-group">
+                            <label>Aadhaar Number <span class="required-mark">*</span></label>
+                            <input type="text" id="aadhaarNumber" required placeholder="XXXX-XXXX-XXXX" maxlength="14">
+                        </div>
+                        <div class="form-group">
+                            <label>GST Number (if applicable)</label>
+                            <input type="text" id="gstNumber" placeholder="07ABCDE1234F1Z5" maxlength="15" style="text-transform: uppercase;">
+                        </div>
+                        <div class="form-group">
+                            <label>Professional Tax Number (if applicable)</label>
+                            <input type="text" id="professionalTaxNo" placeholder="PT Number">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 6: Document Uploads -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">📎</div>
+                        <div>
+                            <div class="section-title">Document Uploads</div>
+                            <div class="section-subtitle">Upload required documents (PDF, JPG, PNG - Max 5MB each)</div>
+                        </div>
+                    </div>
+
+                    <div class="documents-grid">
+                        <!-- Aadhaar Card -->
+                        <div class="document-upload-box" id="aadhaarBox" onclick="document.getElementById('aadhaarFile').click()">
+                            <div class="doc-icon">🆔</div>
+                            <div class="doc-title">Aadhaar Card</div>
+                            <div class="doc-subtitle">Front & Back (Required)</div>
+                            <input type="file" id="aadhaarFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('aadhaar', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="aadhaarFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- PAN Card -->
+                        <div class="document-upload-box" id="panBox" onclick="document.getElementById('panFile').click()">
+                            <div class="doc-icon">💳</div>
+                            <div class="doc-title">PAN Card</div>
+                            <div class="doc-subtitle">Copy (Required)</div>
+                            <input type="file" id="panFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('pan', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="panFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- Bar Council Certificate -->
+                        <div class="document-upload-box" id="barCouncilBox" onclick="document.getElementById('barCouncilFile').click()">
+                            <div class="doc-icon">⚖️</div>
+                            <div class="doc-title">Bar Council Certificate</div>
+                            <div class="doc-subtitle">Enrollment Certificate (Required)</div>
+                            <input type="file" id="barCouncilFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('barCouncil', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="barCouncilFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- Address Proof -->
+                        <div class="document-upload-box" id="addressBox" onclick="document.getElementById('addressFile').click()">
+                            <div class="doc-icon">🏠</div>
+                            <div class="doc-title">Address Proof</div>
+                            <div class="doc-subtitle">Utility Bill/Rental (Required)</div>
+                            <input type="file" id="addressFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('address', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="addressFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- Bank Statement/Cancelled Cheque -->
+                        <div class="document-upload-box" id="bankBox" onclick="document.getElementById('bankFile').click()">
+                            <div class="doc-icon">🏦</div>
+                            <div class="doc-title">Bank Statement</div>
+                            <div class="doc-subtitle">Cancelled Cheque (Required)</div>
+                            <input type="file" id="bankFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('bank', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="bankFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- GST Certificate -->
+                        <div class="document-upload-box" id="gstBox" onclick="document.getElementById('gstFile').click()">
+                            <div class="doc-icon">📄</div>
+                            <div class="doc-title">GST Certificate</div>
+                            <div class="doc-subtitle">If applicable (Optional)</div>
+                            <input type="file" id="gstFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('gst', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="gstFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- Educational Certificates -->
+                        <div class="document-upload-box" id="educationBox" onclick="document.getElementById('educationFile').click()">
+                            <div class="doc-icon">🎓</div>
+                            <div class="doc-title">Educational Certificates</div>
+                            <div class="doc-subtitle">Degree/Diploma (Required)</div>
+                            <input type="file" id="educationFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('education', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="educationFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- Court Registration -->
+                        <div class="document-upload-box" id="courtBox" onclick="document.getElementById('courtFile').click()">
+                            <div class="doc-icon">🏛️</div>
+                            <div class="doc-title">Court Registration</div>
+                            <div class="doc-subtitle">Supreme/High Court (Optional)</div>
+                            <input type="file" id="courtFile" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="handleFileUpload('court', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="courtFileName" class="file-name"></div>
+                        </div>
+
+                        <!-- Passport Size Photo -->
+                        <div class="document-upload-box" id="photoBox" onclick="document.getElementById('photoFile').click()">
+                            <div class="doc-icon">📸</div>
+                            <div class="doc-title">Passport Photo</div>
+                            <div class="doc-subtitle">Recent Photo (Required)</div>
+                            <input type="file" id="photoFile" class="file-input" accept=".jpg,.jpeg,.png" onchange="handleFileUpload('photo', this)">
+                            <button type="button" class="upload-btn">Choose File</button>
+                            <div id="photoFileName" class="file-name"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 7: Compliance Checklist -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">✅</div>
+                        <div>
+                            <div class="section-title">Verification & Compliance</div>
+                            <div class="section-subtitle">Mandatory declarations</div>
+                        </div>
+                    </div>
+
+                    <div class="compliance-checklist">
+                        <div class="compliance-item">
+                            <input type="checkbox" id="verifyInfo" required>
+                            <label for="verifyInfo">I verify that all information provided is accurate and complete</label>
+                        </div>
+                        <div class="compliance-item">
+                            <input type="checkbox" id="barActive" required>
+                            <label for="barActive">I confirm that my Bar Council enrollment is active and in good standing</label>
+                        </div>
+                        <div class="compliance-item">
+                            <input type="checkbox" id="noDisciplinary" required>
+                            <label for="noDisciplinary">I declare that I have no pending disciplinary proceedings</label>
+                        </div>
+                        <div class="compliance-item">
+                            <input type="checkbox" id="acceptTerms" required>
+                            <label for="acceptTerms">I accept the terms and conditions of empanelment</label>
+                        </div>
+                        <div class="compliance-item">
+                            <input type="checkbox" id="dataConsent" required>
+                            <label for="dataConsent">I consent to processing of my personal data for onboarding purposes</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 8: Additional Notes -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <div class="section-icon">📝</div>
+                        <div>
+                            <div class="section-title">Additional Information</div>
+                            <div class="section-subtitle">Optional remarks</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Special Skills / Certifications</label>
+                        <textarea id="specialSkills" placeholder="Any special skills, certifications, or notable achievements"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Previous Experience / Notable Cases</label>
+                        <textarea id="previousExperience" placeholder="Brief summary of previous experience or notable cases handled"></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Additional Remarks / Notes</label>
+                        <textarea id="additionalNotes" placeholder="Any other information you'd like to add"></textarea>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='advocates-management.html'">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                    <button type="submit" class="btn btn-primary">Submit & Onboard Advocate</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        // Initialize chips arrays
+        let specializations = [];
+        let courts = [];
+        let qualifications = [];
+        let languages = [];
+        let uploadedDocuments = {};
+
+        // Document upload handler
+        function handleFileUpload(type, input) {
+            event.stopPropagation();
+            const file = input.files[0];
+
+            if (file) {
+                // Check file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    input.value = '';
+                    return;
+                }
+
+                // Store file reference
+                uploadedDocuments[type] = file;
+
+                // Update UI
+                const box = document.getElementById(type + 'Box');
+                const fileName = document.getElementById(type + 'FileName');
+
+                box.classList.add('has-file');
+                fileName.innerHTML = `
+                    ✓ ${file.name} (${(file.size / 1024).toFixed(2)} KB)
+                    <button type="button" class="remove-file" onclick="removeFile('${type}', event)">Remove</button>
+                `;
+            }
+        }
+
+        function removeFile(type, event) {
+            event.stopPropagation();
+
+            const input = document.getElementById(type + 'File');
+            const box = document.getElementById(type + 'Box');
+            const fileName = document.getElementById(type + 'FileName');
+
+            input.value = '';
+            box.classList.remove('has-file');
+            fileName.innerHTML = '';
+            delete uploadedDocuments[type];
+        }
+
+        // Chips functionality
+        function setupChipsInput(inputId, chipsId, array) {
+            const input = document.getElementById(inputId);
+            const container = document.getElementById(chipsId);
+
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const value = input.value.trim();
+                    if (value && !array.includes(value)) {
+                        array.push(value);
+                        renderChips(chipsId, array);
+                        input.value = '';
+                    }
+                }
+            });
+        }
+
+        function renderChips(containerId, array) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = array.map((item, index) => `
+                <div class="chip">
+                    ${item}
+                    <span class="chip-remove" onclick="removeChip('${containerId}', ${index})">×</span>
+                </div>
+            `).join('');
+        }
+
+        function removeChip(containerId, index) {
+            let array;
+            if (containerId === 'specializationChips') array = specializations;
+            else if (containerId === 'courtsChips') array = courts;
+            else if (containerId === 'qualificationsChips') array = qualifications;
+            else if (containerId === 'languagesChips') array = languages;
+
+            array.splice(index, 1);
+            renderChips(containerId, array);
+        }
+
+        // Initialize chips inputs
+        document.addEventListener('DOMContentLoaded', function() {
+            setupChipsInput('specializationInput', 'specializationChips', specializations);
+            setupChipsInput('courtsInput', 'courtsChips', courts);
+            setupChipsInput('qualificationsInput', 'qualificationsChips', qualifications);
+            setupChipsInput('languagesInput', 'languagesChips', languages);
+        });
+
+        // Form submission
+        document.getElementById('advocateOnboardingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Validate required chips
+            if (specializations.length === 0) {
+                alert('Please add at least one specialization area');
+                return;
+            }
+            if (courts.length === 0) {
+                alert('Please add at least one court of practice');
+                return;
+            }
+            if (qualifications.length === 0) {
+                alert('Please add at least one qualification');
+                return;
+            }
+            if (languages.length === 0) {
+                alert('Please add at least one language');
+                return;
+            }
+
+            // Validate required documents
+            const requiredDocs = ['aadhaar', 'pan', 'barCouncil', 'address', 'bank', 'education', 'photo'];
+            const missingDocs = requiredDocs.filter(doc => !uploadedDocuments[doc]);
+
+            if (missingDocs.length > 0) {
+                alert('Please upload all required documents: ' + missingDocs.join(', '));
+                return;
+            }
+
+            // Create advocate object
+            const advocateData = {
+                id: legalCRM.generateId('advocates', 'ADV'),
+                name: document.getElementById('advocateName').value,
+                email: document.getElementById('advocateEmail').value,
+                phone: document.getElementById('advocatePhone').value,
+                alternatePhone: document.getElementById('alternatePhone').value,
+                dateOfBirth: document.getElementById('dateOfBirth').value,
+                gender: document.getElementById('gender').value,
+                currentAddress: document.getElementById('currentAddress').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                location: document.getElementById('city').value,
+                pinCode: document.getElementById('pinCode').value,
+                emergencyContact: {
+                    name: document.getElementById('emergencyContactName').value,
+                    phone: document.getElementById('emergencyContactNumber').value
+                },
+                barCouncilNo: document.getElementById('barCouncilNo').value,
+                barCouncilState: document.getElementById('barCouncilState').value,
+                enrollmentYear: document.getElementById('enrollmentYear').value,
+                experienceYears: parseInt(document.getElementById('experienceYears').value),
+                specialization: specializations,
+                courtsOfPractice: courts,
+                qualifications: qualifications,
+                languagesKnown: languages,
+                availabilityStatus: document.getElementById('availabilityStatus').value,
+                preferredMode: document.getElementById('preferredMode').value,
+                hourlyRate: parseInt(document.getElementById('hourlyRate').value),
+                retainerRate: parseInt(document.getElementById('retainerRate').value) || 0,
+                consultationFee: parseInt(document.getElementById('consultationFee').value) || 0,
+                courtAppearanceFee: parseInt(document.getElementById('courtAppearanceFee').value) || 0,
+                bankAccountDetails: {
+                    accountName: document.getElementById('accountName').value,
+                    accountNumber: document.getElementById('accountNumber').value,
+                    ifscCode: document.getElementById('ifscCode').value,
+                    bankName: document.getElementById('bankName').value,
+                    branch: document.getElementById('branchName').value,
+                    accountType: document.getElementById('accountType').value
+                },
+                panNumber: document.getElementById('panNumber').value,
+                aadhaarNumber: document.getElementById('aadhaarNumber').value,
+                gstNumber: document.getElementById('gstNumber').value || '',
+                professionalTaxNo: document.getElementById('professionalTaxNo').value || '',
+                documents: Object.keys(uploadedDocuments),
+                specialSkills: document.getElementById('specialSkills').value,
+                previousExperience: document.getElementById('previousExperience').value,
+                notes: document.getElementById('additionalNotes').value,
+                rating: 0,
+                casesHandled: 0,
+                successRate: 0,
+                assignedCases: [],
+                activeAssignments: 0,
+                totalEarnings: 0,
+                empaneledDate: new Date().toISOString().split('T')[0],
+                status: 'Active',
+                onboardingComplete: true
+            };
+
+            // Save to database
+            legalCRM.create('advocates', advocateData);
+
+            alert('Advocate onboarded successfully!\n\nAdvocate ID: ' + advocateData.id + '\nName: ' + advocateData.name);
+
+            // Redirect to advocates management
+            window.location.href = 'advocates-management.html';
+        });
+
+        function saveDraft() {
+            const draftData = {
+                name: document.getElementById('advocateName').value,
+                email: document.getElementById('advocateEmail').value,
+                phone: document.getElementById('advocatePhone').value,
+                // ... other fields
+            };
+
+            // Save to localStorage as draft
+            localStorage.setItem('advocateDraft', JSON.stringify(draftData));
+            alert('Draft saved successfully!');
+        }
+    </script>
+</body>
+</html>

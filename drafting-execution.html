@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execution, E-sign & Obligations - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid #eef2ff;
+        }
+        .summary-card h4 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .summary-card .value {
+            font-size: 30px;
+            color: #0f172a;
+            font-weight: 700;
+        }
+        .panel {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid #eef2ff;
+            margin-bottom: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        thead {
+            background: #f8fafc;
+        }
+        tbody tr:not(:last-child) td {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .obligation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+        .obligation-card {
+            border: 1px solid #cbd5f5;
+            border-radius: 14px;
+            padding: 16px;
+            background: #f8fafc;
+        }
+        .obligation-card h4 {
+            margin: 0 0 6px;
+            font-size: 16px;
+        }
+        .status-pill {
+            display: inline-flex;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-pill[data-status="Upcoming"] { background: #e0f2fe; color: #0369a1; }
+        .status-pill[data-status="Critical"] { background: #fee2e2; color: #b91c1c; }
+        .status-pill[data-status="Completed"] { background: #dcfce7; color: #166534; }
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .timeline-step {
+            background: #0f172a;
+            color: white;
+            border-radius: 16px;
+            padding: 16px;
+        }
+        .timeline-step h4 {
+            margin: 0 0 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Post-Approval Controls</p>
+                <h1>Execution, E-sign & Obligations</h1>
+                <p class="lead">Track signing, storage, alerts, and renewals for every contract to avoid surprises.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-primary" href="#" onclick="alert('E-sign integration coming soon'); return false;">Send for E-sign</a>
+                <a class="btn btn-secondary" href="drafting-dashboard.html">Back to Drafting Hub</a>
+            </div>
+        </header>
+
+        <div class="summary-grid" id="summaryGrid"></div>
+
+        <div class="panel">
+            <div class="panel-header">
+                <h2>Execution Tracker</h2>
+            </div>
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Parties</th>
+                            <th>Start / Expiry</th>
+                            <th>Notice Period</th>
+                            <th>Renewal Type</th>
+                            <th>Next Trigger</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="executionTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="panel">
+            <h2>Obligations & Alerts</h2>
+            <div class="obligation-grid" id="obligationGrid"></div>
+        </div>
+
+        <div class="panel">
+            <h2>Execution Workflow</h2>
+            <div class="timeline" id="timeline"></div>
+        </div>
+    </div>
+
+    <script src="js/drafting-data.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderSummary();
+            renderExecutionTable();
+            renderObligations();
+            renderTimeline();
+        });
+
+        function renderSummary() {
+            const contracts = draftingData.obligations.length;
+            const critical = draftingData.obligations.filter(o => o.status === 'Critical').length;
+            const autoRenew = draftingData.obligations.filter(o => o.renewalType === 'Auto-renew').length;
+            const summaryItems = [
+                { label: 'Active Contracts', value: contracts, meta: 'Tracked in repository' },
+                { label: 'Critical Alerts', value: critical, meta: 'Need attention this month' },
+                { label: 'Auto-Renew Agreements', value: autoRenew, meta: 'Monitor for notice deadlines' },
+                { label: 'Obligation Owners', value: new Set(draftingData.obligations.map(o => o.owner)).size, meta: 'Stakeholders mapped' }
+            ];
+            const container = document.getElementById('summaryGrid');
+            container.innerHTML = summaryItems.map(item => `
+                <div class="summary-card">
+                    <h4>${item.label}</h4>
+                    <div class="value">${item.value}</div>
+                    <div class="meta">${item.meta}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderExecutionTable() {
+            const tbody = document.getElementById('executionTable');
+            tbody.innerHTML = draftingData.obligations.map(item => `
+                <tr>
+                    <td>
+                        <strong>${item.document}</strong>
+                        <div class="muted">${item.id}</div>
+                    </td>
+                    <td>${item.party}</td>
+                    <td>${item.startDate} → ${item.expiryDate}</td>
+                    <td>${item.noticePeriod}</td>
+                    <td>${item.renewalType}</td>
+                    <td>${item.nextTrigger}</td>
+                    <td><span class="status-pill" data-status="${item.status}">${item.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderObligations() {
+            const grid = document.getElementById('obligationGrid');
+            grid.innerHTML = draftingData.obligations.map(item => `
+                <div class="obligation-card">
+                    <div>
+                        <h4>${item.document}</h4>
+                        <span class="status-pill" data-status="${item.status}">${item.status}</span>
+                    </div>
+                    <p style="font-size:14px; color:#475569;">${item.obligation}</p>
+                    <p class="muted">Owner: ${item.owner}</p>
+                    <p class="muted">Next Trigger: ${item.nextTrigger}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderTimeline() {
+            const steps = [
+                { title: 'Finalize PDF', description: 'Lock clean version & watermark executed copies.' },
+                { title: 'E-sign Dispatch', description: 'Send via SignDesk/Adobe with sequential order.' },
+                { title: 'Execution Proof', description: 'Capture signed at, signatories and witness details.' },
+                { title: 'Repository Update', description: 'Store in matter/account folder with metadata.' },
+                { title: 'Renewal Alerts', description: 'Auto-create reminders for T-90/T-60/T-30 days.' }
+            ];
+            document.getElementById('timeline').innerHTML = steps.map(step => `
+                <div class="timeline-step">
+                    <h4>${step.title}</h4>
+                    <p style="font-size:14px;line-height:1.6;">${step.description}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

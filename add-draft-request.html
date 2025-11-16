@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Drafting Request - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .form-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid #eef2ff;
+        }
+        .form-card h3 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #0f172a;
+        }
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+            display: block;
+            margin-bottom: 6px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+        }
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            justify-content: flex-end;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Draft Request Intake</p>
+                <h1>Create Drafting Request</h1>
+                <p class="lead">Capture context, SLA, allocation, and attachments for the drafting team.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-secondary" href="drafting-requests.html">Back to Requests</a>
+            </div>
+        </header>
+
+        <form id="draftRequestForm">
+            <div class="form-card">
+                <h3>Basic Details</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="title">Request Title *</label>
+                        <input type="text" id="title" required placeholder="NDA with ABC Developers">
+                    </div>
+                    <div>
+                        <label for="documentType">Document Type *</label>
+                        <select id="documentType" required>
+                            <option value="">Select</option>
+                            <option value="NDA">NDA</option>
+                            <option value="Loan Agreement">Loan Agreement</option>
+                            <option value="Service Agreement">Service Agreement</option>
+                            <option value="Policy">Policy</option>
+                            <option value="Notice / Reply">Notice / Reply</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="linkedTo">Linked To *</label>
+                        <input type="text" id="linkedTo" required placeholder="Lead LD-1045 / Matter MAT-204">
+                    </div>
+                    <div>
+                        <label for="practiceArea">Practice Area *</label>
+                        <select id="practiceArea" required>
+                            <option value="">Select</option>
+                            <option value="Banking">Banking</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Compliance">Compliance</option>
+                            <option value="IT/Procurement">IT/Procurement</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="priority">Priority *</label>
+                        <select id="priority" required>
+                            <option value="High">High</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="dueDate">Due Date *</label>
+                        <input type="date" id="dueDate" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3>Request Context</h3>
+                <div class="form-grid">
+                    <div style="grid-column: span 2;">
+                        <label for="description">Purpose / Description *</label>
+                        <textarea id="description" required placeholder="Brief the drafter on business objective, negotiation position, and required clauses."></textarea>
+                    </div>
+                    <div>
+                        <label for="clientName">Client / Bank</label>
+                        <input type="text" id="clientName" placeholder="Axis Bank / ABC Developers">
+                    </div>
+                    <div>
+                        <label for="requester">Requesting User *</label>
+                        <input type="text" id="requester" required placeholder="Harish Kumar">
+                    </div>
+                    <div>
+                        <label for="assignee">Assign To</label>
+                        <input type="text" id="assignee" placeholder="Meera Patel / External Counsel">
+                    </div>
+                    <div>
+                        <label for="slaHours">SLA (Hours)</label>
+                        <input type="number" id="slaHours" min="24" step="12" value="48">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <h3>Attachments & Notes</h3>
+                <div class="form-grid">
+                    <div>
+                        <label for="attachmentLinks">Attachment Links</label>
+                        <textarea id="attachmentLinks" placeholder="Share SharePoint / Drive links for sanction letters, emails, MIS, etc."></textarea>
+                    </div>
+                    <div>
+                        <label for="notes">Internal Notes</label>
+                        <textarea id="notes" placeholder="Preferred clauses, negotiation history, reviewer instructions."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/drafting-data.js"></script>
+    <script>
+        document.getElementById('draftRequestForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const request = {
+                id: `DR-${new Date().getFullYear()}-${Math.floor(Math.random()*9000+1000)}`,
+                title: document.getElementById('title').value,
+                type: document.getElementById('documentType').value,
+                linkedTo: document.getElementById('linkedTo').value,
+                practiceArea: document.getElementById('practiceArea').value,
+                priority: document.getElementById('priority').value,
+                dueDate: document.getElementById('dueDate').value,
+                description: document.getElementById('description').value,
+                bank: document.getElementById('clientName').value,
+                requester: document.getElementById('requester').value,
+                assignee: document.getElementById('assignee').value,
+                slaHours: parseInt(document.getElementById('slaHours').value, 10) || 48,
+                attachments: document.getElementById('attachmentLinks').value ? document.getElementById('attachmentLinks').value.split('\n').length : 0,
+                status: 'New',
+                lastUpdated: new Date().toISOString().split('T')[0]
+            };
+            draftingStore.saveRequest(request);
+            event.target.reset();
+            alert(`Draft request ${request.id} submitted successfully!`);
+            window.location.href = 'drafting-requests.html';
+        });
+    </script>
+</body>
+</html>

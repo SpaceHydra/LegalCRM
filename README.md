@@ -75,28 +75,45 @@ A comprehensive Legal CRM platform built with HTML, CSS, and JavaScript featurin
     - Agenda and notes
     - Status management
 
+11. **Drafting & Contract Management** (`drafting-dashboard.html`, `drafting-requests.html`, `drafting-templates.html`, `drafting-clauses.html`, `drafting-execution.html`)
+    - Draft request intake with SLA tracking and workflow boards
+    - Template and clause libraries with versioning, tags, and merge fields
+    - Workspace tips plus AI-ready placeholders for clause insertion
+    - Execution, e-sign readiness, and renewal/obligation tracking
+
+> Detailed requirements live in `drafting_module.md` and every new HTML page above maps back to that blueprint.
+
 ## 📁 File Structure
+
 
 ```
 LegalCRM/
-├── dashboard.html              # Main dashboard (dynamic)
-├── lead-management.html        # Lead module
-├── client-management.html      # Client module
-├── project-management.html     # Project/Matter module
-├── task-management.html        # Task module
-├── document-management.html    # Document module
-├── user-management.html        # User & Role module
-├── reporting.html              # Analytics & Reports
-├── billing.html                # Billing & Invoices
-├── calendar.html               # Meeting Calendar
-├── legal_crm_dashboard (1).html # Original static dashboard
-├── fsd.md                      # Functional Specification
+├── dashboard.html                  # Main dashboard (dynamic)
+├── drafting-dashboard.html         # Drafting hub overview
+├── drafting-requests.html          # Request queue & workflow
+├── drafting-templates.html         # Template library
+├── drafting-clauses.html           # Clause bank
+├── drafting-execution.html         # Execution & obligations
+├── add-draft-request.html          # Intake form
+├── lead-management.html            # Lead module
+├── client-management.html          # Client module
+├── project-management.html         # Project/Matter module
+├── task-management.html            # Task module
+├── document-management.html        # Document module
+├── user-management.html            # User & Role module
+├── reporting.html                  # Analytics & Reports
+├── billing.html                    # Billing & Invoices
+├── calendar.html                   # Meeting Calendar
+├── legal_crm_dashboard (1).html    # Original static dashboard
+├── fsd.md                          # Functional Specification
 ├── js/
-│   ├── data.js                 # Shared data layer (localStorage)
-│   └── common.js               # Common utilities
+│   ├── data.js                     # Shared data layer (localStorage)
+│   ├── drafting-data.js            # Drafting module sample data + helpers
+│   └── common.js                   # Common utilities
 └── css/
-    └── common-styles.css       # Shared styles
+    └── common-styles.css           # Shared styles
 ```
+
 
 ## 🔧 Technical Features
 
