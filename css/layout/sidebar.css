@@ -1,0 +1,127 @@
+/* Legal CRM - Sidebar Navigation */
+
+.sidebar {
+    background: var(--secondary-dark);
+    color: #ecf0f1;
+    width: var(--sidebar-width);
+    position: fixed;
+    top: var(--topnav-height);
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    z-index: 999;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: var(--secondary-medium);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: var(--secondary-light);
+    border-radius: 3px;
+}
+
+.nav-section {
+    margin-bottom: var(--space-md);
+}
+
+.nav-section-title {
+    padding: 10px 20px;
+    font-size: var(--body-micro);
+    text-transform: uppercase;
+    color: #95a5a6;
+    font-weight: var(--weight-semibold);
+    letter-spacing: 1px;
+    margin-top: var(--space-md);
+}
+
+.nav-item {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #ecf0f1;
+    text-decoration: none;
+    border-left: 4px solid transparent;
+}
+
+.nav-item:hover {
+    background: var(--secondary-medium);
+    border-left-color: var(--info-color);
+    padding-left: 16px;
+}
+
+.nav-item.active {
+    background: var(--secondary-medium);
+    border-left-color: var(--info-color);
+    padding-left: 16px;
+    color: var(--info-color);
+}
+
+.nav-icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+}
+
+.nav-label {
+    flex: 1;
+    font-size: var(--body-regular);
+}
+
+.phase-badge {
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: var(--weight-semibold);
+    color: white;
+}
+
+.phase-badge.mvp {
+    background: var(--badge-mvp);
+}
+
+.phase-badge.phase2 {
+    background: var(--badge-phase2);
+}
+
+.phase-badge.phase3 {
+    background: var(--badge-phase3);
+}
+
+.phase-badge.future {
+    background: var(--badge-future);
+}
+
+/* Mobile Sidebar Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+}

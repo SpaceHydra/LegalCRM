@@ -1,0 +1,80 @@
+/* Legal CRM - Typography */
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: var(--weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--text-primary);
+}
+
+h1 {
+    font-size: var(--h1-size);
+    margin-bottom: var(--space-lg);
+}
+
+h2 {
+    font-size: var(--h2-size);
+    margin-bottom: var(--space-md);
+}
+
+h3 {
+    font-size: var(--h3-size);
+    margin-bottom: var(--space-md);
+}
+
+h4 {
+    font-size: var(--h4-size);
+    margin-bottom: var(--space-sm);
+}
+
+h5 {
+    font-size: var(--h5-size);
+    margin-bottom: var(--space-sm);
+}
+
+p {
+    margin-bottom: var(--space-md);
+    line-height: var(--line-height-normal);
+}
+
+.lead {
+    font-size: var(--body-large);
+    color: var(--text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+.text-muted {
+    color: var(--text-muted);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.text-small {
+    font-size: var(--body-small);
+}
+
+.text-tiny {
+    font-size: var(--body-tiny);
+}
+
+.text-bold {
+    font-weight: var(--weight-semibold);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.eyebrow {
+    font-size: var(--body-tiny);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: var(--space-xs);
+    font-weight: var(--weight-semibold);
+}

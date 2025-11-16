@@ -1,0 +1,231 @@
+/* Legal CRM - Drafting Module Specific Styles */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--padding-widget);
+}
+
+.summary-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-light);
+    border: 1px solid #eef2ff;
+    transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-3px);
+}
+
+.summary-card h4 {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.summary-card .value {
+    font-size: 32px;
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+}
+
+.summary-card .meta {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+    margin-top: var(--space-xs);
+}
+
+/* Quick Actions Grid */
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+}
+
+.quick-actions a {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    border-radius: var(--radius-lg);
+    color: white;
+    padding: 18px 22px;
+    text-decoration: none;
+    font-weight: var(--weight-semibold);
+    box-shadow: 0 10px 20px rgba(15, 118, 110, 0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.quick-actions a span {
+    font-size: var(--body-regular);
+    font-weight: var(--weight-normal);
+    opacity: 0.95;
+}
+
+.quick-actions a:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 24px rgba(15, 118, 110, 0.35);
+}
+
+/* Two Column Layout */
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-lg);
+    margin-top: var(--margin-section);
+}
+
+@media (max-width: 1024px) {
+    .two-column-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Renewals List */
+.renewals-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.renewal-item {
+    padding: var(--space-md);
+    border: 1px dashed #cbd5f5;
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+}
+
+.renewal-item strong {
+    display: block;
+    font-size: var(--body-regular);
+    color: var(--text-primary);
+    margin-bottom: var(--space-xs);
+}
+
+/* Workflow Grid */
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: var(--space-md);
+}
+
+.workflow-step {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    padding: var(--space-lg);
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.workflow-step:hover {
+    border-color: var(--info-color);
+    box-shadow: var(--shadow-light);
+}
+
+.workflow-step h4 {
+    font-size: var(--body-regular);
+    margin-bottom: var(--space-sm);
+    color: var(--text-primary);
+}
+
+.workflow-step span {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+}
+
+/* Tips List */
+.tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.tips-list li {
+    list-style: none;
+    padding-left: 28px;
+    position: relative;
+    font-size: var(--body-regular);
+    color: var(--text-primary);
+}
+
+.tips-list li::before {
+    content: "✦";
+    position: absolute;
+    left: 0;
+    color: #8b5cf6;
+    font-size: 18px;
+}
+
+/* Template Card Styles */
+.template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+}
+
+.template-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    box-shadow: var(--shadow-light);
+    border: 1px solid #eef2ff;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.3s ease;
+}
+
+.template-card:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-3px);
+}
+
+.template-card h3 {
+    margin: 0;
+    font-size: var(--h4-size);
+    color: var(--text-primary);
+}
+
+.template-meta {
+    font-size: var(--body-small);
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+/* Tag Styles */
+.tag {
+    font-size: var(--body-tiny);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    margin-right: var(--space-xs);
+    display: inline-block;
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: var(--space-lg);
+}
+
+.filters input,
+.filters select {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 2px solid var(--border-light);
+    font-size: var(--body-regular);
+}
+
+.filters input:focus,
+.filters select:focus {
+    outline: none;
+    border-color: var(--info-color);
+}

@@ -1,0 +1,134 @@
+/* Legal CRM - Buttons */
+
+.btn {
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    font-size: var(--body-regular);
+    font-weight: var(--weight-semibold);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+    box-shadow: var(--shadow-light);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
+}
+
+.btn-secondary {
+    background: white;
+    color: var(--primary-blue);
+    border: 2px solid var(--primary-blue);
+}
+
+.btn-secondary:hover {
+    background: var(--primary-blue);
+    color: white;
+}
+
+.btn-success {
+    background: var(--success-color);
+    color: white;
+}
+
+.btn-success:hover {
+    background: #229954;
+}
+
+.btn-danger {
+    background: var(--danger-color);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+}
+
+.btn-warning {
+    background: var(--warning-color);
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #e67e22;
+}
+
+.btn-info {
+    background: var(--info-color);
+    color: white;
+}
+
+.btn-info:hover {
+    background: #2980b9;
+}
+
+/* Gradient Buttons */
+.btn-gradient {
+    padding: 20px;
+    border: none;
+    color: white;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--body-regular);
+    font-weight: var(--weight-semibold);
+    transition: transform 0.3s ease;
+}
+
+.btn-gradient:hover {
+    transform: translateY(-3px);
+}
+
+.btn-gradient.purple {
+    background: var(--gradient-purple);
+}
+
+.btn-gradient.green {
+    background: var(--gradient-green);
+}
+
+.btn-gradient.pink {
+    background: var(--gradient-pink);
+}
+
+.btn-gradient.cyan {
+    background: var(--gradient-cyan);
+}
+
+.btn-gradient.orange {
+    background: var(--gradient-orange);
+}
+
+.btn-gradient.teal {
+    background: var(--gradient-teal);
+}
+
+/* Button Sizes */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: var(--body-small);
+}
+
+.btn-lg {
+    padding: 16px 32px;
+    font-size: var(--body-large);
+}
+
+/* Button States */
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+    transform: none;
+}

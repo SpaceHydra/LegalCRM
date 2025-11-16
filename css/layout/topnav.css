@@ -1,0 +1,138 @@
+/* Legal CRM - Top Navigation Bar */
+
+.top-nav {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-medium);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--topnav-height);
+    z-index: 1000;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    background: white;
+    color: var(--primary-blue);
+    width: 45px;
+    height: 45px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--weight-bold);
+    font-size: 20px;
+}
+
+.system-title h1 {
+    font-size: 22px;
+    font-weight: var(--weight-semibold);
+    margin-bottom: 2px;
+}
+
+.system-title p {
+    font-size: 12px;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-box {
+    background: rgba(255,255,255,0.2);
+    padding: 8px 15px;
+    border-radius: var(--radius-xl);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+}
+
+.search-box:focus-within {
+    background: rgba(255,255,255,0.3);
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    color: white;
+    outline: none;
+    width: 250px;
+    font-size: var(--body-regular);
+}
+
+.search-box input::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+.search-icon {
+    color: rgba(255,255,255,0.9);
+    font-size: 16px;
+}
+
+.notification-icon {
+    position: relative;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff4444;
+    color: white;
+    border-radius: var(--radius-full);
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--weight-semibold);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-purple);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--weight-bold);
+    font-size: 16px;
+    color: white;
+}
+
+.user-info .user-name {
+    font-weight: var(--weight-semibold);
+    font-size: var(--body-regular);
+}
+
+.user-info .user-role {
+    font-size: var(--body-micro);
+    opacity: 0.8;
+}
