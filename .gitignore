@@ -1,0 +1,30 @@
+# Claude Code configuration
+.claude/
+
+# Credentials and sensitive files
+credentials.md
+*.env
+*.key
+*.pem
+
+# Windows files
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+~*
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node modules (if you add Node.js later)
+node_modules/
+
+# Logs
+*.log
+logs/
