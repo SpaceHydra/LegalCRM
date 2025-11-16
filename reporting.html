@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Reporting - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .report-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .report-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card.green { border-left-color: #27ae60; }
+        .stat-card.blue { border-left-color: #2196f3; }
+        .stat-card.orange { border-left-color: #f39c12; }
+        .stat-card.purple { border-left-color: #9c27b0; }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .stat-change.positive {
+            color: #27ae60;
+        }
+
+        .stat-change.negative {
+            color: #e74c3c;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .chart-placeholder {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 60px 20px;
+            text-align: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+            text-transform: uppercase;
+        }
+
+        .filter-input, .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="legal_crm_dashboard (1).html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item active">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>📈 Basic Reporting & Analytics</h2>
+            <p>Key metrics and performance insights</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-group">
+                <label class="filter-label">Period</label>
+                <select class="filter-select" id="periodFilter" onchange="updateReports()">
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month" selected>This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">This Year</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">From Date</label>
+                <input type="date" class="filter-input" id="fromDate">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">To Date</label>
+                <input type="date" class="filter-input" id="toDate">
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">&nbsp;</label>
+                <button class="btn btn-primary" onclick="updateReports()">Generate Report</button>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">&nbsp;</label>
+                <button class="btn btn-success" onclick="exportReport()">📥 Export PDF</button>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="stats-grid">
+            <div class="stat-card green">
+                <div class="stat-value" id="totalRevenue">₹0</div>
+                <div class="stat-label">Total Revenue</div>
+                <div class="stat-change positive" id="revenueChange">+0% from last month</div>
+            </div>
+            <div class="stat-card blue">
+                <div class="stat-value" id="activeClients">0</div>
+                <div class="stat-label">Active Clients</div>
+                <div class="stat-change positive" id="clientsChange">+0 new clients</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="stat-value" id="activeProjects">0</div>
+                <div class="stat-label">Active Projects</div>
+                <div class="stat-change" id="projectsChange">0 in progress</div>
+            </div>
+            <div class="stat-card purple">
+                <div class="stat-value" id="conversionRate">0%</div>
+                <div class="stat-label">Lead Conversion</div>
+                <div class="stat-change" id="conversionChange">Leads to clients</div>
+            </div>
+        </div>
+
+        <!-- Revenue by Practice Area -->
+        <div class="chart-container">
+            <h3 class="chart-title">Revenue by Practice Area</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Practice Area</th>
+                        <th>Projects</th>
+                        <th>Revenue</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody id="practiceAreaTable">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Top Clients by Revenue -->
+        <div class="chart-container">
+            <h3 class="chart-title">Top Clients by Revenue</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Industry</th>
+                        <th>Active Projects</th>
+                        <th>Total Revenue</th>
+                        <th>Last Interaction</th>
+                    </tr>
+                </thead>
+                <tbody id="topClientsTable">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Team Performance -->
+        <div class="chart-container">
+            <h3 class="chart-title">Team Performance</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Team Member</th>
+                        <th>Role</th>
+                        <th>Active Projects</th>
+                        <th>Completed Tasks</th>
+                        <th>Pending Tasks</th>
+                    </tr>
+                </thead>
+                <tbody id="teamPerformanceTable">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Lead Pipeline -->
+        <div class="chart-container">
+            <h3 class="chart-title">Lead Pipeline Status</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Count</th>
+                        <th>Percentage</th>
+                        <th>Avg. Age (days)</th>
+                    </tr>
+                </thead>
+                <tbody id="leadPipelineTable">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateReports();
+        });
+
+        function updateReports() {
+            updateKeyMetrics();
+            updatePracticeAreaReport();
+            updateTopClientsReport();
+            updateTeamPerformance();
+            updateLeadPipeline();
+        }
+
+        function updateKeyMetrics() {
+            const clients = legalCRM.get('clients');
+            const projects = legalCRM.get('projects');
+            const leads = legalCRM.get('leads');
+            const invoices = legalCRM.get('invoices');
+
+            // Total Revenue
+            const totalRevenue = clients.reduce((sum, c) => sum + c.totalRevenue, 0);
+            document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+
+            // Active Clients
+            const activeClients = clients.filter(c => c.category === 'Active' || c.category === 'VIP').length;
+            document.getElementById('activeClients').textContent = activeClients;
+            document.getElementById('clientsChange').textContent = `${clients.length} total clients`;
+
+            // Active Projects
+            const activeProjects = projects.filter(p => p.status === 'In Progress').length;
+            document.getElementById('activeProjects').textContent = activeProjects;
+            document.getElementById('projectsChange').textContent = `${projects.length} total projects`;
+
+            // Conversion Rate
+            const wonLeads = leads.filter(l => l.status === 'Won').length;
+            const conversionRate = leads.length > 0 ? Math.round((wonLeads / leads.length) * 100) : 0;
+            document.getElementById('conversionRate').textContent = conversionRate + '%';
+            document.getElementById('conversionChange').textContent = `${wonLeads} leads converted`;
+        }
+
+        function updatePracticeAreaReport() {
+            const projects = legalCRM.get('projects');
+            const clients = legalCRM.get('clients');
+
+            const practiceAreas = {};
+            projects.forEach(project => {
+                const area = project.practiceArea;
+                if (!practiceAreas[area]) {
+                    practiceAreas[area] = { count: 0, revenue: 0 };
+                }
+                practiceAreas[area].count++;
+
+                // Get client revenue
+                const client = clients.find(c => c.id === project.clientId);
+                if (client) {
+                    practiceAreas[area].revenue += client.totalRevenue / clients.filter(c => c.id === project.clientId).length;
+                }
+            });
+
+            const totalRevenue = Object.values(practiceAreas).reduce((sum, area) => sum + area.revenue, 0);
+
+            const tbody = document.getElementById('practiceAreaTable');
+            tbody.innerHTML = Object.entries(practiceAreas)
+                .sort((a, b) => b[1].revenue - a[1].revenue)
+                .map(([area, data]) => {
+                    const percentage = totalRevenue > 0 ? ((data.revenue / totalRevenue) * 100).toFixed(1) : 0;
+                    return `
+                        <tr>
+                            <td><strong>${area}</strong></td>
+                            <td>${data.count}</td>
+                            <td>${formatCurrency(Math.round(data.revenue))}</td>
+                            <td>${percentage}%</td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        function updateTopClientsReport() {
+            const clients = legalCRM.get('clients');
+            const projects = legalCRM.get('projects');
+
+            const topClients = clients
+                .map(client => {
+                    const clientProjects = projects.filter(p => p.clientId === client.id);
+                    const activeProjects = clientProjects.filter(p => p.status === 'In Progress').length;
+                    return {
+                        ...client,
+                        activeProjects
+                    };
+                })
+                .sort((a, b) => b.totalRevenue - a.totalRevenue)
+                .slice(0, 10);
+
+            const tbody = document.getElementById('topClientsTable');
+            tbody.innerHTML = topClients.map(client => `
+                <tr>
+                    <td><strong>${client.companyName}</strong></td>
+                    <td>${client.industry}</td>
+                    <td>${client.activeProjects}</td>
+                    <td><strong>${formatCurrency(client.totalRevenue)}</strong></td>
+                    <td>${formatDate(client.lastInteraction)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateTeamPerformance() {
+            const users = legalCRM.get('users');
+            const projects = legalCRM.get('projects');
+            const tasks = legalCRM.get('tasks');
+
+            const teamData = users.map(user => {
+                const userProjects = projects.filter(p =>
+                    p.leadAdvocate === user.name || (p.collaborators && p.collaborators.includes(user.name))
+                ).length;
+
+                const userTasks = tasks.filter(t => t.assignedTo === user.name);
+                const completedTasks = userTasks.filter(t => t.status === 'Completed').length;
+                const pendingTasks = userTasks.filter(t => t.status !== 'Completed').length;
+
+                return {
+                    name: user.name,
+                    role: user.role,
+                    projects: userProjects,
+                    completedTasks,
+                    pendingTasks
+                };
+            });
+
+            const tbody = document.getElementById('teamPerformanceTable');
+            tbody.innerHTML = teamData.map(member => `
+                <tr>
+                    <td><strong>${member.name}</strong></td>
+                    <td>${member.role}</td>
+                    <td>${member.projects}</td>
+                    <td><span style="color: #27ae60;">${member.completedTasks}</span></td>
+                    <td><span style="color: #f39c12;">${member.pendingTasks}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        function updateLeadPipeline() {
+            const leads = legalCRM.get('leads');
+            const statusCounts = {};
+
+            leads.forEach(lead => {
+                if (!statusCounts[lead.status]) {
+                    statusCounts[lead.status] = { count: 0, totalAge: 0 };
+                }
+                statusCounts[lead.status].count++;
+                statusCounts[lead.status].totalAge += lead.agingDays || 0;
+            });
+
+            const totalLeads = leads.length;
+
+            const tbody = document.getElementById('leadPipelineTable');
+            tbody.innerHTML = Object.entries(statusCounts)
+                .map(([status, data]) => {
+                    const percentage = totalLeads > 0 ? ((data.count / totalLeads) * 100).toFixed(1) : 0;
+                    const avgAge = data.count > 0 ? Math.round(data.totalAge / data.count) : 0;
+                    return `
+                        <tr>
+                            <td><strong>${status}</strong></td>
+                            <td>${data.count}</td>
+                            <td>${percentage}%</td>
+                            <td>${avgAge} days</td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        function exportReport() {
+            showNotification('Report export feature will be available in production!');
+        }
+    </script>
+</body>
+</html>

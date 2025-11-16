@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-new { background: #e3f2fd; color: #2196f3; }
+        .status-in-progress { background: #fff8e1; color: #f39c12; }
+        .status-completed { background: #e8f5e9; color: #27ae60; }
+        .status-blocked { background: #ffebee; color: #e74c3c; }
+
+        .priority-high { background: #ffebee; color: #e74c3c; font-weight: 600; }
+        .priority-medium { background: #fff8e1; color: #f39c12; }
+        .priority-low { background: #e8f5e9; color: #27ae60; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .overdue {
+            background: #ffebee;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-actions {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="legal_crm_dashboard (1).html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item active">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>✅ Task Management</h2>
+            <p>Track and manage all your tasks efficiently</p>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-value" id="totalTasks">0</div>
+                <div class="summary-label">Total Tasks</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="inProgressTasks">0</div>
+                <div class="summary-label">In Progress</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="completedTasks">0</div>
+                <div class="summary-label">Completed</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="overdueTasks">0</div>
+                <div class="summary-label">Overdue</div>
+            </div>
+        </div>
+
+        <!-- Tasks Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="table-title">All Tasks</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search tasks...">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="New">New</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Blocked">Blocked</option>
+                    </select>
+                    <select class="filter-select" id="priorityFilter">
+                        <option value="">All Priorities</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddTaskModal()">
+                        ➕ Add New Task
+                    </button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="tasksTable">
+                    <thead>
+                        <tr>
+                            <th>Task ID</th>
+                            <th>Title</th>
+                            <th>Project</th>
+                            <th>Assigned To</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Due Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tasksTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Task</h3>
+                <button class="close-btn" onclick="closeTaskModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="taskForm">
+                    <input type="hidden" id="taskId">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label required">Task Title</label>
+                            <input type="text" class="form-input" id="title" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" id="description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Project</label>
+                            <select class="form-select" id="projectId">
+                                <option value="">No Project</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Assigned To</label>
+                            <select class="form-select" id="assignedTo" required>
+                                <option value="">Select User</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Harish Kumar">Harish Kumar</option>
+                                <option value="Meera Patel">Meera Patel</option>
+                                <option value="Anjali Singh">Anjali Singh</option>
+                                <option value="Rahul Verma">Rahul Verma</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Priority</label>
+                            <select class="form-select" id="priority" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="New">New</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Blocked">Blocked</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Due Date</label>
+                            <input type="date" class="form-input" id="dueDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estimated Effort (hours)</label>
+                            <input type="number" class="form-input" id="estimatedEffort" min="0" step="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Actual Time Spent (hours)</label>
+                            <input type="number" class="form-input" id="actualTimeSpent" min="0" step="0.5">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Dependency Task ID</label>
+                            <input type="text" class="form-input" id="dependencyTaskId" placeholder="e.g., TASK-2025-0001">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-input" id="tags" placeholder="e.g., Urgent, Client Meeting">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        // Load tasks on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProjects();
+            loadTasks();
+            updateStats();
+            setupFilters();
+        });
+
+        function loadProjects() {
+            const projects = legalCRM.get('projects');
+            const projectSelect = document.getElementById('projectId');
+            projectSelect.innerHTML = '<option value="">No Project</option>';
+            projects.forEach(project => {
+                projectSelect.innerHTML += `<option value="${project.id}">${project.name}</option>`;
+            });
+        }
+
+        function loadTasks(filterStatus = '', filterPriority = '', searchTerm = '') {
+            let tasks = legalCRM.get('tasks');
+
+            // Apply filters
+            if (filterStatus) {
+                tasks = tasks.filter(t => t.status === filterStatus);
+            }
+            if (filterPriority) {
+                tasks = tasks.filter(t => t.priority === filterPriority);
+            }
+            if (searchTerm) {
+                searchTerm = searchTerm.toLowerCase();
+                tasks = tasks.filter(t =>
+                    t.title.toLowerCase().includes(searchTerm) ||
+                    t.id.toLowerCase().includes(searchTerm) ||
+                    t.assignedTo.toLowerCase().includes(searchTerm) ||
+                    (t.projectName && t.projectName.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            const tbody = document.getElementById('tasksTableBody');
+            const today = new Date().toISOString().split('T')[0];
+
+            if (tasks.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">✅</div>
+                                <h3>No tasks found</h3>
+                                <p>Start by adding your first task</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = tasks.map(task => {
+                const isOverdue = task.dueDate < today && task.status !== 'Completed';
+                return `
+                <tr class="${isOverdue ? 'overdue' : ''}">
+                    <td><strong>${task.id}</strong></td>
+                    <td>
+                        <strong>${task.title}</strong><br>
+                        ${task.description ? `<small style="color: #7f8c8d;">${task.description.substring(0, 50)}...</small>` : ''}
+                    </td>
+                    <td>${task.projectName || 'No Project'}</td>
+                    <td>${task.assignedTo}</td>
+                    <td>
+                        <span class="status-badge priority-${task.priority.toLowerCase()}">
+                            ${task.priority}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${task.status.toLowerCase().replace(' ', '-')}">
+                            ${task.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${formatDate(task.dueDate)}
+                        ${isOverdue ? '<br><small style="color: #e74c3c;">⚠️ Overdue</small>' : ''}
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="editTask('${task.id}')" title="Edit">
+                                ✏️
+                            </button>
+                            ${task.status !== 'Completed' ? `
+                                <button class="icon-btn btn-success" onclick="completeTask('${task.id}')" title="Mark Complete">
+                                    ✓
+                                </button>
+                            ` : ''}
+                            <button class="icon-btn btn-danger" onclick="deleteTask('${task.id}')" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        function updateStats() {
+            const tasks = legalCRM.get('tasks');
+            const today = new Date().toISOString().split('T')[0];
+
+            const totalTasks = tasks.length;
+            const inProgressTasks = tasks.filter(t => t.status === 'In Progress').length;
+            const completedTasks = tasks.filter(t => t.status === 'Completed').length;
+            const overdueTasks = tasks.filter(t => t.dueDate < today && t.status !== 'Completed').length;
+
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('inProgressTasks').textContent = inProgressTasks;
+            document.getElementById('completedTasks').textContent = completedTasks;
+            document.getElementById('overdueTasks').textContent = overdueTasks;
+        }
+
+        function setupFilters() {
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const priorityFilter = document.getElementById('priorityFilter').value;
+                loadTasks(statusFilter, priorityFilter, searchTerm);
+            });
+
+            document.getElementById('statusFilter').addEventListener('change', function(e) {
+                const statusFilter = e.target.value;
+                const priorityFilter = document.getElementById('priorityFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadTasks(statusFilter, priorityFilter, searchTerm);
+            });
+
+            document.getElementById('priorityFilter').addEventListener('change', function(e) {
+                const priorityFilter = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadTasks(statusFilter, priorityFilter, searchTerm);
+            });
+        }
+
+        function openAddTaskModal() {
+            document.getElementById('modalTitle').textContent = 'Add New Task';
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskId').value = '';
+            document.getElementById('priority').value = 'Medium';
+            document.getElementById('status').value = 'New';
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.remove('active');
+        }
+
+        function saveTask() {
+            const id = document.getElementById('taskId').value;
+            const projectId = document.getElementById('projectId').value;
+            const project = projectId ? legalCRM.getById('projects', projectId) : null;
+
+            const tagsInput = document.getElementById('tags').value;
+            const tags = tagsInput ? tagsInput.split(',').map(t => t.trim()) : [];
+
+            const taskData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                projectId: projectId,
+                projectName: project ? project.name : 'Multiple Projects',
+                assignedTo: document.getElementById('assignedTo').value,
+                priority: document.getElementById('priority').value,
+                status: document.getElementById('status').value,
+                dueDate: document.getElementById('dueDate').value,
+                estimatedEffort: parseFloat(document.getElementById('estimatedEffort').value) || 0,
+                actualTimeSpent: parseFloat(document.getElementById('actualTimeSpent').value) || 0,
+                dependencyTaskId: document.getElementById('dependencyTaskId').value,
+                tags: tags
+            };
+
+            // Validate required fields
+            if (!taskData.title || !taskData.assignedTo || !taskData.dueDate) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (id) {
+                // Update existing task
+                legalCRM.update('tasks', id, taskData);
+                showNotification('Task updated successfully!');
+            } else {
+                // Create new task
+                const newTask = {
+                    id: legalCRM.generateId('tasks', 'TASK'),
+                    ...taskData,
+                    createdBy: 'Prateek Mehta',
+                    createdDate: new Date().toISOString().split('T')[0]
+                };
+                legalCRM.create('tasks', newTask);
+                showNotification('Task created successfully!');
+            }
+
+            closeTaskModal();
+            loadTasks();
+            updateStats();
+        }
+
+        function editTask(id) {
+            const task = legalCRM.getById('tasks', id);
+            if (!task) return;
+
+            document.getElementById('modalTitle').textContent = 'Edit Task';
+            document.getElementById('taskId').value = task.id;
+            document.getElementById('title').value = task.title;
+            document.getElementById('description').value = task.description || '';
+            document.getElementById('projectId').value = task.projectId || '';
+            document.getElementById('assignedTo').value = task.assignedTo;
+            document.getElementById('priority').value = task.priority;
+            document.getElementById('status').value = task.status;
+            document.getElementById('dueDate').value = task.dueDate;
+            document.getElementById('estimatedEffort').value = task.estimatedEffort || 0;
+            document.getElementById('actualTimeSpent').value = task.actualTimeSpent || 0;
+            document.getElementById('dependencyTaskId').value = task.dependencyTaskId || '';
+            document.getElementById('tags').value = task.tags ? task.tags.join(', ') : '';
+
+            document.getElementById('taskModal').classList.add('active');
+        }
+
+        function deleteTask(id) {
+            if (confirm('Are you sure you want to delete this task?')) {
+                legalCRM.delete('tasks', id);
+                showNotification('Task deleted successfully!');
+                loadTasks();
+                updateStats();
+            }
+        }
+
+        function completeTask(id) {
+            if (confirm('Mark this task as completed?')) {
+                legalCRM.update('tasks', id, { status: 'Completed' });
+                showNotification('Task marked as completed!');
+                loadTasks();
+                updateStats();
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('taskModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTaskModal();
+            }
+        });
+    </script>
+</body>
+</html>

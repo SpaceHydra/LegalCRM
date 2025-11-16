@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lead Management - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 14px;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-new { background: #e3f2fd; color: #2196f3; }
+        .status-in-progress { background: #fff8e1; color: #f39c12; }
+        .status-qualified { background: #e8f5e9; color: #27ae60; }
+        .status-won { background: #e8f5e9; color: #27ae60; }
+        .status-lost { background: #ffebee; color: #e74c3c; }
+
+        .aging-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .aging-green { background: #27ae60; }
+        .aging-yellow { background: #f39c12; }
+        .aging-red { background: #e74c3c; }
+
+        .score-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .score-high { background: #e8f5e9; color: #27ae60; }
+        .score-medium { background: #fff8e1; color: #f39c12; }
+        .score-low { background: #ffebee; color: #e74c3c; }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #95a5a6;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #e74c3c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-actions {
+                width: 100%;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="legal_crm_dashboard (1).html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item active">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="dashboard-header">
+            <h2>🎯 Lead Management</h2>
+            <p>Track and manage all your business leads</p>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-value" id="totalLeads">0</div>
+                <div class="summary-label">Total Leads</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="newLeads">0</div>
+                <div class="summary-label">New Leads</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="qualifiedLeads">0</div>
+                <div class="summary-label">Qualified</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" id="conversionRate">0%</div>
+                <div class="summary-label">Conversion Rate</div>
+            </div>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="table-container">
+            <div class="table-header">
+                <h3 class="table-title">All Leads</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search leads...">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="New">New</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Qualified">Qualified</option>
+                        <option value="Won">Won</option>
+                        <option value="Lost">Lost</option>
+                    </select>
+                    <select class="filter-select" id="sourceFilter">
+                        <option value="">All Sources</option>
+                        <option value="Referral">Referral</option>
+                        <option value="Website">Website</option>
+                        <option value="Cold Call">Cold Call</option>
+                        <option value="LinkedIn">LinkedIn</option>
+                        <option value="Phone">Phone</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="openAddLeadModal()">
+                        ➕ Add New Lead
+                    </button>
+                </div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="leadsTable">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Lead ID</th>
+                            <th>Name</th>
+                            <th>Company</th>
+                            <th>Contact</th>
+                            <th>Practice Area</th>
+                            <th>Source</th>
+                            <th>Score</th>
+                            <th>Aging</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTableBody">
+                        <!-- Dynamic content -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Lead Modal -->
+    <div class="modal" id="leadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add New Lead</h3>
+                <button class="close-btn" onclick="closeLeadModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="leadForm">
+                    <input type="hidden" id="leadId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Lead Name</label>
+                            <input type="text" class="form-input" id="leadName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Company Name</label>
+                            <input type="text" class="form-input" id="companyName" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Phone</label>
+                            <input type="tel" class="form-input" id="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Lead Source</label>
+                            <select class="form-select" id="source" required onchange="toggleReferralField()">
+                                <option value="">Select Source</option>
+                                <option value="Phone">Phone</option>
+                                <option value="Website">Website</option>
+                                <option value="Referral">Referral</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="Cold Call">Cold Call</option>
+                                <option value="Email Campaign">Email Campaign</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="referralGroup" style="display: none;">
+                            <label class="form-label">Referred By</label>
+                            <input type="text" class="form-input" id="referralBy">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Practice Area</label>
+                            <select class="form-select" id="practiceArea" required>
+                                <option value="">Select Practice Area</option>
+                                <option value="Corporate Law">Corporate Law</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Contract Law">Contract Law</option>
+                                <option value="Intellectual Property">Intellectual Property</option>
+                                <option value="Tax Law">Tax Law</option>
+                                <option value="Employment Law">Employment Law</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="New">New</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Qualified">Qualified</option>
+                                <option value="Won">Won</option>
+                                <option value="Lost">Lost</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Lead Score (0-100)</label>
+                            <input type="number" class="form-input" id="score" min="0" max="100" value="50">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-textarea" id="notes"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeLeadModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveLead()">Save Lead</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        let currentEditId = null;
+
+        // Load leads on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadLeads();
+            updateStats();
+            setupFilters();
+        });
+
+        function loadLeads(filterStatus = '', filterSource = '', searchTerm = '') {
+            let leads = legalCRM.get('leads');
+
+            // Apply filters
+            if (filterStatus) {
+                leads = leads.filter(l => l.status === filterStatus);
+            }
+            if (filterSource) {
+                leads = leads.filter(l => l.source === filterSource);
+            }
+            if (searchTerm) {
+                searchTerm = searchTerm.toLowerCase();
+                leads = leads.filter(l =>
+                    l.name.toLowerCase().includes(searchTerm) ||
+                    l.company.toLowerCase().includes(searchTerm) ||
+                    l.email.toLowerCase().includes(searchTerm) ||
+                    l.phone.includes(searchTerm) ||
+                    l.id.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const tbody = document.getElementById('leadsTableBody');
+
+            if (leads.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="10">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">🎯</div>
+                                <h3>No leads found</h3>
+                                <p>Start by adding your first lead</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = leads.map(lead => `
+                <tr>
+                    <td>
+                        <span class="aging-indicator aging-${getAgingColor(lead.agingDays)}"></span>
+                    </td>
+                    <td><strong>${lead.id}</strong></td>
+                    <td>${lead.name}</td>
+                    <td>${lead.company}</td>
+                    <td>
+                        ${lead.email ? `📧 ${lead.email}<br>` : ''}
+                        📱 ${lead.phone}
+                    </td>
+                    <td>${lead.practiceArea}</td>
+                    <td>${lead.source}${lead.referralBy ? `<br><small>(${lead.referralBy})</small>` : ''}</td>
+                    <td>
+                        <span class="score-badge score-${getScoreClass(lead.score)}">
+                            ${lead.score}
+                        </span>
+                    </td>
+                    <td>${lead.agingDays} days</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="editLead('${lead.id}')" title="Edit">
+                                ✏️
+                            </button>
+                            ${lead.status !== 'Won' ? `
+                                <button class="icon-btn btn-success" onclick="convertToClient('${lead.id}')" title="Convert to Client">
+                                    ✅
+                                </button>
+                            ` : ''}
+                            <button class="icon-btn btn-danger" onclick="deleteLead('${lead.id}')" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getAgingColor(days) {
+            if (days <= 7) return 'green';
+            if (days <= 14) return 'yellow';
+            return 'red';
+        }
+
+        function getScoreClass(score) {
+            if (score >= 70) return 'high';
+            if (score >= 40) return 'medium';
+            return 'low';
+        }
+
+        function updateStats() {
+            const leads = legalCRM.get('leads');
+            const totalLeads = leads.length;
+            const newLeads = leads.filter(l => l.status === 'New').length;
+            const qualifiedLeads = leads.filter(l => l.status === 'Qualified').length;
+            const wonLeads = leads.filter(l => l.status === 'Won').length;
+            const conversionRate = totalLeads > 0 ? Math.round((wonLeads / totalLeads) * 100) : 0;
+
+            document.getElementById('totalLeads').textContent = totalLeads;
+            document.getElementById('newLeads').textContent = newLeads;
+            document.getElementById('qualifiedLeads').textContent = qualifiedLeads;
+            document.getElementById('conversionRate').textContent = conversionRate + '%';
+        }
+
+        function setupFilters() {
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const sourceFilter = document.getElementById('sourceFilter').value;
+                loadLeads(statusFilter, sourceFilter, searchTerm);
+            });
+
+            document.getElementById('statusFilter').addEventListener('change', function(e) {
+                const statusFilter = e.target.value;
+                const sourceFilter = document.getElementById('sourceFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadLeads(statusFilter, sourceFilter, searchTerm);
+            });
+
+            document.getElementById('sourceFilter').addEventListener('change', function(e) {
+                const sourceFilter = e.target.value;
+                const statusFilter = document.getElementById('statusFilter').value;
+                const searchTerm = document.getElementById('searchInput').value;
+                loadLeads(statusFilter, sourceFilter, searchTerm);
+            });
+        }
+
+        function openAddLeadModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Add New Lead';
+            document.getElementById('leadForm').reset();
+            document.getElementById('leadId').value = '';
+            document.getElementById('leadModal').classList.add('active');
+        }
+
+        function closeLeadModal() {
+            document.getElementById('leadModal').classList.remove('active');
+        }
+
+        function toggleReferralField() {
+            const source = document.getElementById('source').value;
+            const referralGroup = document.getElementById('referralGroup');
+            referralGroup.style.display = source === 'Referral' ? 'block' : 'none';
+        }
+
+        function saveLead() {
+            const id = document.getElementById('leadId').value;
+            const leadData = {
+                name: document.getElementById('leadName').value,
+                company: document.getElementById('companyName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                source: document.getElementById('source').value,
+                referralBy: document.getElementById('referralBy').value,
+                practiceArea: document.getElementById('practiceArea').value,
+                status: document.getElementById('status').value,
+                score: parseInt(document.getElementById('score').value) || 50,
+                notes: document.getElementById('notes').value
+            };
+
+            // Validate required fields
+            if (!leadData.name || !leadData.company || !leadData.phone || !leadData.source || !leadData.practiceArea) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            if (id) {
+                // Update existing lead
+                legalCRM.update('leads', id, leadData);
+            } else {
+                // Create new lead
+                const newLead = {
+                    id: legalCRM.generateId('leads', 'LD'),
+                    ...leadData,
+                    agingDays: 0,
+                    lastActivity: new Date().toISOString().split('T')[0],
+                    createdDate: new Date().toISOString().split('T')[0],
+                    escalationStatus: 'None'
+                };
+                legalCRM.create('leads', newLead);
+            }
+
+            closeLeadModal();
+            loadLeads();
+            updateStats();
+        }
+
+        function editLead(id) {
+            const lead = legalCRM.getById('leads', id);
+            if (!lead) return;
+
+            currentEditId = id;
+            document.getElementById('modalTitle').textContent = 'Edit Lead';
+            document.getElementById('leadId').value = lead.id;
+            document.getElementById('leadName').value = lead.name;
+            document.getElementById('companyName').value = lead.company;
+            document.getElementById('email').value = lead.email;
+            document.getElementById('phone').value = lead.phone;
+            document.getElementById('source').value = lead.source;
+            document.getElementById('referralBy').value = lead.referralBy || '';
+            document.getElementById('practiceArea').value = lead.practiceArea;
+            document.getElementById('status').value = lead.status;
+            document.getElementById('score').value = lead.score;
+            document.getElementById('notes').value = lead.notes || '';
+
+            toggleReferralField();
+            document.getElementById('leadModal').classList.add('active');
+        }
+
+        function deleteLead(id) {
+            if (confirm('Are you sure you want to delete this lead?')) {
+                legalCRM.delete('leads', id);
+                loadLeads();
+                updateStats();
+            }
+        }
+
+        function convertToClient(id) {
+            if (confirm('Convert this lead to a client?')) {
+                const client = legalCRM.convertLeadToClient(id);
+                if (client) {
+                    alert(`Lead converted to client successfully! Client ID: ${client.id}`);
+                    loadLeads();
+                    updateStats();
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('leadModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeLeadModal();
+            }
+        });
+    </script>
+</body>
+</html>
