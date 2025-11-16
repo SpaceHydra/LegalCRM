@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Lead - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .form-header h2 {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #2c3e50;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            padding-top: 20px;
+            border-top: 2px solid #ecf0f1;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #dfe6e9;
+        }
+
+        .help-text {
+            font-size: 12px;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search clients, matters, documents...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">PM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Prateek Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">Senior Advocate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item active">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="form-container">
+            <div class="form-header">
+                <h2>🎯 Add New Lead</h2>
+                <p>Capture comprehensive lead information to track potential clients</p>
+            </div>
+
+            <form id="leadForm">
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📋</span> Basic Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Lead/Contact Name</label>
+                            <input type="text" class="form-input" id="leadName" placeholder="e.g., Rajesh Kumar" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Company/Organization Name</label>
+                            <input type="text" class="form-input" id="companyName" placeholder="e.g., Tech Innovations Pvt Ltd" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Designation/Title</label>
+                            <input type="text" class="form-input" id="designation" placeholder="e.g., CEO, Legal Head">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Company Type</label>
+                            <select class="form-select" id="companyType">
+                                <option value="">Select Company Type</option>
+                                <option value="Private Limited">Private Limited</option>
+                                <option value="Public Limited">Public Limited</option>
+                                <option value="LLP">LLP</option>
+                                <option value="Partnership">Partnership</option>
+                                <option value="Sole Proprietorship">Sole Proprietorship</option>
+                                <option value="Individual">Individual</option>
+                                <option value="NGO/Trust">NGO/Trust</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📞</span> Contact Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Primary Phone</label>
+                            <input type="tel" class="form-input" id="phone" placeholder="+91 98765 43210" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Secondary Phone</label>
+                            <input type="tel" class="form-input" id="alternatePhone" placeholder="+91 98765 43211">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Primary Email</label>
+                            <input type="email" class="form-input" id="email" placeholder="contact@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Secondary Email</label>
+                            <input type="email" class="form-input" id="alternateEmail" placeholder="alternate@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">LinkedIn Profile</label>
+                            <input type="url" class="form-input" id="linkedin" placeholder="https://linkedin.com/in/...">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Website</label>
+                            <input type="url" class="form-input" id="website" placeholder="https://www.company.com">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Address Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📍</span> Address Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Street Address</label>
+                            <input type="text" class="form-input" id="address" placeholder="Building, Street Name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-input" id="city" placeholder="e.g., Mumbai">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <select class="form-select" id="state">
+                                <option value="">Select State</option>
+                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Gujarat">Gujarat</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Tamil Nadu">Tamil Nadu</option>
+                                <option value="Telangana">Telangana</option>
+                                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                                <option value="West Bengal">West Bengal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">PIN Code</label>
+                            <input type="text" class="form-input" id="pincode" placeholder="400001">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country</label>
+                            <input type="text" class="form-input" id="country" value="India">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lead Details -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>🎯</span> Lead Details
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label required">Lead Source</label>
+                            <select class="form-select" id="source" required onchange="toggleReferralField()">
+                                <option value="">Select Source</option>
+                                <option value="Website">Website</option>
+                                <option value="Phone">Phone Call</option>
+                                <option value="Email Campaign">Email Campaign</option>
+                                <option value="LinkedIn">LinkedIn</option>
+                                <option value="Referral">Referral</option>
+                                <option value="Cold Call">Cold Call</option>
+                                <option value="Event/Seminar">Event/Seminar</option>
+                                <option value="Advertisement">Advertisement</option>
+                                <option value="Direct Visit">Direct Visit</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="referralGroup" style="display: none;">
+                            <label class="form-label">Referred By</label>
+                            <input type="text" class="form-input" id="referralBy" placeholder="Name of person/organization">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Practice Area</label>
+                            <select class="form-select" id="practiceArea" required>
+                                <option value="">Select Practice Area</option>
+                                <option value="Corporate Law">Corporate Law</option>
+                                <option value="Real Estate">Real Estate</option>
+                                <option value="Litigation">Litigation</option>
+                                <option value="Contract Law">Contract Law</option>
+                                <option value="Intellectual Property">Intellectual Property</option>
+                                <option value="Tax Law">Tax Law</option>
+                                <option value="Employment Law">Employment Law</option>
+                                <option value="Mergers & Acquisitions">Mergers & Acquisitions</option>
+                                <option value="Banking & Finance">Banking & Finance</option>
+                                <option value="Arbitration">Arbitration</option>
+                                <option value="Family Law">Family Law</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="New">New</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Contacted">Contacted</option>
+                                <option value="Qualified">Qualified</option>
+                                <option value="Proposal Sent">Proposal Sent</option>
+                                <option value="Won">Won</option>
+                                <option value="Lost">Lost</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Priority</label>
+                            <select class="form-select" id="priority">
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Urgent">Urgent</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Lead Score (0-100)</label>
+                            <input type="number" class="form-input" id="score" min="0" max="100" value="50">
+                            <span class="help-text">Rate the quality/potential of this lead</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Estimated Value</label>
+                            <input type="number" class="form-input" id="estimatedValue" placeholder="Enter amount in ₹">
+                            <span class="help-text">Expected revenue from this lead</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expected Closure Date</label>
+                            <input type="date" class="form-input" id="expectedClosureDate">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span>📝</span> Additional Information
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Requirements/Description</label>
+                            <textarea class="form-textarea" id="requirements" placeholder="Describe the legal requirements or case details..."></textarea>
+                            <span class="help-text">Detailed description of what the lead is looking for</span>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Internal Notes</label>
+                            <textarea class="form-textarea" id="notes" placeholder="Add any internal notes about this lead..."></textarea>
+                            <span class="help-text">These notes are for internal use only</span>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Assigned To</label>
+                            <select class="form-select" id="assignedTo">
+                                <option value="">Select Team Member</option>
+                                <option value="Prateek Mehta">Prateek Mehta</option>
+                                <option value="Anita Sharma">Anita Sharma</option>
+                                <option value="Vikram Singh">Vikram Singh</option>
+                                <option value="Neha Gupta">Neha Gupta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Follow-up Date</label>
+                            <input type="date" class="form-input" id="followUpDate">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Tags</label>
+                            <input type="text" class="form-input" id="tags" placeholder="e.g., high-value, urgent, recurring-client (comma separated)">
+                            <span class="help-text">Add tags for easier filtering and searching</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="cancelForm()">Cancel</button>
+                    <button type="button" class="btn btn-secondary" onclick="saveDraft()">Save as Draft</button>
+                    <button type="submit" class="btn btn-primary">Save Lead</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNotificationCount();
+        });
+
+        function toggleReferralField() {
+            const source = document.getElementById('source').value;
+            const referralGroup = document.getElementById('referralGroup');
+            referralGroup.style.display = source === 'Referral' ? 'block' : 'none';
+        }
+
+        document.getElementById('leadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveLead();
+        });
+
+        function saveLead() {
+            // Gather all form data
+            const leadData = {
+                id: 'LEAD-' + Date.now(),
+                name: document.getElementById('leadName').value,
+                company: document.getElementById('companyName').value,
+                designation: document.getElementById('designation').value,
+                companyType: document.getElementById('companyType').value,
+                phone: document.getElementById('phone').value,
+                alternatePhone: document.getElementById('alternatePhone').value,
+                email: document.getElementById('email').value,
+                alternateEmail: document.getElementById('alternateEmail').value,
+                linkedin: document.getElementById('linkedin').value,
+                website: document.getElementById('website').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                pincode: document.getElementById('pincode').value,
+                country: document.getElementById('country').value,
+                source: document.getElementById('source').value,
+                referralBy: document.getElementById('referralBy').value,
+                practiceArea: document.getElementById('practiceArea').value,
+                status: document.getElementById('status').value,
+                priority: document.getElementById('priority').value,
+                score: parseInt(document.getElementById('score').value),
+                estimatedValue: parseFloat(document.getElementById('estimatedValue').value) || 0,
+                expectedClosureDate: document.getElementById('expectedClosureDate').value,
+                requirements: document.getElementById('requirements').value,
+                notes: document.getElementById('notes').value,
+                assignedTo: document.getElementById('assignedTo').value,
+                followUpDate: document.getElementById('followUpDate').value,
+                tags: document.getElementById('tags').value,
+                createdDate: new Date().toISOString().split('T')[0],
+                agingDays: 0
+            };
+
+            // Validate required fields
+            if (!leadData.name || !leadData.company || !leadData.phone || !leadData.email ||
+                !leadData.source || !leadData.practiceArea || !leadData.status) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            // Save to localStorage
+            legalCRM.add('leads', leadData);
+
+            // Add activity
+            legalCRM.add('activities', {
+                id: 'ACT-' + Date.now(),
+                type: 'lead_created',
+                title: 'New Lead Created',
+                description: `${leadData.name} from ${leadData.company} added as new lead`,
+                timestamp: new Date().toISOString(),
+                user: 'Prateek Mehta'
+            });
+
+            alert('Lead saved successfully!');
+            window.location.href = 'lead-management.html';
+        }
+
+        function saveDraft() {
+            // Save form data to localStorage as draft
+            const formData = {
+                leadName: document.getElementById('leadName').value,
+                companyName: document.getElementById('companyName').value,
+                // ... save all fields
+            };
+            localStorage.setItem('leadDraft', JSON.stringify(formData));
+            alert('Draft saved!');
+        }
+
+        function cancelForm() {
+            if (confirm('Are you sure you want to cancel? Any unsaved changes will be lost.')) {
+                window.location.href = 'lead-management.html';
+            }
+        }
+
+        function updateNotificationCount() {
+            const activities = legalCRM.get('activities');
+            const today = new Date().toISOString().split('T')[0];
+            const todayActivities = activities.filter(a => a.timestamp && a.timestamp.startsWith(today));
+
+            const badge = document.getElementById('notificationCount');
+            if (badge) {
+                badge.textContent = todayActivities.length;
+            }
+        }
+    </script>
+</body>
+</html>
