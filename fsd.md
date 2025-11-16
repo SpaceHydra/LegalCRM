@@ -452,3 +452,269 @@ Escalation triggers >15 days inactivity
 Project documents cannot exist at client level
 
 AI cannot process restricted content
+1. INTRODUCTION
+This Functional Specification Document provides a detailed description of the Lead Management, Opportunity Management, Matter Conversion, Deal Closure, and Delivery Workflow for a specialized CRM designed for legal firms, compliance teams, financial institutions, and Cubictree product users (CT-MAP, BPR, PDD, EDD).
+The CRM manages the entire lifecycle:
+Lead Created → Lead Enriched → Owner Assigned → Qualified → Opportunity → Matter → Delivery → Closure
+The system follows strict compliance, audit trail management, document versioning, advocate onboarding considerations, and bank-grade SLA rules.
+________________________________________
+2. SYSTEM MODULES
+1.	Lead Management Module
+2.	Lead Assignment Engine (Routing)
+3.	Lead Qualification Engine
+4.	Opportunity (Deal) Module
+5.	Account & Contact Module
+6.	Matter/Case Module (Legal/Compliance scoped)
+7.	Task & Activity Tracking
+8.	Document Management Module
+9.	Delivery/Assignment Module (internal/external advocates)
+10.	Billing & Invoice Module
+11.	Reports & Dashboard Module
+12.	User Access & Role Matrix (UAM-lite)
+13.	Audit Log & Compliance Module
+14.	Notification & Communication Engine (Email, WhatsApp, SMS)
+________________________________________
+3. USER ROLES (LEGAL/CT CUSTOM)
+Role	Description	Permissions
+Client User (Bank/Corporate)	External user creating assignments/requests	Create assignments, upload docs, view status
+Internal User (Cubictree Employee)	Works on assignments, reviews tasks	Create/edit leads, convert, process matters
+Advocate / External Partner	Vendor advocate performing tasks	View assigned cases, upload deliverables
+CT User (Special Category)	Allocation-only user	Assign advocate, basic view, no downloads
+Delivery / Research Team	Works on compliance, due diligence, litigation	Task execution, document upload
+Reviewer / QC	Quality verification for reports	Approve, reject, comment
+Billing Team	Manages billing events	Generate invoice, validate charges
+Admin	Full access	Configuration, master setup
+________________________________________
+4. COMPLETE STAGE-BY-STAGE FSD
+________________________________________
+🔵 4.1 Stage 1 – Lead Created → Lead Enrichment
+4.1.1 Lead Creation Fields
+Lead Basic Info
+Field	Type	Mandatory	Validation
+Lead Name	Text	Yes	Auto from First+Last
+Company Name	Text	Yes	Default “Individual” if empty
+Email	Email	No	Email format check
+Phone	Number	Yes	10-digit India mobile rule
+Lead Source	Dropdown	Yes	Website, Referral, LinkedIn, Bank Client
+Campaign	Lookup	No	Auto-linked
+System Fields
+•	Lead ID (Auto-generated; alphanumeric)
+•	Created On
+•	Created By
+•	Lead Score (AI calculated)
+•	Duplicate Flag
+________________________________________
+4.1.2 Enrichment Fields
+Field	Type	Automation
+Email Validated	Boolean	Via verification API
+Phone Verified	Boolean	Carrier lookup
+Company Size	Dropdown	AI from LinkedIn
+Industry	Dropdown	Legal/Banking/Real Estate
+City	Dropdown	Must match Master City list
+State	Dropdown	Auto from City
+Notes	Long Text	Added by sales
+________________________________________
+4.1.3 Stage Workflow Logic
+1.	Lead created
+2.	Enrichment service runs
+3.	AI assigns Lead Score
+4.	Duplicate detection engine checks (Phone + Email + PAN)
+5.	Move lead to Assignment Stage
+________________________________________
+🔵 4.2 Stage 2 – Lead Assignment (Routing)
+4.2.1 Assignment Fields
+Field	Type	Mandatory
+Region	Dropdown	Auto from city
+City	Dropdown	Yes
+Industry	Dropdown	Yes
+Priority	Dropdown	Auto: Hot/Warm/Cold
+4.2.2 Assignment Rule Engine
+Rule 1: Region-based Routing
+•	North → Delhi Team
+•	West → Mumbai Team
+•	South → Chennai/Bangaluru
+•	East → Kolkata
+Rule 2: Industry Specialist Routing
+•	Banking → BFSI Specialist
+•	Real Estate → Property Team
+•	Legal → Litigation Team
+Rule 3: Round-Robin
+If multiple specialists exist → assign based on lowest load.
+________________________________________
+4.2.3 Workflow
+1.	Assignment engine checks rules
+2.	Owner assigned
+3.	Follow-up task auto-created (due in 24 hours)
+4.	Notification sent to owner
+5.	Move to Qualification Stage
+________________________________________
+🔵 4.3 Stage 3 – Lead Qualification (Sales Discovery)
+4.3.1 Fields
+Field	Type	Mandatory
+Need / Problem Statement	Text	Yes
+Budget Range	Dropdown	No
+Decision Maker?	Yes/No	Yes
+Timeline	Dropdown	Immediate/1-3 Months
+Interest Level	Dropdown	High/Med/Low
+Fit Score	Number	Auto
+Attachments	File	Optional
+________________________________________
+4.3.2 AI Qualification
+The AI engine:
+•	Extracts intent from emails
+•	Predicts urgency
+•	Recommends next action
+•	Updates Fit Score
+________________________________________
+4.3.3 Workflow
+1.	Sales conducts discovery
+2.	Updates qualification fields
+3.	Lead reaches one of two outcomes:
+✔ Qualified → Move to Opportunity
+✔ Disqualified → Capture reason
+________________________________________
+🔵 4.4 Stage 4 – Lead Status Update
+4.4.1 Status Values
+•	New
+•	Open
+•	Connected
+•	In Progress
+•	Qualified
+•	Disqualified
+4.4.2 Disqualification Reasons
+•	Wrong number
+•	Not interested
+•	Duplicate
+•	Budget issue
+•	Competitor selected
+Mandatory fields when disqualifying:
+•	Reason (Dropdown)
+•	Notes
+________________________________________
+🔵 4.5 Stage 5 – Convert to Opportunity (Deal Creation)
+4.5.1 Opportunity Fields
+Field	Type	Mandatory
+Deal Name	Auto	Yes
+Deal Value	Number	Yes
+Closing Date	Date	Yes
+Stage	Dropdown	Discovery/Proposal/Negotiation
+________________________________________
+4.5.2 Account Fields (Company)
+•	Company Name
+•	Industry
+•	Address
+•	City, State
+•	GST No. (optional)
+4.5.3 Contact Fields
+•	Name
+•	Phone
+•	Email
+•	Role (Decision Maker, Influencer)
+________________________________________
+4.5.4 Workflow
+•	Lead → convert → Account + Contact + Opportunity created
+•	Owner remains same
+•	Tasks auto-created
+•	Pipeline stage moves to Discovery
+________________________________________
+🔵 4.6 Stage 6 – Opportunity Pipeline Movement
+6 Pipeline Stages
+1.	Discovery
+2.	Proposal Preparation
+3.	Proposal Sent
+4.	Negotiation
+5.	Commercial Approval
+6.	Won / Lost
+________________________________________
+6.1 Mandatory Fields by Stage
+Stage 1 – Discovery
+•	Requirement Notes
+•	Meeting Summary
+Stage 2 – Proposal Preparation
+•	Proposal Amount
+•	Proposal Document
+Stage 3 – Proposal Sent
+•	Mode of sending
+•	Date sent
+Stage 4 – Negotiation
+•	Revised amount
+•	Discount (%)
+Stage 5 – Commercial Approval
+•	Manager approval
+•	Finance approval
+Stage 6 – Won/Lost
+•	Reason
+•	Competitor
+•	Final Amount
+________________________________________
+🔵 4.7 Stage 7 – Task & Activity Tracking
+Activity Types
+•	Call
+•	Meeting
+•	WhatsApp
+•	Email
+•	Note
+•	Follow-up task
+Mandatory Fields
+•	Owner
+•	Due date
+•	Outcome (Call result, Meeting notes)
+AI automatically:
+•	Summarizes calls
+•	Suggests next step
+•	Logs email threads
+________________________________________
+🔵 4.8 Stage 8 – Deal Closure → Delivery Workflow
+If WON – Create Matter + Delivery Setup
+Matter Fields
+Field	Type
+Matter Name	Auto: Account + Matter Type
+Matter Type	Litigation / Property / Due Diligence
+Practice Area	Banking / Real Estate / Compliance
+Assigned Team	Lookup
+SLA Start Date	Auto
+Priority	Low/Med/High
+Tasks Generated:
+✔ Document collection
+✔ Advocate assignment (if external)
+✔ Internal QC points
+✔ Kick-off meeting
+Document Repository Setup:
+•	Folder structure auto-created
+•	Versioning enabled
+•	Access restricted based on role
+________________________________________
+If LOST
+•	Lost reason
+•	Competitor name
+•	Lost revenue
+•	Nurture sequence triggered
+________________________________________
+5. VALIDATIONS
+(Will generate 60–80 line validation matrix if you want.)
+________________________________________
+6. ROLE ACCESS MATRIX
+(Will provide full table if required.)
+________________________________________
+7. REPORTS & DASHBOARDS
+Includes:
+•	Lead Funnel
+•	Conversion Rate
+•	Pipeline Velocity
+•	Team Performance
+•	TAT & SLA
+•	Matter progress
+•	QC failures
+•	Advocate performance
+________________________________________
+8. NOTIFICATION & SLA RULES
+•	Auto reminders
+•	SLA breach alerts
+•	Manager escalation
+•	Client notification
+________________________________________
+9. AUDIT TRAIL REQUIREMENTS
+•	Every field change logged
+•	Time-stamped
+•	User ID captured
+•	Old value vs new value recorded

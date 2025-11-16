@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Requests & Allocation - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .filters input,
+        .filters select {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            min-width: 180px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        thead {
+            background: #f8fafc;
+        }
+        tbody tr:not(:last-child) td {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .status-pill {
+            padding: 6px 12px;
+            border-radius: 999px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        .status-pill[data-status="New"] { background: #e0f2fe; color: #0369a1; }
+        .status-pill[data-status="In Draft"] { background: #ede9fe; color: #5b21b6; }
+        .status-pill[data-status="Under Review"] { background: #fef3c7; color: #92400e; }
+        .status-pill[data-status="Approved"] { background: #dcfce7; color: #15803d; }
+        .status-pill[data-status="Shared"] { background: #cffafe; color: #0e7490; }
+        .status-pill[data-status="Executed"] { background: #c7d2fe; color: #3730a3; }
+        .layout {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 20px;
+        }
+        .panel {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+            border: 1px solid #eef2ff;
+        }
+        .panel h2 {
+            margin-top: 0;
+        }
+        .kanban-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        .kanban-column {
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 14px;
+            background: #f8fafc;
+        }
+        .kanban-column h4 {
+            margin: 0 0 10px;
+            font-size: 15px;
+            color: #0f172a;
+        }
+        .kanban-card {
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+        }
+        .kanban-card strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .request-meta {
+            font-size: 13px;
+            color: #475569;
+        }
+        .detail-card {
+            background: #0f172a;
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .detail-card h3 {
+            margin: 0;
+        }
+        .detail-meta {
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+        }
+        .detail-meta span {
+            display: block;
+        }
+        .btn-inline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+        }
+        @media (max-width: 1024px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+            .detail-card {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Drafting Request Desk</p>
+                <h1>Draft Requests & Allocation</h1>
+                <p class="lead">Central queue for all drafting intake linked to leads, matters, opportunities, and client accounts.</p>
+            </div>
+            <div class="header-actions">
+                <a class="btn btn-primary" href="add-draft-request.html">➕ New Draft Request</a>
+                <a class="btn btn-secondary" href="drafting-dashboard.html">Back to Drafting Hub</a>
+            </div>
+        </header>
+
+        <div class="panel">
+            <div class="filters">
+                <input type="search" id="searchInput" placeholder="Search request title or ID...">
+                <select id="typeFilter">
+                    <option value="">All Document Types</option>
+                    <option value="NDA">NDA</option>
+                    <option value="Loan Agreement">Loan Agreement</option>
+                    <option value="Service Agreement">Service Agreement</option>
+                    <option value="Policy">Policy</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="New">New</option>
+                    <option value="In Draft">In Draft</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Approved">Approved</option>
+                    <option value="Shared">Shared</option>
+                    <option value="Executed">Executed</option>
+                </select>
+                <select id="priorityFilter">
+                    <option value="">All Priority</option>
+                    <option value="High">High</option>
+                    <option value="Normal">Normal</option>
+                    <option value="Low">Low</option>
+                </select>
+                <select id="practiceFilter">
+                    <option value="">All Practice Areas</option>
+                    <option value="Banking">Banking</option>
+                    <option value="Corporate">Corporate</option>
+                    <option value="IT/Procurement">IT/Procurement</option>
+                    <option value="Compliance">Compliance</option>
+                </select>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Request</th>
+                            <th>Document</th>
+                            <th>Linked To</th>
+                            <th>Priority</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestsTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="layout">
+            <div class="panel">
+                <h2>Workflow Status</h2>
+                <div class="kanban-board" id="kanbanBoard"></div>
+            </div>
+            <div class="detail-card" id="detailCard">
+                <div>
+                    <p class="eyebrow" style="color:rgba(255,255,255,0.7);">Selected Request</p>
+                    <h3 id="detailTitle">Select a Draft Request</h3>
+                    <div class="detail-meta" id="detailMeta">
+                        Click on any row to view SLA, attachments, and workflow notes.
+                    </div>
+                </div>
+                <div>
+                    <a class="btn-inline" href="drafting-templates.html">
+                        Browse recommended templates
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/drafting-data.js"></script>
+    <script>
+        const requestsTable = document.getElementById('requestsTable');
+        const filters = ['searchInput','typeFilter','statusFilter','priorityFilter','practiceFilter'].map(id => document.getElementById(id));
+        const detailTitle = document.getElementById('detailTitle');
+        const detailMeta = document.getElementById('detailMeta');
+
+        let cachedRequests = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cachedRequests = draftingStore.getCombinedRequests();
+            renderRequests();
+            renderKanban();
+            filters.forEach(el => el.addEventListener('input', () => {
+                renderRequests();
+                renderKanban();
+            }));
+        });
+
+        function applyFilters(data) {
+            const [search, type, status, priority, practice] = filters.map(el => el.value.toLowerCase());
+            return data.filter(item => {
+                const matchesSearch = !search || (item.title + item.id).toLowerCase().includes(search);
+                const matchesType = !type || (item.type || '').toLowerCase() === type;
+                const matchesStatus = !status || (item.status || '').toLowerCase() === status;
+                const matchesPriority = !priority || (item.priority || '').toLowerCase() === priority;
+                const matchesPractice = !practice || (item.practiceArea || '').toLowerCase() === practice;
+                return matchesSearch && matchesType && matchesStatus && matchesPriority && matchesPractice;
+            });
+        }
+
+        function renderRequests() {
+            const filtered = applyFilters(cachedRequests);
+            requestsTable.innerHTML = filtered.map(item => `
+                <tr data-id="${item.id}">
+                    <td>
+                        <strong>${item.title}</strong>
+                        <div class="muted">${item.id}</div>
+                    </td>
+                    <td>
+                        ${item.type}
+                        <div class="muted">${item.practiceArea}</div>
+                    </td>
+                    <td>${item.linkedTo || '—'}<div class="muted">${item.bank || ''}</div></td>
+                    <td>${item.priority}</td>
+                    <td>${item.dueDate}</td>
+                    <td><span class="status-pill" data-status="${item.status}">${item.status}</span></td>
+                </tr>
+            `).join('');
+
+            Array.from(requestsTable.querySelectorAll('tr')).forEach(row => {
+                row.addEventListener('click', () => {
+                    const request = cachedRequests.find(r => r.id === row.dataset.id);
+                    if (request) {
+                        showDetails(request);
+                    }
+                });
+            });
+        }
+
+        function renderKanban() {
+            const board = document.getElementById('kanbanBoard');
+            const stages = ['New','In Draft','Under Review','Approved','Shared','Executed'];
+            const filtered = applyFilters(cachedRequests);
+            board.innerHTML = stages.map(stage => {
+                const items = filtered.filter(item => item.status === stage);
+                return `
+                    <div class="kanban-column">
+                        <h4>${stage} (${items.length})</h4>
+                        ${items.map(item => `
+                            <div class="kanban-card">
+                                <strong>${item.title}</strong>
+                                <div class="request-meta">Due ${item.dueDate}</div>
+                                <div class="request-meta">${item.assignee || 'Unassigned'}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function showDetails(request) {
+            detailTitle.textContent = request.title;
+            detailMeta.innerHTML = `
+                <span><strong>Request ID:</strong> ${request.id}</span>
+                <span><strong>Document Type:</strong> ${request.type} (${request.practiceArea})</span>
+                <span><strong>Linked To:</strong> ${request.linkedTo} • ${request.bank || '—'}</span>
+                <span><strong>SLA:</strong> ${request.slaHours || 48} hours • Due ${request.dueDate}</span>
+                <span><strong>Assignee:</strong> ${request.assignee || 'Unassigned'} | Requester: ${request.requester || 'N/A'}</span>
+                <span><strong>Attachments:</strong> ${request.attachments || 0} • Last Updated: ${request.lastUpdated || '—'}</span>
+                <span style="margin-top:8px;">${request.description || ''}</span>
+            `;
+        }
+    </script>
+</body>
+</html>
