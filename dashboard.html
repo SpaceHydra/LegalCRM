@@ -327,6 +327,151 @@
             color: #95a5a6;
         }
 
+        /* Lead Card */
+        .lead-card {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            border-left: 4px solid #3498db;
+        }
+
+        .lead-score {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .lead-details h4 {
+            font-size: 14px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .lead-details p {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 3px;
+        }
+
+        .lead-source {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .lead-source.referral { background: #e8f5e9; color: #27ae60; }
+        .lead-source.website { background: #e3f2fd; color: #2196f3; }
+        .lead-source.linkedin { background: #f3e5f5; color: #9c27b0; }
+        .lead-source.coldcall { background: #fff8e1; color: #f57c00; }
+
+        /* Revenue Stats */
+        .revenue-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .revenue-stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .revenue-stat-box.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .revenue-stat-box.orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .revenue-stat-box.red {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .revenue-stat-box h4 {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .revenue-stat-box .amount {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .revenue-stat-box .count {
+            font-size: 11px;
+            opacity: 0.8;
+        }
+
+        /* Workload Bar */
+        .workload-item {
+            margin-bottom: 20px;
+        }
+
+        .workload-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .advocate-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .workload-count {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .workload-bar-container {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .workload-bar {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .workload-bar.low {
+            background: linear-gradient(90deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .workload-bar.medium {
+            background: linear-gradient(90deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .workload-bar.high {
+            background: linear-gradient(90deg, #fa709a 0%, #fee140 100%);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .stats-grid {
@@ -428,6 +573,20 @@
                 <div class="phase-badge mvp">MVP</div>
             </a>
         </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Phase 2</div>
+            <a href="advocates-management.html" class="nav-item">
+                <div class="nav-icon">👨‍⚖️</div>
+                <div class="nav-label">Empaneled Advocates</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="audit-trail.html" class="nav-item">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-label">Audit Trail</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+        </div>
     </div>
 
     <!-- Main Content Area -->
@@ -525,6 +684,17 @@
                 </div>
             </div>
 
+            <!-- Today's Leads -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">Today's Leads</h3>
+                    <a href="lead-management.html" class="widget-action">View All Leads →</a>
+                </div>
+                <div id="todayLeads">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+
             <!-- Leads Requiring Attention -->
             <div class="widget">
                 <div class="widget-header">
@@ -536,15 +706,25 @@
                 </div>
             </div>
 
-            <!-- Revenue Chart -->
+            <!-- Revenue Tracker -->
             <div class="widget">
                 <div class="widget-header">
-                    <h3 class="widget-title">Revenue Trend (Last 6 Months)</h3>
-                    <a href="reporting.html" class="widget-action">View Detailed Report →</a>
+                    <h3 class="widget-title">Revenue Tracker</h3>
+                    <a href="billing.html" class="widget-action">View All Invoices →</a>
                 </div>
-                <div class="chart-placeholder">
-                    📊 Monthly Revenue Visualization<br>
-                    (Chart Component Integration)
+                <div id="revenueTracker">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
+
+            <!-- Advocate Workload -->
+            <div class="widget">
+                <div class="widget-header">
+                    <h3 class="widget-title">Advocate Workload</h3>
+                    <a href="advocates-management.html" class="widget-action">View All Advocates →</a>
+                </div>
+                <div id="advocateWorkload">
+                    <!-- Dynamic content -->
                 </div>
             </div>
 
@@ -595,9 +775,12 @@
             updateDate();
             loadStats();
             loadTodayMeetings();
+            loadTodayLeads();
             loadRecentActivities();
             loadPriorityTasks();
             loadAgingLeads();
+            loadRevenueTracker();
+            loadAdvocateWorkload();
             updateNotificationCount();
         }
 
@@ -827,6 +1010,132 @@
                 month: 'short',
                 day: 'numeric'
             });
+        }
+
+        function loadTodayLeads() {
+            const leads = legalCRM.get('leads');
+            const today = new Date().toISOString().split('T')[0];
+            const todayLeads = leads.filter(l => l.createdDate === today).slice(0, 3);
+
+            const container = document.getElementById('todayLeads');
+
+            if (todayLeads.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No new leads created today</p></div>';
+                return;
+            }
+
+            container.innerHTML = todayLeads.map(lead => {
+                const sourceClass = lead.source.toLowerCase().replace(/\s+/g, '');
+
+                return `
+                    <div class="lead-card">
+                        <div class="lead-score">${lead.score}</div>
+                        <div class="lead-details">
+                            <h4>${lead.company}</h4>
+                            <p><strong>${lead.name}</strong> | ${lead.practiceArea}</p>
+                            <p>📧 ${lead.email} | 📱 ${lead.phone}</p>
+                            <span class="lead-source ${sourceClass}">${lead.source}${lead.referralBy ? ' by ' + lead.referralBy : ''}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadRevenueTracker() {
+            const invoices = legalCRM.get('invoices');
+            const currentMonth = new Date().toISOString().substring(0, 7);
+
+            // Calculate revenue stats
+            const paidInvoices = invoices.filter(inv => inv.status === 'Paid');
+            const overdueInvoices = invoices.filter(inv => inv.status === 'Overdue');
+            const partiallyPaidInvoices = invoices.filter(inv => inv.status === 'Partially Paid');
+
+            const totalPaid = paidInvoices.reduce((sum, inv) => sum + inv.totalAmount, 0);
+            const totalOverdue = overdueInvoices.reduce((sum, inv) => sum + inv.totalAmount, 0);
+            const totalPartial = partiallyPaidInvoices.reduce((sum, inv) => sum + inv.totalAmount, 0);
+            const monthlyRevenue = invoices
+                .filter(inv => inv.invoiceDate.startsWith(currentMonth))
+                .reduce((sum, inv) => sum + inv.amount, 0);
+
+            const container = document.getElementById('revenueTracker');
+
+            container.innerHTML = `
+                <div class="revenue-stats-grid">
+                    <div class="revenue-stat-box green">
+                        <h4>Paid</h4>
+                        <div class="amount">${formatCurrency(totalPaid)}</div>
+                        <div class="count">${paidInvoices.length} invoices</div>
+                    </div>
+                    <div class="revenue-stat-box orange">
+                        <h4>Partially Paid</h4>
+                        <div class="amount">${formatCurrency(totalPartial)}</div>
+                        <div class="count">${partiallyPaidInvoices.length} invoices</div>
+                    </div>
+                    <div class="revenue-stat-box red">
+                        <h4>Overdue</h4>
+                        <div class="amount">${formatCurrency(totalOverdue)}</div>
+                        <div class="count">${overdueInvoices.length} invoices</div>
+                    </div>
+                    <div class="revenue-stat-box">
+                        <h4>This Month</h4>
+                        <div class="amount">${formatCurrency(monthlyRevenue)}</div>
+                        <div class="count">${invoices.filter(inv => inv.invoiceDate.startsWith(currentMonth)).length} invoices</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadAdvocateWorkload() {
+            const tasks = legalCRM.get('tasks');
+            const users = legalCRM.get('users');
+            const advocates = legalCRM.get('advocates');
+
+            // Get all users/advocates
+            const allAdvocates = [...users, ...advocates];
+
+            // Calculate workload for each
+            const workloadData = allAdvocates.map(advocate => {
+                const advocateName = advocate.name;
+                const assignedTasks = tasks.filter(t =>
+                    t.assignedTo === advocateName && t.status !== 'Completed'
+                );
+                const totalHours = assignedTasks.reduce((sum, t) => sum + (t.estimatedEffort || 0), 0);
+
+                return {
+                    name: advocateName,
+                    taskCount: assignedTasks.length,
+                    totalHours: totalHours
+                };
+            }).filter(w => w.taskCount > 0)
+              .sort((a, b) => b.taskCount - a.taskCount)
+              .slice(0, 5);
+
+            const container = document.getElementById('advocateWorkload');
+
+            if (workloadData.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No active task assignments</p></div>';
+                return;
+            }
+
+            // Find max for percentage calculation
+            const maxTasks = Math.max(...workloadData.map(w => w.taskCount));
+
+            container.innerHTML = workloadData.map(workload => {
+                const percentage = (workload.taskCount / maxTasks) * 100;
+                const barClass = workload.taskCount <= 2 ? 'low' : (workload.taskCount <= 4 ? 'medium' : 'high');
+
+                return `
+                    <div class="workload-item">
+                        <div class="workload-header">
+                            <span class="advocate-name">${workload.name}</span>
+                            <span class="workload-count">${workload.taskCount} tasks | ${workload.totalHours}h</span>
+                        </div>
+                        <div class="workload-bar-container">
+                            <div class="workload-bar ${barClass}" style="width: ${percentage}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function updateNotificationCount() {
