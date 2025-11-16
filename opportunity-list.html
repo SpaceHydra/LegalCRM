@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opportunities - Legal CRM</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        /* Pipeline Stats */
+        .pipeline-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        /* Filters Bar */
+        .filters-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-select, .filter-input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        /* Table Styles */
+        .opportunities-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9fa;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 13px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+            cursor: pointer;
+        }
+
+        .stage-badge {
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .stage-discovery { background: #e3f2fd; color: #2196f3; }
+        .stage-proposal-preparation { background: #fff3e0; color: #f57c00; }
+        .stage-proposal-sent { background: #fff8e1; color: #f39c12; }
+        .stage-negotiation { background: #fce4ec; color: #e91e63; }
+        .stage-commercial-approval { background: #f3e5f5; color: #9c27b0; }
+        .stage-won { background: #e8f5e9; color: #27ae60; }
+        .stage-lost { background: #ffebee; color: #e74c3c; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 5px;
+            background: #ecf0f1;
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .view-btn.active {
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .page-btn {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            margin: 0 2px;
+            border-radius: 4px;
+        }
+
+        .page-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <div class="top-nav">
+        <div class="logo-section">
+            <div class="logo">LC</div>
+            <div class="system-title">
+                <h1>Legal CRM Portal</h1>
+                <p>SNG & Partners - Business Development Platform</p>
+            </div>
+        </div>
+        <div class="user-section">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" placeholder="Search opportunities...">
+            </div>
+            <div class="notification-icon">
+                <span style="font-size: 24px;">🔔</span>
+                <div class="badge" id="notificationCount">0</div>
+            </div>
+            <div class="user-profile">
+                <div class="user-avatar">AM</div>
+                <div>
+                    <div style="font-weight: 600; font-size: 14px;">Akash Mehta</div>
+                    <div style="font-size: 11px; opacity: 0.8;">BD Manager</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <div class="nav-section">
+            <div class="nav-section-title">Core Modules (MVP)</div>
+            <a href="dashboard.html" class="nav-item">
+                <div class="nav-icon">📊</div>
+                <div class="nav-label">Dashboard</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="lead-management.html" class="nav-item">
+                <div class="nav-icon">🎯</div>
+                <div class="nav-label">Lead Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="client-management.html" class="nav-item">
+                <div class="nav-icon">👥</div>
+                <div class="nav-label">Client Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="project-management.html" class="nav-item">
+                <div class="nav-icon">📁</div>
+                <div class="nav-label">Matter/Project Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="task-management.html" class="nav-item">
+                <div class="nav-icon">✅</div>
+                <div class="nav-label">Task Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="document-management.html" class="nav-item">
+                <div class="nav-icon">📄</div>
+                <div class="nav-label">Document Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="user-management.html" class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">User & Role Management</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="reporting.html" class="nav-item">
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Basic Reporting</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="billing.html" class="nav-item">
+                <div class="nav-icon">💰</div>
+                <div class="nav-label">Billing & Revenue</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+            <a href="calendar.html" class="nav-item">
+                <div class="nav-icon">📆</div>
+                <div class="nav-label">Calendar Integration</div>
+                <div class="phase-badge mvp">MVP</div>
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">Phase 2</div>
+            <a href="advocates-management.html" class="nav-item">
+                <div class="nav-icon">👨‍⚖️</div>
+                <div class="nav-label">Empaneled Advocates</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+            <a href="audit-trail.html" class="nav-item">
+                <div class="nav-icon">🔍</div>
+                <div class="nav-label">Audit Trail</div>
+                <div class="phase-badge phase2">Phase 2</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <div style="margin-bottom: 20px; color: #7f8c8d; font-size: 14px;">
+            <a href="dashboard.html" style="color: #7f8c8d;">CRM</a> &gt;
+            <span style="color: #2c3e50; font-weight: 600;">Opportunities</span>
+        </div>
+
+        <div class="dashboard-header">
+            <div>
+                <h2>💼 Opportunities</h2>
+                <p>Manage your sales pipeline and deals</p>
+            </div>
+        </div>
+
+        <!-- Pipeline Stats -->
+        <div class="pipeline-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="totalPipeline">₹ 0</div>
+                <div class="stat-label">Total Pipeline</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="weightedPipeline">₹ 0</div>
+                <div class="stat-label">Weighted Pipeline</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="totalOpps">0</div>
+                <div class="stat-label">Total Opportunities</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avgDealSize">₹ 0</div>
+                <div class="stat-label">Average Deal Size</div>
+            </div>
+        </div>
+
+        <!-- Filters and Actions -->
+        <div class="filters-bar">
+            <select class="filter-select" id="stageFilter" onchange="loadOpportunities()">
+                <option value="">All Stages</option>
+                <option value="Discovery">Discovery</option>
+                <option value="Proposal Preparation">Proposal Preparation</option>
+                <option value="Proposal Sent">Proposal Sent</option>
+                <option value="Negotiation">Negotiation</option>
+                <option value="Commercial Approval">Commercial Approval</option>
+                <option value="Won">Won</option>
+                <option value="Lost">Lost</option>
+            </select>
+
+            <select class="filter-select" id="ownerFilter" onchange="loadOpportunities()">
+                <option value="">All Owners</option>
+                <option value="Akash Mehta">Akash Mehta</option>
+                <option value="Priya Nair">Priya Nair</option>
+                <option value="Saurabh Jain">Saurabh Jain</option>
+                <option value="Vikram Sharma">Vikram Sharma</option>
+            </select>
+
+            <select class="filter-select" id="regionFilter" onchange="loadOpportunities()">
+                <option value="">All Regions</option>
+                <option value="North">North</option>
+                <option value="South">South</option>
+                <option value="East">East</option>
+                <option value="West">West</option>
+            </select>
+
+            <select class="filter-select" id="industryFilter" onchange="loadOpportunities()">
+                <option value="">All Industries</option>
+                <option value="Banking">Banking</option>
+                <option value="Legal">Legal</option>
+                <option value="Real Estate">Real Estate</option>
+                <option value="Technology">Technology</option>
+            </select>
+
+            <input type="text" class="filter-input" id="searchInput" placeholder="🔍 Search..." onkeyup="loadOpportunities()" style="flex: 1; min-width: 200px;">
+
+            <div style="margin-left: auto; display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="exportOpportunities()">📊 Export</button>
+                <button class="btn btn-primary" onclick="window.location.href='pipeline-board.html'">📋 Pipeline View</button>
+            </div>
+        </div>
+
+        <!-- Opportunities Table -->
+        <div class="opportunities-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"></th>
+                        <th>Deal Name</th>
+                        <th>Account</th>
+                        <th>Stage</th>
+                        <th>Expected Revenue</th>
+                        <th>Owner</th>
+                        <th>Close Date</th>
+                    </tr>
+                </thead>
+                <tbody id="opportunitiesTableBody">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div>
+                    Showing <span id="showingCount">0</span> of <span id="totalCount">0</span> opportunities
+                </div>
+                <div>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <span style="margin: 0 10px;">Rows per page:</span>
+                    <select class="filter-select" style="width: 70px;">
+                        <option>25</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadOpportunities();
+            updateStats();
+        });
+
+        function loadOpportunities() {
+            let opportunities = legalCRM.get('opportunities');
+
+            // Apply filters
+            const stageFilter = document.getElementById('stageFilter').value;
+            const ownerFilter = document.getElementById('ownerFilter').value;
+            const regionFilter = document.getElementById('regionFilter').value;
+            const industryFilter = document.getElementById('industryFilter').value;
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            if (stageFilter) opportunities = opportunities.filter(o => o.stage === stageFilter);
+            if (ownerFilter) opportunities = opportunities.filter(o => o.owner === ownerFilter);
+            if (regionFilter) opportunities = opportunities.filter(o => o.region === regionFilter);
+            if (industryFilter) opportunities = opportunities.filter(o => o.industry === industryFilter);
+            if (searchTerm) {
+                opportunities = opportunities.filter(o =>
+                    o.dealName.toLowerCase().includes(searchTerm) ||
+                    o.accountName.toLowerCase().includes(searchTerm) ||
+                    o.owner.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const tbody = document.getElementById('opportunitiesTableBody');
+
+            if (opportunities.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                            <div style="font-size: 48px; margin-bottom: 15px;">💼</div>
+                            <div style="font-size: 18px; font-weight: 600;">No opportunities found</div>
+                            <div style="font-size: 14px; margin-top: 5px;">Try adjusting your filters</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = opportunities.map(opp => `
+                <tr onclick="window.location.href='opportunity-details.html?id=${opp.id}'">
+                    <td onclick="event.stopPropagation()"><input type="checkbox"></td>
+                    <td>
+                        <div style="font-weight: 600;">${opp.dealName}</div>
+                    </td>
+                    <td>${opp.accountName}</td>
+                    <td><span class="stage-badge stage-${opp.stage.toLowerCase().replace(/\s+/g, '-')}">${opp.stage}</span></td>
+                    <td><strong>₹ ${formatCurrency(opp.expectedRevenue)}</strong></td>
+                    <td>${opp.owner}</td>
+                    <td>${formatDate(opp.closingDate)}</td>
+                </tr>
+            `).join('');
+
+            // Update counts
+            document.getElementById('showingCount').textContent = opportunities.length;
+            document.getElementById('totalCount').textContent = legalCRM.get('opportunities').length;
+        }
+
+        function updateStats() {
+            const opportunities = legalCRM.get('opportunities').filter(o => o.status === 'Open');
+
+            const totalPipeline = opportunities.reduce((sum, o) => sum + o.expectedRevenue, 0);
+            const weightedPipeline = opportunities.reduce((sum, o) => sum + (o.expectedRevenue * o.probability / 100), 0);
+            const avgDealSize = opportunities.length > 0 ? totalPipeline / opportunities.length : 0;
+
+            document.getElementById('totalPipeline').textContent = '₹ ' + formatCurrency(totalPipeline);
+            document.getElementById('weightedPipeline').textContent = '₹ ' + formatCurrency(weightedPipeline);
+            document.getElementById('totalOpps').textContent = opportunities.length;
+            document.getElementById('avgDealSize').textContent = '₹ ' + formatCurrency(avgDealSize);
+        }
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('en-IN').format(value);
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' });
+        }
+
+        function exportOpportunities() {
+            alert('Export functionality coming soon!');
+        }
+    </script>
+</body>
+</html>
