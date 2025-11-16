@@ -55,7 +55,7 @@ Appendices
 1️⃣ PROJECT OVERVIEW
 Purpose
 
-Build India’s most advanced, AI-powered Legal CRM Platform, covering end-to-end workflow from Lead → Client → Mandate → Tasks → Billing → Completion.
+Build India's most advanced, AI-powered Legal CRM Platform, covering end-to-end workflow from Lead → Client → Mandate → Tasks → Billing → Completion.
 
 Key Principles
 
@@ -69,7 +69,7 @@ DPDPA-compliant
 
 Mobile-first + Cloud-based
 
-2️⃣ 
+2️⃣
 Key Features
 
 Multi-source lead capture
@@ -144,11 +144,11 @@ Registered Address	Text	Optional
 Communication Address	Text	Optional
 SPOC Details
 Field	Type	Notes
-SPOC ID	Auto	
-Name	Text	
-Email	Email	
-Phone	Phone	
-Department	Text	
+SPOC ID	Auto
+Name	Text
+Email	Email
+Phone	Phone
+Department	Text
 Communication Preference	Enum	Phone/Email/WhatsApp
 Client Status
 Field	Type
@@ -445,7 +445,7 @@ I can generate a full Excel-ready dictionary on request
 
 PAN must be unique per client
 
-Lead status must be “Qualified” to convert
+Lead status must be "Qualified" to convert
 
 Escalation triggers >15 days inactivity
 
