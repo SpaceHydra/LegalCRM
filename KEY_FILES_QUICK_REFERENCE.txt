@@ -1,0 +1,245 @@
+============================================================================
+                    LEGALCRM KEY FILES QUICK REFERENCE
+============================================================================
+
+CORE DATA LAYER
+===============
+/home/user/LegalCRM/js/data.js                          (1916 lines)
+  - Main: LegalCRMData class with all CRUD operations
+  - Entities: leads, clients, projects, tasks, documents, invoices, meetings, users, advocates, matters, matterTasks, matterDocuments, advocateAssignments, qcItems, opportunities, activities
+  - Initialize: legalCRM = new LegalCRMData()
+  - Key Methods: get(), getById(), create(), update(), delete(), generateId(), logActivity()
+  - Matter Methods: getMatterStats(), getMatterTasks(), getMatterDocuments(), convertToMatter(), canCompleteMatter(), checkTaskDependencies(), etc.
+
+UTILITIES & HELPERS
+====================
+/home/user/LegalCRM/js/common.js                        (127 lines)
+  - formatCurrency(amount)        -> ₹ format
+  - formatDate(dateString)        -> en-IN format
+  - daysBetween(date1, date2)     -> integer days
+  - getStatusBadgeClass(status)   -> CSS class
+  - showNotification(msg, type)   -> Toast alert
+  - updateNotificationCount()     -> Badge update
+
+/home/user/LegalCRM/js/navigation.js                    (181 lines)
+  - navigationData object with module list
+  - createTopNavigation()         -> HTML string
+  - createSidebar(activePage)     -> HTML string
+  - injectNavigation()            -> Inserts into DOM
+  - setupMobileMenu()             -> Mobile toggle
+
+/home/user/LegalCRM/js/drafting-data.js                 (254 lines)
+  - draftingData with requests, templates, clauses, obligations
+  - draftingStore with localStorage functions
+  - formatDraftingStatus(status)
+
+STYLING & CSS
+==============
+/home/user/LegalCRM/css/common-styles.css               (Main styles)
+  - Top nav styling: .top-nav, .logo, .user-section, .notification-icon
+  - Sidebar: .sidebar, .nav-section, .nav-item, .nav-item.active
+  - Layout: .main-content, .sidebar positioning
+  - Responsive design and mobile menu toggle
+
+/home/user/LegalCRM/css/components/buttons.css
+/home/user/LegalCRM/css/components/forms.css
+/home/user/LegalCRM/css/components/tables.css
+/home/user/LegalCRM/css/components/badges.css
+/home/user/LegalCRM/css/components/cards.css
+/home/user/LegalCRM/css/modules/drafting.css
+/home/user/LegalCRM/css/layout/topnav.css
+/home/user/LegalCRM/css/utilities/helpers.css
+
+MAIN PAGES (HTML)
+==================
+/home/user/LegalCRM/dashboard.html                      # Entry point - shows stats
+/home/user/LegalCRM/lead-management.html                # Lead CRUD
+/home/user/LegalCRM/client-management.html              # Client CRUD
+/home/user/LegalCRM/project-management.html             # Projects/Matters CRUD
+/home/user/LegalCRM/task-management.html                # Tasks CRUD
+/home/user/LegalCRM/document-management.html            # Documents list & search
+/home/user/LegalCRM/add-document.html                   # Document upload form
+/home/user/LegalCRM/user-management.html                # Users & roles
+/home/user/LegalCRM/reporting.html                      # Analytics dashboard
+/home/user/LegalCRM/billing.html                        # Invoices & revenue
+/home/user/LegalCRM/calendar.html                       # Meetings
+/home/user/LegalCRM/advocates-management.html           # Empaneled advocates
+/home/user/LegalCRM/advocate-profile.html               # Advocate detail
+/home/user/LegalCRM/matter-details.html                 # Matter detail with tabs
+/home/user/LegalCRM/drafting-dashboard.html             # Drafting hub
+/home/user/LegalCRM/drafting-requests.html              # Draft requests queue
+/home/user/LegalCRM/drafting-templates.html             # Template library
+/home/user/LegalCRM/drafting-clauses.html               # Clause bank
+/home/user/LegalCRM/drafting-execution.html             # Execution & renewals
+
+DOCUMENTATION
+===============
+/home/user/LegalCRM/README.md                           # Feature overview (268 lines)
+/home/user/LegalCRM/fsd.md                              # Functional specification (720 lines)
+/home/user/LegalCRM/drafting_module.md                  # Drafting requirements
+/home/user/LegalCRM/CODEBASE_ARCHITECTURE.md            # This analysis (just created)
+/home/user/LegalCRM/Legal_CRM_Design_System_Style_Guide.md
+/home/user/LegalCRM/BUTTON_SYSTEM_QUICK_REFERENCE.md
+/home/user/LegalCRM/INTEGRATION_COMPLETE.md
+/home/user/LegalCRM/INTEGRATION_STATUS.md
+/home/user/LegalCRM/USAGE_GUIDE.md
+/home/user/LegalCRM/SYNC_GUIDE.md
+
+============================================================================
+                            DATA ENTITIES SUMMARY
+============================================================================
+
+CLIENTS & LEADS
+  leads              - 7 records, status: New/In Progress/Qualified/Won/Lost
+  clients            - 5 records, has SPOC array
+  opportunities      - 5 records, pipeline stages
+  users              - 5 records, roles & permissions
+  advocates          - 5 records, empaneled lawyers
+
+WORK & PROJECTS
+  projects           - 4 records, matters/cases
+  matters            - 3 records, specialized projects (BPR, TSR, POSH)
+  matterTasks        - 4 records, tasks within matters
+  tasks              - 5 records, standalone tasks
+  matterDocuments    - 4 records, matter-specific files
+  documents          - 3 records, project documents
+
+FINANCIAL
+  invoices           - 3 records, GST calculations
+  
+MEETINGS & COMMUNICATION
+  meetings           - 5 records, calendar events
+  
+DRAFTING & CONTRACTS
+  requests           - 4 records, draft requests
+  templates          - 3 records, document templates
+  clauses            - 3 records, reusable clauses
+  obligations        - 3 records, contract renewals
+
+GOVERNANCE
+  advocateAssignments - 3 records, advocate-to-matter mapping
+  qcItems            - 2 records, quality control items
+  activities         - activity log, max 100 records
+
+============================================================================
+                        BROWSER STORAGE KEYS
+============================================================================
+
+localStorage keys used (prefix: legalCRM_):
+  legalCRM_leads
+  legalCRM_clients
+  legalCRM_opportunities
+  legalCRM_users
+  legalCRM_advocates
+  legalCRM_projects
+  legalCRM_matters
+  legalCRM_matterTasks
+  legalCRM_tasks
+  legalCRM_documents
+  legalCRM_matterDocuments
+  legalCRM_invoices
+  legalCRM_meetings
+  legalCRM_advocateAssignments
+  legalCRM_qcItems
+  legalCRM_activities
+  legalCRM_initialized      (boolean flag)
+
+Drafting-specific (different storage):
+  legalCRM.drafting.requests
+  legalCRM.drafting.workspaceDrafts
+
+============================================================================
+                      IMPORTANT CODE PATTERNS
+============================================================================
+
+CREATING A RECORD:
+  const newItem = {
+    id: legalCRM.generateId('documents', 'DOC'),
+    name: 'My Document',
+    // ... other fields
+  };
+  legalCRM.create('documents', newItem);
+  // Activity logged automatically
+
+UPDATING A RECORD:
+  legalCRM.update('documents', documentId, {
+    status: 'Approved',
+    updatedDate: new Date().toISOString()
+  });
+  // Activity logged automatically
+
+DELETING A RECORD:
+  legalCRM.delete('documents', documentId);
+  // Activity logged automatically
+
+QUERYING:
+  const docs = legalCRM.get('documents');
+  const doc = legalCRM.getById('documents', docId);
+
+SHOWING NOTIFICATION:
+  showNotification('Document uploaded successfully', 'success');
+  showNotification('Error uploading', 'error');
+
+FORMATTING DATA:
+  formatCurrency(500000)              // "₹5,00,000"
+  formatDate('2025-11-17')            // "17 Nov 2025"
+  getStatusBadgeClass('Paid')         // "status-won"
+
+============================================================================
+                        ARCHITECTURE SUMMARY
+============================================================================
+
+FRONTEND FRAMEWORK:       Vanilla HTML5 + CSS3 + JavaScript (No React/Vue/Angular)
+DATA PERSISTENCE:         Browser localStorage (no backend)
+DATABASE:                 None (all in-memory via localStorage)
+AUTHENTICATION:           None (hardcoded user: "Prateek Mehta")
+API/BACKEND:              None (static files only)
+FILE STORAGE:             Metadata only (no actual file persistence)
+ROUTING:                  Direct HTML links (not SPA)
+STATE MANAGEMENT:         localStorage CRUD class
+STYLING APPROACH:         Component-based CSS files
+RESPONSIVE DESIGN:        Yes, mobile menu toggle
+DESIGN SYSTEM:            Color-coded badges, cards, tables
+INDIAN CONTEXT:           ₹ currency, PAN/GSTIN, en-IN dates, GST 18%
+
+============================================================================
+                    DOCUMENT PROCESSING INTEGRATION
+============================================================================
+
+To add document processing module:
+
+1. CREATE NEW PAGE:
+   /home/user/LegalCRM/document-processing.html
+   - Use common nav injection from navigation.js
+   - Include data.js and common.js
+   - Link to css/common-styles.css
+
+2. CREATE DATA LAYER:
+   /home/user/LegalCRM/js/document-processing.js
+   - Define processing entities
+   - Add methods to legalCRM (or separate class)
+   - Handle processing results storage
+
+3. TRACK METADATA:
+   Use existing 'documents' entity with new fields:
+   - processingStatus (Pending, Processing, Completed, Failed)
+   - processingResults (OCR text, extracted fields, etc.)
+   - processedDate
+   - processingNotes
+
+4. LOG ACTIVITIES:
+   legalCRM.logActivity({
+     type: 'document_processed',
+     title: 'Document Processed',
+     description: 'Extracted data from Sales_Agreement.pdf',
+     timestamp: new Date().toISOString(),
+     user: 'Prateek Mehta',
+     relatedId: docId
+   });
+
+5. ADD TO NAVIGATION:
+   Update /home/user/LegalCRM/js/navigation.js
+   Add to navigationData.coreModules or phase2Modules:
+   { name: 'Document Processing', icon: '📑', url: 'document-processing.html', phase: 'mvp' }
+
+============================================================================
