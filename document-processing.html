@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Processing - Legal CRM</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/document-processing.css">
+</head>
+<body>
+    <!-- Navigation will be injected here -->
+    <div id="topnav"></div>
+    <div id="sidebar"></div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <div class="header-content">
+                <h1>📑 Document Processing</h1>
+                <p class="subtitle">Upload → Auto-classify → Extract → Translate → Summarise → Insights → Save to CRM</p>
+            </div>
+        </div>
+
+        <!-- Processing Options Panel -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>⚙️ Processing Options</h3>
+                <p class="text-muted">Configure how documents should be processed</p>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="form-label">Output Language</label>
+                        <select id="outputLanguage" class="form-control">
+                            <option value="English (India)" selected>English (India)</option>
+                            <option value="Hindi">Hindi (हिन्दी)</option>
+                            <option value="Marathi">Marathi (मराठी)</option>
+                            <option value="Tamil">Tamil (தமிழ்)</option>
+                            <option value="Telugu">Telugu (తెలుగు)</option>
+                            <option value="Gujarati">Gujarati (ગુજરાતી)</option>
+                            <option value="Bengali">Bengali (বাংলা)</option>
+                            <option value="Kannada">Kannada (ಕನ್ನಡ)</option>
+                            <option value="Malayalam">Malayalam (മലയാളം)</option>
+                            <option value="Punjabi">Punjabi (ਪੰਜਾਬੀ)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Detail Level</label>
+                        <select id="detailLevel" class="form-control">
+                            <option value="Short">Short (3-4 bullet points)</option>
+                            <option value="Detailed" selected>Detailed Summary</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Insight Mode</label>
+                        <select id="insightMode" class="form-control">
+                            <option value="Plain summary only">Plain summary only</option>
+                            <option value="Summary + risk/issue flags" selected>Summary + Risk Flags</option>
+                            <option value="Summary + action items / next steps">Summary + Action Items</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label">&nbsp;</label>
+                        <button id="applyOptionsBtn" class="btn btn-primary btn-block">Apply to All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Area -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3>📤 Upload Documents</h3>
+                <p class="text-muted">Drag & drop files or click to browse. Supports: PDF, DOCX, DOC, TXT, ZIP</p>
+            </div>
+            <div class="card-body">
+                <!-- Drag & Drop Area -->
+                <div id="dropZone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="drop-zone-icon">📁</div>
+                        <h4>Drag & Drop Files Here</h4>
+                        <p class="text-muted">or</p>
+                        <button id="browseBtn" class="btn btn-primary btn-lg">Browse Files</button>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.doc,.txt,.zip" style="display: none;">
+                        <div class="mt-3 text-muted">
+                            <small>
+                                Max file size: <strong>50 MB</strong> (single file) | <strong>200 MB</strong> (ZIP) <br>
+                                Supported formats: PDF, DOCX, DOC, TXT, ZIP
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Progress (hidden by default) -->
+                <div id="uploadProgress" class="upload-progress" style="display: none;">
+                    <div class="progress-header">
+                        <span id="uploadStatus">Uploading...</span>
+                        <span id="uploadPercent">0%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div id="uploadProgressBar" class="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Queue / List -->
+        <div class="card mb-4" id="fileQueueCard" style="display: none;">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3>📋 Document Queue</h3>
+                        <p class="text-muted mb-0">
+                            <span id="queueStats">0 files | 0 supported | 0 unsupported</span>
+                        </p>
+                    </div>
+                    <div>
+                        <button id="processAllBtn" class="btn btn-success" disabled>
+                            ▶️ Process All
+                        </button>
+                        <button id="clearQueueBtn" class="btn btn-outline-danger ml-2">
+                            🗑️ Clear Queue
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th width="5%">
+                                    <input type="checkbox" id="selectAllFiles">
+                                </th>
+                                <th width="30%">File Name</th>
+                                <th width="10%">Size</th>
+                                <th width="15%">Detected Type</th>
+                                <th width="15%">Status</th>
+                                <th width="15%">Progress</th>
+                                <th width="10%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fileQueueBody">
+                            <!-- Files will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Area -->
+        <div id="resultsArea" style="display: none;">
+            <div class="section-header mb-3">
+                <h2>📊 Processing Results</h2>
+                <p class="text-muted">Review extracted data, insights, and link to CRM</p>
+            </div>
+
+            <!-- Results will be dynamically populated here -->
+            <div id="resultsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Document Result Modal Template -->
+    <div id="documentModal" class="modal" style="display: none;">
+        <div class="modal-content modal-xl">
+            <div class="modal-header">
+                <h2 id="modalDocumentName">Document Details</h2>
+                <button class="modal-close" onclick="closeDocumentModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="summary">📝 Summary</button>
+                    <button class="tab-btn" data-tab="extracted">📊 Extracted Data</button>
+                    <button class="tab-btn" data-tab="insights">⚠️ Insights & Risks</button>
+                    <button class="tab-btn" data-tab="actions">✅ Action Items</button>
+                    <button class="tab-btn" data-tab="crm">🔗 Link to CRM</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="tabContent" class="tab-content">
+                    <!-- Content will be populated dynamically -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" onclick="downloadJSON()">💾 Download JSON</button>
+                <button class="btn btn-outline-primary" onclick="copyToClipboard()">📋 Copy Summary</button>
+                <button class="btn btn-success" onclick="saveToCRM()">💾 Save to CRM</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/navigation.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/document-processing.js"></script>
+
+    <script>
+        // Initialize navigation
+        const legalCRM = new LegalCRMData();
+        loadNavigation();
+    </script>
+</body>
+</html>

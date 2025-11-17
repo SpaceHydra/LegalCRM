@@ -9,6 +9,7 @@ const navigationData = {
         { name: 'Project Management', icon: '📁', url: 'project-management.html', phase: 'mvp' },
         { name: 'Task Management', icon: '✅', url: 'task-management.html', phase: 'mvp' },
         { name: 'Document Management', icon: '📄', url: 'document-management.html', phase: 'mvp' },
+        { name: 'Document Processing', icon: '📑', url: 'document-processing.html', phase: 'NEW', badge: true },
         { name: 'User Management', icon: '👤', url: 'user-management.html', phase: 'mvp' },
         { name: 'Basic Reporting', icon: '📈', url: 'reporting.html', phase: 'mvp' }
     ],
