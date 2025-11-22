@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E2E Workflow Test - Legal CRM</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .test-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .test-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .test-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .workflow-step {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 6px solid;
+            position: relative;
+        }
+
+        .workflow-step.step-1 { border-left-color: #3b82f6; }
+        .workflow-step.step-2 { border-left-color: #8b5cf6; }
+        .workflow-step.step-3 { border-left-color: #ec4899; }
+        .workflow-step.step-4 { border-left-color: #f59e0b; }
+        .workflow-step.step-5 { border-left-color: #10b981; }
+        .workflow-step.step-6 { border-left-color: #06b6d4; }
+        .workflow-step.step-7 { border-left-color: #6366f1; }
+        .workflow-step.step-8 { border-left-color: #14b8a6; }
+        .workflow-step.step-9 { border-left-color: #22c55e; }
+
+        .workflow-step.completed {
+            opacity: 0.7;
+            background: #f0fdf4;
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: 3px solid;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            margin-top: 10px;
+        }
+
+        .step-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+
+        .step-module {
+            font-size: 14px;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 4px 12px;
+            border-radius: 12px;
+        }
+
+        .step-description {
+            color: #6b7280;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .step-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-execute {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-execute:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-view {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-view:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-completed {
+            background: #d1fae5;
+            color: #065f46;
+            cursor: default;
+        }
+
+        .step-data {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .data-label {
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .data-value {
+            font-size: 16px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 8px;
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #6b7280;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .test-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-item {
+            text-align: center;
+            padding: 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        .summary-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #374151;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        .workflow-diagram {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .diagram-flow {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .diagram-node {
+            flex: 1;
+            min-width: 100px;
+            padding: 15px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .diagram-arrow {
+            font-size: 24px;
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- Header -->
+        <div class="test-header">
+            <div class="test-title">🧪 End-to-End Workflow Test</div>
+            <div class="test-subtitle">Complete Legal CRM Lifecycle: Lead → Client → Matter → Completion</div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text" id="progressText">0 of 9 steps completed (0%)</div>
+
+        <!-- Workflow Diagram -->
+        <div class="workflow-diagram">
+            <h3 style="margin-bottom: 20px;">Workflow Overview</h3>
+            <div class="diagram-flow">
+                <div class="diagram-node">🎯 Lead</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">📞 Follow-up</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">📅 Schedule</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">👥 Client</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">📁 Matter</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">⚖️ Senior</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">✅ Tasks</div>
+                <div class="diagram-arrow">→</div>
+                <div class="diagram-node">🎉 Complete</div>
+            </div>
+        </div>
+
+        <!-- Workflow Steps -->
+        <div class="workflow-steps">
+            <!-- Step 1: Lead Generation -->
+            <div class="workflow-step step-1" id="step1">
+                <div class="step-number" style="border-color: #3b82f6; color: #3b82f6;">1</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">🎯 Lead Generation</div>
+                        <div class="step-module">Module: Lead Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Create a new lead in the system. This represents a potential client who has shown interest in your legal services.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep1()">
+                        ➕ Create Test Lead
+                    </button>
+                    <button class="step-btn btn-view" onclick="window.location.href='lead-management.html'">
+                        📋 View All Leads
+                    </button>
+                </div>
+                <div class="step-data" id="step1Data" style="display: none;">
+                    <strong>✅ Lead Created:</strong>
+                    <div class="data-grid" style="margin-top: 15px;">
+                        <div class="data-item">
+                            <div class="data-label">Lead Name</div>
+                            <div class="data-value" id="leadName">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Company</div>
+                            <div class="data-value" id="leadCompany">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Lead ID</div>
+                            <div class="data-value" id="leadId">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Lead Score</div>
+                            <div class="data-value" id="leadScore">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Follow-up Activities -->
+            <div class="workflow-step step-2" id="step2">
+                <div class="step-number" style="border-color: #8b5cf6; color: #8b5cf6;">2</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">📞 Follow-up & Qualification</div>
+                        <div class="step-module">Module: Lead Management + Team Chat</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Add notes and update the lead score based on interactions. Track follow-up activities and discussions.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep2()" disabled id="step2Btn">
+                        📝 Add Follow-up Notes
+                    </button>
+                    <button class="step-btn btn-view" onclick="viewLeadDetail()" disabled id="step2ViewBtn">
+                        👁️ View Lead Details
+                    </button>
+                </div>
+                <div class="step-data" id="step2Data" style="display: none;">
+                    <strong>✅ Follow-up Completed:</strong>
+                    <div style="margin-top: 10px; color: #6b7280;">
+                        Notes added and lead score updated to <strong id="updatedScore">-</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Demo/Call Scheduling -->
+            <div class="workflow-step step-3" id="step3">
+                <div class="step-number" style="border-color: #ec4899; color: #ec4899;">3</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">📅 Schedule Demo/Call</div>
+                        <div class="step-module">Module: Meeting Scheduler</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Schedule a meeting or demo call with the qualified lead to discuss their legal requirements.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep3()" disabled id="step3Btn">
+                        📅 Schedule Meeting
+                    </button>
+                    <button class="step-btn btn-view" onclick="window.location.href='calendar.html'">
+                        🗓️ View Calendar
+                    </button>
+                </div>
+                <div class="step-data" id="step3Data" style="display: none;">
+                    <strong>✅ Meeting Scheduled:</strong>
+                    <div class="data-grid" style="margin-top: 15px;">
+                        <div class="data-item">
+                            <div class="data-label">Meeting Date</div>
+                            <div class="data-value" id="meetingDate">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Meeting Type</div>
+                            <div class="data-value">Consultation Call</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Convert to Client -->
+            <div class="workflow-step step-4" id="step4">
+                <div class="step-number" style="border-color: #f59e0b; color: #f59e0b;">4</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">👥 Convert to Client</div>
+                        <div class="step-module">Module: Lead Management → Client Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    After successful consultation, convert the qualified lead to a client with complete onboarding details.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep4()" disabled id="step4Btn">
+                        ✅ Convert to Client
+                    </button>
+                    <button class="step-btn btn-view" onclick="window.location.href='client-management.html'">
+                        👥 View Clients
+                    </button>
+                </div>
+                <div class="step-data" id="step4Data" style="display: none;">
+                    <strong>✅ Client Created:</strong>
+                    <div class="data-grid" style="margin-top: 15px;">
+                        <div class="data-item">
+                            <div class="data-label">Client ID</div>
+                            <div class="data-value" id="clientId">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Client Name</div>
+                            <div class="data-value" id="clientName">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Category</div>
+                            <div class="data-value">Corporate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Create Matter -->
+            <div class="workflow-step step-5" id="step5">
+                <div class="step-number" style="border-color: #10b981; color: #10b981;">5</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">📁 Create Legal Matter</div>
+                        <div class="step-module">Module: Project/Matter Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Create a new legal matter/case for the client with all relevant details.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep5()" disabled id="step5Btn">
+                        📁 Create Matter
+                    </button>
+                    <button class="step-btn btn-view" onclick="window.location.href='project-management.html'">
+                        📂 View Matters
+                    </button>
+                </div>
+                <div class="step-data" id="step5Data" style="display: none;">
+                    <strong>✅ Matter Created:</strong>
+                    <div class="data-grid" style="margin-top: 15px;">
+                        <div class="data-item">
+                            <div class="data-label">Matter ID</div>
+                            <div class="data-value" id="matterId">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Matter Title</div>
+                            <div class="data-value" id="matterTitle">-</div>
+                        </div>
+                        <div class="data-item">
+                            <div class="data-label">Practice Area</div>
+                            <div class="data-value">Corporate Law</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: Assign to Senior Advocate -->
+            <div class="workflow-step step-6" id="step6">
+                <div class="step-number" style="border-color: #06b6d4; color: #06b6d4;">6</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">⚖️ Assign to Senior Advocate</div>
+                        <div class="step-module">Module: Matter Management + User Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Assign the matter to a senior advocate who will lead the case and manage the team.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep6()" disabled id="step6Btn">
+                        👨‍⚖️ Assign Senior Advocate
+                    </button>
+                    <button class="step-btn btn-view" onclick="viewMatterDetail()" disabled id="step6ViewBtn">
+                        👁️ View Matter
+                    </button>
+                </div>
+                <div class="step-data" id="step6Data" style="display: none;">
+                    <strong>✅ Senior Advocate Assigned:</strong>
+                    <div style="margin-top: 10px; color: #6b7280;">
+                        Lead Advocate: <strong id="seniorAdvocate">-</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 7: Create Tasks for Junior Advocates -->
+            <div class="workflow-step step-7" id="step7">
+                <div class="step-number" style="border-color: #6366f1; color: #6366f1;">7</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">✅ Assign Tasks to Team</div>
+                        <div class="step-module">Module: Task Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Senior advocate creates and assigns specific tasks to junior advocates and team members.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep7()" disabled id="step7Btn">
+                        ➕ Create Tasks
+                    </button>
+                    <button class="step-btn btn-view" onclick="window.location.href='task-management.html'">
+                        📋 View Tasks
+                    </button>
+                </div>
+                <div class="step-data" id="step7Data" style="display: none;">
+                    <strong>✅ Tasks Created:</strong>
+                    <div style="margin-top: 10px; color: #6b7280;">
+                        Created <strong id="taskCount">0</strong> tasks for the team
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 8: Complete Tasks -->
+            <div class="workflow-step step-8" id="step8">
+                <div class="step-number" style="border-color: #14b8a6; color: #14b8a6;">8</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">✔️ Complete Tasks</div>
+                        <div class="step-module">Module: Task Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    Junior advocates complete their assigned tasks (research, drafting, client communication, etc.)
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep8()" disabled id="step8Btn">
+                        ✔️ Mark Tasks Complete
+                    </button>
+                    <button class="step-btn btn-view" onclick="window.location.href='task-management.html'">
+                        📊 View Progress
+                    </button>
+                </div>
+                <div class="step-data" id="step8Data" style="display: none;">
+                    <strong>✅ Tasks Completed:</strong>
+                    <div style="margin-top: 10px; color: #6b7280;">
+                        All <strong id="completedCount">0</strong> tasks marked as completed
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 9: Close Matter -->
+            <div class="workflow-step step-9" id="step9">
+                <div class="step-number" style="border-color: #22c55e; color: #22c55e;">9</div>
+                <div class="step-header">
+                    <div>
+                        <div class="step-title">🎉 Close Matter</div>
+                        <div class="step-module">Module: Matter Management</div>
+                    </div>
+                </div>
+                <div class="step-description">
+                    All tasks completed! Close the matter and mark it as successfully resolved.
+                </div>
+                <div class="step-actions">
+                    <button class="step-btn btn-execute" onclick="executeStep9()" disabled id="step9Btn">
+                        🎉 Close Matter
+                    </button>
+                    <button class="step-btn btn-view" onclick="viewMatterDetail()" disabled id="step9ViewBtn">
+                        👁️ View Final Matter
+                    </button>
+                </div>
+                <div class="step-data" id="step9Data" style="display: none;">
+                    <strong>✅ Matter Closed Successfully!</strong>
+                    <div style="margin-top: 10px; color: #6b7280;">
+                        Matter status updated to <strong>Closed</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Summary -->
+        <div class="test-summary" id="testSummary" style="display: none;">
+            <h2 style="text-align: center; margin-bottom: 10px;">🎉 E2E Test Completed Successfully!</h2>
+            <p style="text-align: center; color: #6b7280; margin-bottom: 30px;">
+                Complete workflow from lead generation to matter completion has been tested.
+            </p>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="summary-value">✅</div>
+                    <div class="summary-label">Lead Created</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">✅</div>
+                    <div class="summary-label">Client Converted</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">✅</div>
+                    <div class="summary-label">Matter Created</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">✅</div>
+                    <div class="summary-label">Tasks Completed</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value">✅</div>
+                    <div class="summary-label">Matter Closed</div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn-primary" onclick="location.reload()">🔄 Run Test Again</button>
+                <button class="btn-primary" onclick="window.location.href='dashboard.html'" style="margin-left: 10px;">📊 Go to Dashboard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/e2e-test.js"></script>
+</body>
+</html>
