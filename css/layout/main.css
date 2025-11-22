@@ -1,19 +1,5 @@
 /* Legal CRM - Main Content Layout */
-
-.main-content {
-    margin-left: var(--sidebar-width);
-    margin-top: var(--topnav-height);
-    padding: var(--padding-section);
-    min-height: calc(100vh - var(--topnav-height));
-    background: var(--bg-dark);
-}
-
-.page-container {
-    margin-left: var(--sidebar-width);
-    margin-top: var(--topnav-height);
-    padding: var(--padding-section);
-    min-height: calc(100vh - var(--topnav-height));
-}
+/* Main content and page container styles are defined in css/common-styles.css */
 
 .page-header {
     margin-bottom: var(--margin-section);
@@ -52,41 +38,6 @@
     margin: 0;
 }
 
-/* Breadcrumb */
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: var(--space-lg);
-    font-size: var(--body-small);
-    color: var(--text-secondary);
-}
-
-.breadcrumb-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.breadcrumb-item a {
-    color: var(--info-color);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.breadcrumb-item a:hover {
-    color: #2980b9;
-    text-decoration: underline;
-}
-
-.breadcrumb-item.active {
-    color: var(--text-primary);
-    font-weight: var(--weight-semibold);
-}
-
-.breadcrumb-separator {
-    color: var(--border-medium);
-}
 
 /* Footer */
 .footer {
