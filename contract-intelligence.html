@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Intelligence - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .intelligence-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--margin-section);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .intelligence-tab {
+            padding: var(--space-md) var(--space-lg);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: var(--body-regular);
+            font-weight: var(--weight-semibold);
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .intelligence-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .contract-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            padding: var(--space-lg);
+            margin-bottom: var(--space-lg);
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .contract-card:hover {
+            box-shadow: var(--shadow-medium);
+            transform: translateY(-2px);
+        }
+
+        .contract-card.active { border-left-color: #27ae60; }
+        .contract-card.expiring { border-left-color: #f39c12; }
+        .contract-card.expired { border-left-color: #e74c3c; }
+        .contract-card.renewal { border-left-color: #3498db; }
+
+        .contract-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+
+        .contract-title {
+            font-size: var(--h4);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .contract-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+        }
+
+        .contract-meta-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+        }
+
+        .obligations-list {
+            margin-top: var(--space-md);
+        }
+
+        .obligation-item {
+            padding: var(--space-sm) var(--space-md);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .obligation-text {
+            flex: 1;
+            font-size: var(--body-small);
+        }
+
+        .obligation-status {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: var(--weight-semibold);
+            text-transform: uppercase;
+        }
+
+        .obligation-status.pending { background: #fff3cd; color: #856404; }
+        .obligation-status.completed { background: #d4edda; color: #155724; }
+        .obligation-status.overdue { background: #f8d7da; color: #721c24; }
+
+        .renewal-alerts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--margin-section);
+        }
+
+        .renewal-alert-card {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            border-left: 4px solid;
+        }
+
+        .renewal-alert-card.critical { border-left-color: #e74c3c; }
+        .renewal-alert-card.warning { border-left-color: #f39c12; }
+        .renewal-alert-card.info { border-left-color: #3498db; }
+
+        .alert-icon {
+            font-size: 32px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .alert-count {
+            font-size: 28px;
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .alert-label {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            font-weight: var(--weight-semibold);
+        }
+
+        .ai-insights {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--margin-section);
+        }
+
+        .ai-insights-title {
+            font-size: var(--h4);
+            font-weight: var(--weight-bold);
+            margin-bottom: var(--space-md);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .insight-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+        }
+
+        .insight-value {
+            font-size: 24px;
+            font-weight: var(--weight-bold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .insight-label {
+            font-size: var(--body-small);
+            opacity: 0.9;
+        }
+
+        .compliance-checker {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--margin-section);
+        }
+
+        .compliance-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .compliance-item:last-child {
+            border-bottom: none;
+        }
+
+        .compliance-icon {
+            font-size: 24px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .compliance-content {
+            flex: 1;
+        }
+
+        .compliance-title {
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .compliance-description {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+        }
+
+        .value-analysis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+        }
+
+        .value-card {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+        }
+
+        .value-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-md);
+        }
+
+        .value-card-title {
+            font-size: var(--body-large);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .value-amount {
+            font-size: 32px;
+            font-weight: var(--weight-bold);
+            color: var(--primary-color);
+            margin-bottom: var(--space-sm);
+        }
+
+        .value-details {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-light);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: var(--space-lg);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .timeline-date {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            font-weight: var(--weight-semibold);
+            margin-bottom: var(--space-xs);
+        }
+
+        .timeline-content {
+            font-size: var(--body-regular);
+            color: var(--text-primary);
+        }
+
+        .filter-bar {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            margin-bottom: var(--margin-section);
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            font-weight: var(--weight-semibold);
+            font-size: var(--body-small);
+            color: var(--text-primary);
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: var(--body-regular);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation injected by navigation.js -->
+
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">AI-Powered Contract Analysis</p>
+                <h1>Contract Intelligence</h1>
+                <p class="lead">Automated obligation extraction, renewal tracking, and compliance analysis</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" onclick="analyzeNewContract()">
+                    🤖 Analyze Contract
+                </button>
+                <button class="btn btn-primary" onclick="exportAnalytics()">
+                    📊 Export Analytics
+                </button>
+            </div>
+        </header>
+
+        <!-- AI Insights Dashboard -->
+        <div class="ai-insights">
+            <div class="ai-insights-title">
+                <span>🤖</span>
+                <span>AI-Powered Insights</span>
+            </div>
+            <div class="insight-grid">
+                <div class="insight-item">
+                    <div class="insight-value" id="totalContractsValue">0</div>
+                    <div class="insight-label">Total Contracts</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-value" id="totalObligations">0</div>
+                    <div class="insight-label">Active Obligations</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-value" id="totalContractValue">₹0</div>
+                    <div class="insight-label">Total Contract Value</div>
+                </div>
+                <div class="insight-item">
+                    <div class="insight-value" id="complianceScore">0%</div>
+                    <div class="insight-label">Compliance Score</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Renewal Alerts -->
+        <div class="renewal-alerts">
+            <div class="renewal-alert-card critical">
+                <div class="alert-icon">🔴</div>
+                <div class="alert-count" id="criticalAlerts">0</div>
+                <div class="alert-label">Expiring in 30 Days</div>
+            </div>
+            <div class="renewal-alert-card warning">
+                <div class="alert-icon">🟡</div>
+                <div class="alert-count" id="warningAlerts">0</div>
+                <div class="alert-label">Expiring in 60 Days</div>
+            </div>
+            <div class="renewal-alert-card info">
+                <div class="alert-icon">🔵</div>
+                <div class="alert-count" id="infoAlerts">0</div>
+                <div class="alert-label">Expiring in 90 Days</div>
+            </div>
+            <div class="renewal-alert-card" style="border-left-color: #27ae60;">
+                <div class="alert-icon">♻️</div>
+                <div class="alert-count" id="autoRenewals">0</div>
+                <div class="alert-label">Auto-Renewals</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="intelligence-tabs">
+            <button class="intelligence-tab active" onclick="switchIntelligenceTab('obligations')">
+                📋 Obligations
+            </button>
+            <button class="intelligence-tab" onclick="switchIntelligenceTab('renewals')">
+                ♻️ Renewals
+            </button>
+            <button class="intelligence-tab" onclick="switchIntelligenceTab('compliance')">
+                ✅ Compliance
+            </button>
+            <button class="intelligence-tab" onclick="switchIntelligenceTab('value')">
+                💰 Value Analysis
+            </button>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label class="filter-label">Contract Type</label>
+                <select class="filter-select" onchange="applyFilters()">
+                    <option value="all">All Types</option>
+                    <option value="loan">Loan Agreements</option>
+                    <option value="nda">NDAs</option>
+                    <option value="service">Service Agreements</option>
+                    <option value="lease">Lease Agreements</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Status</label>
+                <select class="filter-select" onchange="applyFilters()">
+                    <option value="all">All Status</option>
+                    <option value="active">Active</option>
+                    <option value="expiring">Expiring Soon</option>
+                    <option value="expired">Expired</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Sort By</label>
+                <select class="filter-select" onchange="applyFilters()">
+                    <option value="expiry">Expiry Date</option>
+                    <option value="value">Contract Value</option>
+                    <option value="recent">Recently Added</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div id="intelligenceContent">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/contract-intelligence.js"></script>
+</body>
+</html>
