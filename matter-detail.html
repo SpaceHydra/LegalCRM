@@ -4,148 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matter Details - Legal CRM</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/common-styles.css">
     <style>
-        body {
-            background: #f7fafc;
-        }
-        .page-container {
-            max-width: 1024px;
-            margin: 0 auto;
-        }
-        .matter-card {
-            background: white;
-            padding: var(--space-xl);
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-light);
-            margin-bottom: var(--margin-section);
-        }
-        .matter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: var(--space-md);
-            margin-top: var(--space-lg);
-        }
-        .matter-grid div {
-            background: #f8fafc;
-            padding: var(--space-md);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-light);
-        }
-        .matter-actions {
-            margin-top: var(--space-lg);
-            display: flex;
-            gap: var(--space-sm);
-        }
-        .timeline-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--space-lg);
-            box-shadow: var(--shadow-light);
-            border: 1px solid #e2e8f0;
-        }
+        .detail-container { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .detail-header { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        .detail-header-top { display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px; }
+        .detail-title { font-size: 32px; font-weight: 700; margin-bottom: 5px; }
+        .detail-subtitle { font-size: 16px; opacity: 0.9; }
+        .detail-actions { display: flex; gap: 10px; }
+        .btn-action { padding: 10px 20px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 8px; cursor: pointer; font-weight: 500; }
+        .detail-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .meta-item { background: rgba(255,255,255,0.15); padding: 15px; border-radius: 8px; }
+        .meta-label { font-size: 12px; opacity: 0.8; margin-bottom: 5px; }
+        .meta-value { font-size: 20px; font-weight: 600; }
+        .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .detail-section { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .section-title { font-size: 18px; font-weight: 600; color: #374151; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #e5e7eb; }
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .info-item { display: flex; flex-direction: column; gap: 5px; }
+        .info-label { font-size: 13px; color: #6b7280; font-weight: 500; }
+        .info-value { font-size: 16px; color: #374151; font-weight: 500; }
+        .status-badge { display: inline-block; padding: 6px 16px; border-radius: 16px; font-size: 14px; font-weight: 600; }
+        .status-active { background: #d1fae5; color: #065f46; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-closed { background: #fee2e2; color: #991b1b; }
     </style>
 </head>
 <body>
-    <div class="page-container">
-        <header class="page-header">
-            <div>
-                <p class="eyebrow">Matter Detail</p>
-                <h1 id="matterTitle">Loading...</h1>
-                <p class="lead" id="matterSubtitle"></p>
-            </div>
-            <div class="header-actions">
-                <a class="btn btn-secondary" href="advocates-management.html">← Back to Advocates</a>
-                <a class="btn btn-primary" id="openMatter" href="#">Open Matter</a>
-            </div>
-        </header>
-
-        <div class="matter-card" id="matterCard" style="display:none;">
-            <div class="matter-grid">
+    <div class="detail-container">
+        <div class="detail-header">
+            <div class="detail-header-top">
                 <div>
-                    <strong>Matter ID</strong>
-                    <p id="matterId"></p>
+                    <div class="detail-title" id="matterTitle">Loading...</div>
+                    <div class="detail-subtitle" id="matterSerial"></div>
                 </div>
-                <div>
-                    <strong>Client</strong>
-                    <p id="matterClient"></p>
-                </div>
-                <div>
-                    <strong>Document Type</strong>
-                    <p id="matterDocType"></p>
-                </div>
-                <div>
-                    <strong>Status</strong>
-                    <p id="matterStatus"></p>
-                </div>
-                <div>
-                    <strong>Completed On</strong>
-                    <p id="matterCompleted"></p>
-                </div>
-                <div>
-                    <strong>Value</strong>
-                    <p id="matterValue"></p>
+                <div class="detail-actions">
+                    <button class="btn-action" onclick="addTask()">✅ Add Task</button>
+                    <button class="btn-action" onclick="editMatter()">✏️ Edit</button>
+                    <button class="btn-action" onclick="goBack()">← Back</button>
                 </div>
             </div>
-            <div class="timeline-card" id="matterSummary"></div>
-            <div class="matter-actions">
-                <a class="btn btn-primary" href="#" id="viewMatterSource">View Source</a>
-                <a class="btn btn-secondary" href="advocate-profile.html">Back to Profile</a>
+            <div class="detail-meta">
+                <div class="meta-item"><div class="meta-label">Matter ID</div><div class="meta-value" id="matterId">-</div></div>
+                <div class="meta-item"><div class="meta-label">Status</div><div class="meta-value" id="matterStatus">-</div></div>
+                <div class="meta-item"><div class="meta-label">Type</div><div class="meta-value" id="matterType">-</div></div>
+                <div class="meta-item"><div class="meta-label">Start Date</div><div class="meta-value" id="startDate">-</div></div>
             </div>
         </div>
 
-        <section class="empty-state" id="matterMissing" style="display:none;">
-            <div class="empty-state-icon">⚖️</div>
-            <h3>Matter Not Found</h3>
-            <p>We couldn’t locate the requested matter. Please return to the advocates list.</p>
-            <a class="btn btn-secondary" href="advocates-management.html">Back to Advocates</a>
-        </section>
+        <div class="content-grid">
+            <div>
+                <div class="detail-section">
+                    <h2 class="section-title">Matter Information</h2>
+                    <div class="info-grid">
+                        <div class="info-item"><div class="info-label">Client</div><div class="info-value" id="clientName">-</div></div>
+                        <div class="info-item"><div class="info-label">Matter Type</div><div class="info-value" id="type">-</div></div>
+                        <div class="info-item"><div class="info-label">Practice Area</div><div class="info-value" id="practiceArea">-</div></div>
+                        <div class="info-item"><div class="info-label">Lead Advocate</div><div class="info-value" id="leadAdvocate">-</div></div>
+                        <div class="info-item" style="grid-column: 1 / -1;"><div class="info-label">Description</div><div class="info-value" id="description">-</div></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="detail-section">
+                    <h2 class="section-title">Quick Actions</h2>
+                    <button class="btn-primary" style="width: 100%;" onclick="goBack()">← Back to Projects</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="js/navigation.js"></script>
-    <script src="js/advocates-data.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/common.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const matterId = params.get('id');
-            if (!matterId) {
-                document.getElementById('matterMissing').style.display = 'block';
-                return;
-            }
+        let currentMatter = null;
+        document.addEventListener('DOMContentLoaded', loadMatterDetails);
 
-            const matter = findMatterById(matterId);
-            if (!matter) {
-                document.getElementById('matterMissing').style.display = 'block';
-                return;
-            }
+        function loadMatterDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const matterId = urlParams.get('id');
+            if (!matterId) { alert('No matter ID'); window.location.href = 'project-management.html'; return; }
 
-            populateMatter(matter);
-        });
+            const matters = legalCRM.get('matters');
+            currentMatter = matters.find(m => m.id === matterId);
+            if (!currentMatter) { alert('Matter not found'); window.location.href = 'project-management.html'; return; }
 
-        function findMatterById(id) {
-            for (const advocate of advocatesData.advocates) {
-                const match = (advocate.historicalMatters || []).find(m => m.matterId === id);
-                if (match) {
-                    return { ...match, advocateName: advocate.name };
-                }
-            }
-            return null;
+            document.getElementById('matterTitle').textContent = currentMatter.title;
+            document.getElementById('matterSerial').textContent = currentMatter.serialNumber;
+            document.getElementById('matterId').textContent = currentMatter.serialNumber;
+            document.getElementById('matterStatus').innerHTML = '<span class="status-badge status-active">' + currentMatter.status + '</span>';
+            document.getElementById('matterType').textContent = currentMatter.type;
+            document.getElementById('startDate').textContent = currentMatter.startDate;
+
+            const clients = legalCRM.get('clients');
+            const client = clients.find(c => c.id === currentMatter.clientId);
+            document.getElementById('clientName').textContent = client ? client.name : 'Unknown';
+            document.getElementById('type').textContent = currentMatter.type;
+            document.getElementById('practiceArea').textContent = currentMatter.practiceArea;
+            document.getElementById('leadAdvocate').textContent = currentMatter.leadAdvocate || 'Not assigned';
+            document.getElementById('description').textContent = currentMatter.description || 'No description';
         }
 
-        function populateMatter(matter) {
-            document.getElementById('matterTitle').textContent = matter.title || matter.matterId;
-            document.getElementById('matterSubtitle').textContent = `Handled by ${matter.advocateName}`;
-            document.getElementById('matterId').textContent = matter.matterId;
-            document.getElementById('matterClient').textContent = matter.linkedClient;
-            document.getElementById('matterDocType').textContent = matter.documentType;
-            document.getElementById('matterStatus').textContent = matter.status;
-            document.getElementById('matterCompleted').textContent = matter.completionDate || 'Pending';
-            document.getElementById('matterValue').textContent = matter.value ? `₹ ${matter.value.toLocaleString('en-IN')}` : '—';
-            document.getElementById('matterSummary').textContent = matter.summary || 'No summary available.';
-            document.getElementById('viewMatterSource').href = `#`;
-            document.getElementById('matterCard').style.display = 'block';
-            document.getElementById('openMatter').href = '#';
-        }
+        function goBack() { window.location.href = 'project-management.html'; }
+        function editMatter() { alert('Edit matter'); }
+        function addTask() { alert('Add task'); }
     </script>
 </body>
 </html>

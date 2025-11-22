@@ -699,8 +699,8 @@
             }
 
             tbody.innerHTML = leads.map(lead => `
-                <tr>
-                    <td>
+                <tr style="cursor: pointer;" onclick="window.location.href='lead-detail.html?id=${lead.id}'">
+                    <td onclick="event.stopPropagation();">
                         <span class="aging-indicator aging-${getAgingColor(lead.agingDays)}"></span>
                     </td>
                     <td><strong>${lead.id}</strong></td>
@@ -718,8 +718,11 @@
                         </span>
                     </td>
                     <td>${lead.agingDays} days</td>
-                    <td>
+                    <td onclick="event.stopPropagation();">
                         <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="window.location.href='lead-detail.html?id=${lead.id}'" title="View Details">
+                                👁️
+                            </button>
                             <button class="icon-btn btn-primary" onclick="editLead('${lead.id}')" title="Edit">
                                 ✏️
                             </button>

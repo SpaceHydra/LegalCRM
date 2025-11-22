@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precedent Library - Legal CRM</title>
+    <link rel="stylesheet" href="css/common-styles.css">
+    <style>
+        .precedent-container {
+            padding: 20px;
+        }
+
+        .library-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-section {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .search-box-large {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box-large input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .btn-search {
+            padding: 12px 24px;
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .category-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            border-color: #6366f1;
+        }
+
+        .category-card.active {
+            border-color: #6366f1;
+            background: #eff6ff;
+        }
+
+        .category-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+
+        .category-count {
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .precedents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .precedent-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .precedent-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            border-color: #6366f1;
+        }
+
+        .precedent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .precedent-type-icon {
+            width: 50px;
+            height: 50px;
+            background: #eff6ff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .precedent-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-icon-small {
+            padding: 6px 10px;
+            background: #f3f4f6;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-icon-small:hover {
+            background: #e5e7eb;
+        }
+
+        .precedent-title {
+            font-weight: 600;
+            color: #374151;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .precedent-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .precedent-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #9ca3af;
+            flex-wrap: wrap;
+        }
+
+        .precedent-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .precedent-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #6b7280;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #9ca3af;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .file-upload-zone {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-zone:hover {
+            border-color: #6366f1;
+            background: #f9fafb;
+        }
+
+        .file-upload-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .tags-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            min-height: 42px;
+        }
+
+        .tag-item {
+            background: #6366f1;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tags-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .precedent-detail-view {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .detail-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .detail-section {
+            margin-bottom: 25px;
+        }
+
+        .detail-section h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .detail-content {
+            color: #6b7280;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="precedent-container">
+        <!-- Header -->
+        <div class="library-header">
+            <div class="search-section">
+                <h1 style="margin-bottom: 10px;">📚 Precedent Library</h1>
+                <p style="color: #6b7280; margin-bottom: 15px;">Store and reuse successful legal documents and templates</p>
+                <div class="search-box-large">
+                    <input type="text" id="searchInput" placeholder="Search precedents by title, tags, or content..." onkeyup="searchPrecedents()">
+                    <button class="btn-search">🔍 Search</button>
+                </div>
+            </div>
+            <button class="btn-primary" onclick="openAddPrecedentModal()">➕ Add Precedent</button>
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <div class="category-card active" data-category="all" onclick="filterByCategory('all')">
+                <div class="category-icon">📁</div>
+                <div class="category-name">All Documents</div>
+                <div class="category-count" id="countAll">0 items</div>
+            </div>
+            <div class="category-card" data-category="pleadings" onclick="filterByCategory('pleadings')">
+                <div class="category-icon">⚖️</div>
+                <div class="category-name">Pleadings</div>
+                <div class="category-count" id="countPleadings">0 items</div>
+            </div>
+            <div class="category-card" data-category="contracts" onclick="filterByCategory('contracts')">
+                <div class="category-icon">📝</div>
+                <div class="category-name">Contracts</div>
+                <div class="category-count" id="countContracts">0 items</div>
+            </div>
+            <div class="category-card" data-category="opinions" onclick="filterByCategory('opinions')">
+                <div class="category-icon">💡</div>
+                <div class="category-name">Legal Opinions</div>
+                <div class="category-count" id="countOpinions">0 items</div>
+            </div>
+            <div class="category-card" data-category="templates" onclick="filterByCategory('templates')">
+                <div class="category-icon">📋</div>
+                <div class="category-name">Templates</div>
+                <div class="category-count" id="countTemplates">0 items</div>
+            </div>
+            <div class="category-card" data-category="research" onclick="filterByCategory('research')">
+                <div class="category-icon">🔍</div>
+                <div class="category-name">Research Memos</div>
+                <div class="category-count" id="countResearch">0 items</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label>Sort by:</label>
+                <select id="sortBy" onchange="loadPrecedents()">
+                    <option value="recent">Most Recent</option>
+                    <option value="popular">Most Used</option>
+                    <option value="alphabetical">Alphabetical</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Practice Area:</label>
+                <select id="filterPracticeArea" onchange="loadPrecedents()">
+                    <option value="all">All Areas</option>
+                    <option value="corporate">Corporate Law</option>
+                    <option value="litigation">Litigation</option>
+                    <option value="criminal">Criminal Law</option>
+                    <option value="family">Family Law</option>
+                    <option value="property">Property Law</option>
+                    <option value="tax">Tax Law</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Precedents Grid -->
+        <div class="precedents-grid" id="precedentsGrid">
+            <div class="empty-state">
+                <div class="empty-state-icon">📚</div>
+                <h3>No precedents yet</h3>
+                <p>Start building your precedent library by adding successful documents</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Precedent Modal -->
+    <div class="modal" id="precedentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add Precedent</h2>
+                <button class="modal-close" onclick="closePrecedentModal()">×</button>
+            </div>
+
+            <form id="precedentForm" onsubmit="savePrecedent(event)">
+                <div class="form-group">
+                    <label>Title *</label>
+                    <input type="text" id="precedentTitle" required placeholder="e.g., Petition for Writ of Habeas Corpus">
+                </div>
+
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select id="precedentCategory" required>
+                        <option value="">Select category...</option>
+                        <option value="pleadings">Pleadings</option>
+                        <option value="contracts">Contracts</option>
+                        <option value="opinions">Legal Opinions</option>
+                        <option value="templates">Templates</option>
+                        <option value="research">Research Memos</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Practice Area</label>
+                    <select id="precedentPracticeArea">
+                        <option value="">Not specified</option>
+                        <option value="corporate">Corporate Law</option>
+                        <option value="litigation">Litigation</option>
+                        <option value="criminal">Criminal Law</option>
+                        <option value="family">Family Law</option>
+                        <option value="property">Property Law</option>
+                        <option value="tax">Tax Law</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="precedentDescription" required placeholder="Brief description of the document and when to use it..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Key Points / Usage Notes</label>
+                    <textarea id="precedentNotes" placeholder="Important points, successful arguments, customization tips..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Tags (press Enter to add)</label>
+                    <div class="tags-input-container" id="tagsContainer">
+                        <input type="text" class="tags-input" id="tagInput" placeholder="Add tags..." onkeypress="handleTagInput(event)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Upload Document</label>
+                    <div class="file-upload-zone" onclick="document.getElementById('precedentFile').click()">
+                        <div class="file-upload-icon">📎</div>
+                        <div>Click to upload document</div>
+                        <div style="font-size: 12px; color: #9ca3af; margin-top: 5px;">PDF, DOCX, or TXT</div>
+                    </div>
+                    <input type="file" id="precedentFile" accept=".pdf,.doc,.docx,.txt" style="display: none;" onchange="handleFileUpload(event)">
+                    <div id="filePreview" style="margin-top: 10px;"></div>
+                </div>
+
+                <div class="form-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;">
+                    <button type="button" class="btn-secondary" onclick="closePrecedentModal()">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Precedent</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Precedent Modal -->
+    <div class="modal" id="viewPrecedentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Precedent Details</h2>
+                <button class="modal-close" onclick="closeViewModal()">×</button>
+            </div>
+            <div id="precedentDetailContent"></div>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/precedent-library.js"></script>
+</body>
+</html>
