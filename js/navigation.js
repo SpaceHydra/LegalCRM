@@ -23,13 +23,20 @@ const navigationData = {
         { name: 'Contract Intelligence', icon: '🤖', url: 'contract-intelligence.html', phase: 'NEW' }
     ],
     legalModules: [
+        { name: 'Court Calendar', icon: '⚖️', url: 'court-calendar.html', phase: 'NEW' },
         { name: 'Drafting & Contracts', icon: '📝', url: 'drafting-dashboard.html', phase: 'phase2' },
-        { name: 'Advocate Management', icon: '⚖️', url: 'advocates-management.html', phase: 'phase2' },
+        { name: 'Precedent Library', icon: '📚', url: 'precedent-library.html', phase: 'NEW' },
+        { name: 'Conflict Checking', icon: '⚠️', url: 'conflict-checking.html', phase: 'NEW' },
+        { name: 'Advocate Management', icon: '👨‍⚖️', url: 'advocates-management.html', phase: 'phase2' },
         { name: 'Billing & Revenue', icon: '💰', url: 'billing.html', phase: 'phase2' }
+    ],
+    practiceModules: [
+        { name: 'Time Tracking', icon: '⏱️', url: 'time-tracking.html', phase: 'NEW' },
+        { name: 'Expense Tracking', icon: '💸', url: 'expense-tracking.html', phase: 'NEW' }
     ],
     systemModules: [
         { name: 'Settings', icon: '⚙️', url: 'settings.html' },
-        { name: 'Help & Documentation', icon: '📚', url: 'index.html' }
+        { name: 'Help & Documentation', icon: '📖', url: 'index.html' }
     ]
 };
 
@@ -144,6 +151,7 @@ function createSidebar(activePage = '') {
             ${createSection('Collaboration', navigationData.collaborationModules, 'collaboration')}
             ${createSection('Documents & AI', navigationData.documentModules, 'documents')}
             ${createSection('Legal Operations', navigationData.legalModules, 'legal')}
+            ${createSection('Practice Management', navigationData.practiceModules, 'practice')}
             ${createSection('System', navigationData.systemModules, 'system')}
 
             <div class="sidebar-footer">
@@ -288,6 +296,7 @@ function setupGlobalSearch() {
             ...navigationData.collaborationModules,
             ...navigationData.documentModules,
             ...navigationData.legalModules,
+            ...navigationData.practiceModules,
             ...navigationData.systemModules
         ];
 
