@@ -642,7 +642,7 @@
             }
 
             tbody.innerHTML = clients.map(client => `
-                <tr>
+                <tr style="cursor: pointer;" onclick="window.location.href='client-detail.html?id=${client.id}'">
                     <td><strong>${client.id}</strong></td>
                     <td>
                         <strong>${client.companyName}</strong><br>
@@ -657,13 +657,13 @@
                     <td><strong>${formatCurrency(client.totalRevenue)}</strong></td>
                     <td>${client.spocs ? client.spocs.length : 0} contacts</td>
                     <td>${formatDate(client.lastInteraction)}</td>
-                    <td>
+                    <td onclick="event.stopPropagation();">
                         <div class="action-buttons">
+                            <button class="icon-btn btn-primary" onclick="window.location.href='client-detail.html?id=${client.id}'" title="View Details">
+                                👁️
+                            </button>
                             <button class="icon-btn btn-primary" onclick="editClient('${client.id}')" title="Edit">
                                 ✏️
-                            </button>
-                            <button class="icon-btn btn-success" onclick="viewClient('${client.id}')" title="View Details">
-                                👁️
                             </button>
                             <button class="icon-btn btn-danger" onclick="deleteClient('${client.id}')" title="Delete">
                                 🗑️

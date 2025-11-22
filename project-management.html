@@ -701,7 +701,7 @@
             }
 
             tbody.innerHTML = projects.map(project => `
-                <tr onclick="window.location.href='add-project.html?id=${project.id}'" style="cursor: pointer;">
+                <tr onclick="window.location.href='matter-detail.html?id=${project.id}'" style="cursor: pointer;">
                     <td><strong>${project.id}</strong></td>
                     <td>
                         <strong>${project.name}</strong><br>
@@ -719,9 +719,12 @@
                         ${formatDate(project.startDate)}<br>
                         <small style="color: #7f8c8d;">to ${formatDate(project.expectedEndDate)}</small>
                     </td>
-                    <td>
+                    <td onclick="event.stopPropagation();">
                         <div class="action-buttons">
-                            <button class="icon-btn btn-primary" onclick="event.stopPropagation(); window.location.href='add-project.html?id=${project.id}'" title="Edit">
+                            <button class="icon-btn btn-primary" onclick="window.location.href='matter-detail.html?id=${project.id}'" title="View Details">
+                                👁️
+                            </button>
+                            <button class="icon-btn btn-primary" onclick="window.location.href='add-project.html?id=${project.id}'" title="Edit">
                                 ✏️
                             </button>
                         </div>
