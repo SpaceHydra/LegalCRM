@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Signature Management - Legal CRM Portal</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .signature-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--margin-section);
+        }
+
+        .stat-card {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            border-left: 4px solid;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .stat-card.pending { border-left-color: #f39c12; }
+        .stat-card.signed { border-left-color: #27ae60; }
+        .stat-card.declined { border-left-color: #e74c3c; }
+        .stat-card.expired { border-left-color: #95a5a6; }
+
+        .stat-card-icon {
+            font-size: 36px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .stat-card-value {
+            font-size: 32px;
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-card-label {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .signature-tabs {
+            display: flex;
+            gap: var(--space-sm);
+            margin-bottom: var(--margin-section);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .signature-tab {
+            padding: var(--space-md) var(--space-lg);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: var(--body-regular);
+            font-weight: var(--weight-semibold);
+            color: var(--text-secondary);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .signature-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .signature-tab:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        .signature-table {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+        }
+
+        .signature-table-header {
+            padding: var(--space-lg);
+            border-bottom: 2px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .signature-table-title {
+            font-size: var(--h3);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+        }
+
+        .signature-filters {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        .signature-item {
+            padding: var(--space-lg);
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.2s ease;
+        }
+
+        .signature-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .signature-item:last-child {
+            border-bottom: none;
+        }
+
+        .signature-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-sm);
+        }
+
+        .signature-item-title {
+            font-size: var(--body-large);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .signature-item-meta {
+            display: flex;
+            gap: var(--space-md);
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .signature-signers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        .signer-badge {
+            display: flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            font-size: var(--body-small);
+        }
+
+        .signer-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .signer-status.signed { background: var(--success-color); }
+        .signer-status.pending { background: var(--warning-color); }
+        .signer-status.declined { background: var(--danger-color); }
+
+        .signature-actions {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .signature-action-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            font-size: var(--body-small);
+            font-weight: var(--weight-semibold);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid;
+        }
+
+        .signature-action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .signature-action-btn.secondary {
+            background: white;
+            color: var(--text-primary);
+            border-color: var(--border-medium);
+        }
+
+        .signature-action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .provider-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .modal-title {
+            font-size: var(--h3);
+            font-weight: var(--weight-bold);
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-xs);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: var(--body-regular);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .signers-list {
+            margin-top: var(--space-md);
+        }
+
+        .signer-item {
+            display: flex;
+            gap: var(--space-sm);
+            align-items: center;
+            padding: var(--space-sm);
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-sm);
+        }
+
+        .signer-remove {
+            background: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: var(--body-small);
+        }
+
+        .audit-timeline {
+            position: relative;
+            padding-left: var(--space-xl);
+        }
+
+        .audit-timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-light);
+        }
+
+        .audit-event {
+            position: relative;
+            margin-bottom: var(--space-lg);
+        }
+
+        .audit-event::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .audit-event-time {
+            font-size: var(--body-small);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .audit-event-text {
+            font-size: var(--body-regular);
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation injected by navigation.js -->
+
+    <div class="page-container">
+        <header class="page-header">
+            <div>
+                <p class="eyebrow">Document Signing Platform</p>
+                <h1>E-Signature Management</h1>
+                <p class="lead">Secure electronic signature workflows with DocuSign, Adobe Sign, and Aadhaar e-Sign</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="openSendForSignatureModal()">
+                    ✍️ Send for Signature
+                </button>
+                <button class="btn btn-secondary" onclick="openBulkSendModal()">
+                    📤 Bulk Send
+                </button>
+            </div>
+        </header>
+
+        <!-- Statistics Cards -->
+        <div class="signature-stats">
+            <div class="stat-card pending">
+                <div class="stat-card-icon">⏳</div>
+                <div class="stat-card-value" id="pendingCount">0</div>
+                <div class="stat-card-label">Pending Signatures</div>
+            </div>
+            <div class="stat-card signed">
+                <div class="stat-card-icon">✅</div>
+                <div class="stat-card-value" id="signedCount">0</div>
+                <div class="stat-card-label">Completed</div>
+            </div>
+            <div class="stat-card declined">
+                <div class="stat-card-icon">❌</div>
+                <div class="stat-card-value" id="declinedCount">0</div>
+                <div class="stat-card-label">Declined</div>
+            </div>
+            <div class="stat-card expired">
+                <div class="stat-card-icon">⌛</div>
+                <div class="stat-card-value" id="expiredCount">0</div>
+                <div class="stat-card-label">Expired</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="signature-tabs">
+            <button class="signature-tab active" onclick="switchSignatureTab('all')">All Requests</button>
+            <button class="signature-tab" onclick="switchSignatureTab('pending')">Pending</button>
+            <button class="signature-tab" onclick="switchSignatureTab('completed')">Completed</button>
+            <button class="signature-tab" onclick="switchSignatureTab('audit')">Audit Trail</button>
+        </div>
+
+        <!-- Signature Requests Table -->
+        <div class="signature-table">
+            <div class="signature-table-header">
+                <h3 class="signature-table-title">Signature Requests</h3>
+                <div class="signature-filters">
+                    <select class="form-select" style="width: 200px;" onchange="filterByProvider(this.value)">
+                        <option value="all">All Providers</option>
+                        <option value="docusign">DocuSign</option>
+                        <option value="adobesign">Adobe Sign</option>
+                        <option value="aadhaar">Aadhaar e-Sign</option>
+                    </select>
+                    <input type="text" class="form-input" placeholder="Search..." style="width: 250px;"
+                           onkeyup="searchSignatures(this.value)">
+                </div>
+            </div>
+            <div id="signatureRequestsList">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Send for Signature Modal -->
+    <div class="modal" id="sendSignatureModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Send Document for Signature</h3>
+                <button class="modal-close" onclick="closeModal('sendSignatureModal')">×</button>
+            </div>
+
+            <form onsubmit="sendForSignature(event)">
+                <div class="form-group">
+                    <label class="form-label">Document Title *</label>
+                    <input type="text" class="form-input" id="docTitle" required
+                           placeholder="e.g., Loan Agreement - ABC Corp">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Link to Matter</label>
+                    <select class="form-select" id="linkedMatter">
+                        <option value="">Select Matter (Optional)</option>
+                        <!-- Populated by JavaScript -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">E-Signature Provider *</label>
+                    <select class="form-select" id="signatureProvider" required onchange="updateProviderInfo()">
+                        <option value="">Select Provider</option>
+                        <option value="docusign">DocuSign (International)</option>
+                        <option value="adobesign">Adobe Sign (International)</option>
+                        <option value="aadhaar">Aadhaar e-Sign (India)</option>
+                    </select>
+                    <small id="providerInfo" style="color: #7f8c8d; font-size: 13px; margin-top: 5px; display: block;"></small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Upload Document *</label>
+                    <input type="file" class="form-input" id="signatureDocument" required
+                           accept=".pdf,.docx">
+                    <small style="color: #7f8c8d; font-size: 13px;">Accepted formats: PDF, DOCX</small>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Signers *</label>
+                    <div class="signers-list" id="signersList">
+                        <!-- Populated dynamically -->
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="addSigner()">
+                        ➕ Add Signer
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Signing Order</label>
+                    <select class="form-select" id="signingOrder">
+                        <option value="parallel">Parallel (All at once)</option>
+                        <option value="sequential">Sequential (One by one)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Expiry (Days)</label>
+                    <input type="number" class="form-input" id="expiryDays" value="7" min="1" max="365">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Message to Signers</label>
+                    <textarea class="form-textarea" id="signerMessage" rows="3"
+                              placeholder="Please review and sign this document..."></textarea>
+                </div>
+
+                <div style="display: flex; gap: var(--space-sm); justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('sendSignatureModal')">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Send for Signature
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Audit Trail Modal -->
+    <div class="modal" id="auditTrailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Signature Audit Trail</h3>
+                <button class="modal-close" onclick="closeModal('auditTrailModal')">×</button>
+            </div>
+            <div id="auditTrailContent">
+                <!-- Populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/navigation.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/e-signature.js"></script>
+</body>
+</html>

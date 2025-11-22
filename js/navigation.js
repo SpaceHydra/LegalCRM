@@ -24,6 +24,12 @@ const navigationData = {
         ]},
         { name: 'Advocate Management', icon: '⚖️', url: 'advocates-management.html', phase: 'phase2' }
     ],
+    advancedModules: [
+        { name: 'Team Chat', icon: '💬', url: 'team-chat.html', phase: 'NEW', badge: true },
+        { name: 'E-Signature', icon: '✍️', url: 'e-signature.html', phase: 'NEW', badge: true },
+        { name: 'Document Comparison', icon: '🔄', url: 'document-comparison.html', phase: 'NEW', badge: true },
+        { name: 'Contract Intelligence', icon: '🤖', url: 'contract-intelligence.html', phase: 'NEW', badge: true }
+    ],
     systemModules: [
         { name: 'Settings', icon: '⚙️', url: 'settings.html' },
         { name: 'Help & Docs', icon: '📚', url: 'index.html' }
@@ -93,6 +99,7 @@ function createSidebar(activePage = '') {
         }
     });
 
+    const advancedHTML = navigationData.advancedModules.map(m => createNavItem(m)).join('');
     const systemHTML = navigationData.systemModules.map(m => createNavItem(m)).join('');
 
     return `
@@ -104,6 +111,10 @@ function createSidebar(activePage = '') {
             <div class="nav-section">
                 <div class="nav-section-title">Phase 2 Features</div>
                 ${phase2HTML}
+            </div>
+            <div class="nav-section">
+                <div class="nav-section-title">Advanced Features</div>
+                ${advancedHTML}
             </div>
             <div class="nav-section">
                 <div class="nav-section-title">System</div>
