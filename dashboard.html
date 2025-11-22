@@ -1034,7 +1034,16 @@
                 </div>
             </div>
 
-            <!-- Today's Leads -->
+            <!-- Team Workload Analytics -->
+            <div class="widget" style="grid-column: span 2;">
+                <div class="widget-header">
+                    <h3 class="widget-title">👥 Team Workload Analytics</h3>
+                    <a href="user-management.html" class="widget-action">Manage Team →</a>
+                </div>
+                <div id="teamWorkload">
+                    <!-- Dynamic content -->
+                </div>
+            </div>
 
             <!-- Drafting & Contracts Module -->
             <div class="widget">
@@ -1140,6 +1149,8 @@
     <script src="js/data.js"></script>
     <script src="js/common.js"></script>
     <script src="js/drafting-data.js"></script>
+    <script src="js/dummy-data.js"></script>
+    <script src="js/module-integrations.js"></script>
     <script>
         // Load dashboard on page load
         document.addEventListener('DOMContentLoaded', function() {
@@ -1158,12 +1169,147 @@
                 loadAgingLeads();
                 loadRevenueTracker();
                 loadAdvocateWorkload();
+                loadTeamWorkload();
                 updateNotificationCount();
             } catch (error) {
                 console.error('Error loading dashboard:', error);
                 // Show user-friendly error message
                 showNotification('Error loading dashboard data. Please refresh the page.', 'error');
             }
+        }
+
+        function loadTeamWorkload() {
+            // Get users with workload data
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            if (users.length === 0) {
+                const container = document.getElementById('teamWorkload');
+                if (container) {
+                    container.innerHTML = '<div class="empty-state"><p>No team members found</p></div>';
+                }
+                return;
+            }
+
+            // Calculate workloads if not already done
+            if (window.DummyDataInitializer) {
+                window.DummyDataInitializer.calculateWorkloads();
+            }
+
+            // Get updated users with workload
+            const usersWithWorkload = JSON.parse(localStorage.getItem('users') || '[]')
+                .sort((a, b) => (b.workload || 0) - (a.workload || 0));
+
+            const container = document.getElementById('teamWorkload');
+            if (!container) return;
+
+            const maxWorkload = Math.max(...usersWithWorkload.map(u => u.workload || 0), 1);
+
+            container.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px;">
+                        ${usersWithWorkload.slice(0, 4).map(user => {
+                            const percentage = ((user.workload || 0) / maxWorkload) * 100;
+                            const workloadClass = percentage > 80 ? 'high' : percentage > 50 ? 'medium' : 'low';
+                            const workloadColor = percentage > 80 ? '#e74c3c' : percentage > 50 ? '#f39c12' : '#27ae60';
+
+                            return `
+                                <div style="background: white; padding: 16px; border-radius: 10px; border: 2px solid ${workloadColor}; text-align: center;">
+                                    <div style="font-size: 32px; font-weight: 700; color: ${workloadColor}; margin-bottom: 4px;">
+                                        ${user.workload || 0}
+                                    </div>
+                                    <div style="font-size: 13px; font-weight: 600; color: #2c3e50; margin-bottom: 2px;">
+                                        ${user.name.split(' ')[0]}
+                                    </div>
+                                    <div style="font-size: 11px; color: #7f8c8d;">
+                                        ${user.role}
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f8f9fa; border-bottom: 2px solid #dee2e6;">
+                                <th style="padding: 12px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7280;">Team Member</th>
+                                <th style="padding: 12px; text-align: center; font-size: 12px; font-weight: 700; color: #6b7280;">Leads</th>
+                                <th style="padding: 12px; text-align: center; font-size: 12px; font-weight: 700; color: #6b7280;">Clients</th>
+                                <th style="padding: 12px; text-align: center; font-size: 12px; font-weight: 700; color: #6b7280;">Matters</th>
+                                <th style="padding: 12px; text-align: center; font-size: 12px; font-weight: 700; color: #6b7280;">Tasks</th>
+                                <th style="padding: 12px; text-align: right; font-size: 12px; font-weight: 700; color: #6b7280;">Workload</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${usersWithWorkload.map(user => {
+                                const breakdown = user.workloadBreakdown || {};
+                                const percentage = ((user.workload || 0) / maxWorkload) * 100;
+                                const workloadColor = percentage > 80 ? '#e74c3c' : percentage > 50 ? '#f39c12' : '#27ae60';
+
+                                return `
+                                    <tr style="border-bottom: 1px solid #f3f4f6; transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+                                        <td style="padding: 12px;">
+                                            <div style="display: flex; align-items: center; gap: 10px;">
+                                                <div style="width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px;">
+                                                    ${user.initials}
+                                                </div>
+                                                <div>
+                                                    <div style="font-weight: 600; font-size: 14px; color: #1f2937;">${user.name}</div>
+                                                    <div style="font-size: 12px; color: #6b7280;">${user.role} • ${user.department}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 12px; text-align: center;">
+                                            <span style="display: inline-block; min-width: 24px; height: 24px; line-height: 24px; background: #dbeafe; color: #1e40af; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 0 8px;">
+                                                ${breakdown.leads || 0}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; text-align: center;">
+                                            <span style="display: inline-block; min-width: 24px; height: 24px; line-height: 24px; background: #d1fae5; color: #065f46; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 0 8px;">
+                                                ${breakdown.clients || 0}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; text-align: center;">
+                                            <span style="display: inline-block; min-width: 24px; height: 24px; line-height: 24px; background: #fef3c7; color: #92400e; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 0 8px;">
+                                                ${(breakdown.leadsMatters || 0) + (breakdown.collaborations || 0)}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; text-align: center;">
+                                            <span style="display: inline-block; min-width: 24px; height: 24px; line-height: 24px; background: #f3e8ff; color: #6b21a8; border-radius: 6px; font-size: 12px; font-weight: 600; padding: 0 8px;">
+                                                ${breakdown.tasks || 0}
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; text-align: right;">
+                                            <div style="display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+                                                <div style="flex: 1; max-width: 100px; height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
+                                                    <div style="width: ${percentage}%; height: 100%; background: ${workloadColor}; transition: width 0.3s;"></div>
+                                                </div>
+                                                <span style="font-weight: 700; font-size: 14px; color: ${workloadColor}; min-width: 35px; text-align: right;">
+                                                    ${user.workload || 0}
+                                                </span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 16px; padding: 12px; background: #f8f9fa; border-radius: 8px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; font-size: 11px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <div style="width: 12px; height: 12px; background: #27ae60; border-radius: 3px;"></div>
+                        <span style="color: #6b7280;">Low Workload</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <div style="width: 12px; height: 12px; background: #f39c12; border-radius: 3px;"></div>
+                        <span style="color: #6b7280;">Medium Workload</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <div style="width: 12px; height: 12px; background: #e74c3c; border-radius: 3px;"></div>
+                        <span style="color: #6b7280;">High Workload</span>
+                    </div>
+                </div>
+            `;
         }
 
         function updateDate() {
