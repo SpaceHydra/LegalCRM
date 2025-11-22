@@ -5,6 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Legal CRM Portal - Index</title>
   <link rel="stylesheet" href="css/styles.css" />
+  <script>
+    // Redirect to login page or dashboard based on authentication status
+    (function() {
+      const currentUser = localStorage.getItem('currentUser');
+      const sessionExpiry = localStorage.getItem('sessionExpiry');
+      const now = new Date().getTime();
+
+      // Check if user is logged in and session is valid
+      if (currentUser && sessionExpiry && now < parseInt(sessionExpiry)) {
+        // User is logged in, redirect to dashboard
+        window.location.href = 'dashboard.html';
+      } else {
+        // User is not logged in, redirect to login
+        window.location.href = 'login.html';
+      }
+    })();
+  </script>
 </head>
 <body>
   <!-- Navigation injected by navigation.js -->
