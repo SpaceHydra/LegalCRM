@@ -126,9 +126,9 @@ body {
 .sidebar {
     position: fixed;
     left: 0;
-    top: 75px;
+    top: var(--topnav-height);
     bottom: 0;
-    width: 260px;
+    width: var(--sidebar-width);
     background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
     color: white;
     overflow-y: auto;
@@ -368,7 +368,7 @@ body {
 .sidebar-overlay {
     display: none;
     position: fixed;
-    top: 75px;
+    top: var(--topnav-height);
     left: 0;
     right: 0;
     bottom: 0;
@@ -385,11 +385,12 @@ body {
 
 /* Main Content Area */
 .main-content {
-    margin-left: 260px;
-    margin-top: 75px;
-    padding: 30px;
-    min-height: calc(100vh - 75px);
+    margin-left: var(--sidebar-width);
+    margin-top: var(--topnav-height);
+    padding: var(--padding-section);
+    min-height: calc(100vh - var(--topnav-height));
     transition: margin-left 0.3s ease;
+    background: var(--bg-dark);
 }
 
 /* Adjust content when sidebar is collapsed */
@@ -398,10 +399,10 @@ body.sidebar-collapsed .main-content {
 }
 
 .page-container {
-    margin-left: 260px;
-    margin-top: 75px;
-    padding: 30px;
-    min-height: calc(100vh - 75px);
+    margin-left: var(--sidebar-width);
+    margin-top: var(--topnav-height);
+    padding: var(--padding-section);
+    min-height: calc(100vh - var(--topnav-height));
     transition: margin-left 0.3s ease;
 }
 
